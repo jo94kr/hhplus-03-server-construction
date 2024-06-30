@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: hhplus-03-server-construction
