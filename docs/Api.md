@@ -10,7 +10,7 @@
 {
   "token": "String - 토큰",
   "rank": "long - 대기열 순번",
-  "status": "String - 대기열 상태"
+  "status": "enum - 대기열 상태"
 }
 ```
 
@@ -18,6 +18,8 @@
 
 - Description
     - 콘서트 목록 조회
+- Header
+  - token: 대기열 토큰
 - Request
 
 | Parameter | Parameter Description | Required | etc |
