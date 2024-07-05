@@ -15,7 +15,7 @@
 ```
 ---
 
-# GET /concert - 콘서트 조회
+# GET /concerts - 콘서트 조회
 
 - Description
     - 콘서트 목록 조회
@@ -65,7 +65,7 @@
 
 ---
 
-# GET /concert/{concertId}/schedule - 콘서트 날짜 조회
+# GET /concerts/{concertId}/schedules - 콘서트 날짜 조회
 
 - Description
     - 콘서트의 날짜 조회
@@ -93,7 +93,7 @@
 
 ---
 
-# GET /concert/{concertId}/schedule/{concertScheduleId}/seat - 예약 가능 좌석 조회
+# GET /concerts/{concertId}/schedules/{concertScheduleId}/seats - 예약 가능 좌석 조회
 
 - Description
     - 콘서트의 좌석 조회
@@ -121,7 +121,7 @@
 |---------------|------------|-----|
 | INVALID_TOKEN | 유효하지 않은 토큰 |     |     
 
-# POST /reservation - 좌석 예약
+# POST /reservations - 좌석 예약
 
 - Header
     - token: 대기열 토큰
@@ -162,7 +162,7 @@
 
 ---
 
-# GET /user/{userId}/amount - 잔액 조회
+# GET /users/{userId}/amount - 잔액 조회
 
 - PathVariable
     - userId: 사용자 Id
@@ -176,7 +176,7 @@
 
 ---
 
-# PATCH /user/{userId}/charge - 잔액 충전
+# PATCH /users/{userId}/charge - 잔액 충전
 
 - PathVariable
     - userId: 사용자 Id
