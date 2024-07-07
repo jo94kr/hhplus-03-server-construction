@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.controller.concert.dto;
+package io.hhplus.server_construction.presentation.concert.dto;
 
 import io.hhplus.server_construction.domain.concert.ConcertEnums;
 

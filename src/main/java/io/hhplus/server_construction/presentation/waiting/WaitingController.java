@@ -1,6 +1,6 @@
-package io.hhplus.server_construction.controller.waiting;
+package io.hhplus.server_construction.presentation.waiting;
 
-import io.hhplus.server_construction.controller.waiting.dto.CheckWaitingDto;
+import io.hhplus.server_construction.presentation.waiting.dto.CheckWaitingDto;
 import io.hhplus.server_construction.domain.waiting.WaitingEnums;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.controller.user.dto;
+package io.hhplus.server_construction.presentation.user.dto;
 
 import java.math.BigDecimal;
 

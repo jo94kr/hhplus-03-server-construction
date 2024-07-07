@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.controller.waiting.dto;
+package io.hhplus.server_construction.presentation.waiting.dto;
 
 import io.hhplus.server_construction.domain.waiting.WaitingEnums;
 

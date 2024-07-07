@@ -1,8 +1,8 @@
-package io.hhplus.server_construction.controller.concert;
+package io.hhplus.server_construction.presentation.concert;
 
-import io.hhplus.server_construction.controller.concert.dto.FindConcertListDto;
-import io.hhplus.server_construction.controller.concert.dto.FindConcertScheduleDto;
-import io.hhplus.server_construction.controller.concert.dto.FindConcertSeatDto;
+import io.hhplus.server_construction.presentation.concert.dto.FindConcertListDto;
+import io.hhplus.server_construction.presentation.concert.dto.FindConcertScheduleDto;
+import io.hhplus.server_construction.presentation.concert.dto.FindConcertSeatDto;
 import io.hhplus.server_construction.domain.concert.ConcertEnums;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,23 +18,23 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/concert")
+@RequestMapping("/concerts")
 public class ConcertController {
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<Page<FindConcertListDto.Response>> findConcertList(@RequestHeader("token") String token,
                                                                              Pageable pageable) {
         List<FindConcertListDto.Response> responseList = Collections.singletonList(new FindConcertListDto.Response(1L, "항플 콘서트", LocalDateTime.now(), null));
         return ResponseEntity.ok(new PageImpl<>(responseList));
     }
 
-    @GetMapping(value = "/{concertId}/schedule")
+    @GetMapping(value = "/{concertId}/schedules")
     public ResponseEntity<FindConcertScheduleDto.Response> findConcertSchedule(@RequestHeader("token") String token,
                                                                                @PathVariable(name = "concertId") Long concertId) {
         return ResponseEntity.ok(new FindConcertScheduleDto.Response(1L, LocalDateTime.now().plusDays(1), false));
     }
 
-    @GetMapping(value = "/{concertId}/schedule/{concertScheduleId}/seat")
+    @GetMapping(value = "/{concertId}/schedules/{concertScheduleId}/seats")
     public ResponseEntity<FindConcertSeatDto.Response> findConcertSeat(@RequestHeader("token") String token,
                                                                        @PathVariable(name = "concertId") Long concertId,
                                                                        @PathVariable("concertScheduleId") Long concertScheduleId) {

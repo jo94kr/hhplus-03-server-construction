@@ -129,6 +129,8 @@
 
 ```json
 {
+  "concertId":  "long - 콘서트 Id",
+  "concertScheduleId": "long - 콘서트 스케쥴 Id",
   "concertSeatIdList": [
     "long - 콘서트 좌석 Id"
   ],
@@ -141,7 +143,6 @@
 ```json
 {
   "reservationId": "long - 예약 Id",
-  "reservationPaymentId": "long - 결제 Id",
   "totalPrice": "decimal - 총 결제금액",
   "reservationItemList": [
     {

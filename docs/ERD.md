@@ -36,7 +36,7 @@ erDiagram
     wallet {
     %% 추후 확장성을 고려하여 잔액에 관한 테이블을 분리 (ex. 포인트)
         long id PK "지갑 PK"
-        long userId "자용자 PK"
+        long userId "사용자 PK"
         decimal amount "잔액"
         datetime create_datetime "생성일시"
         datetime modify_datetime "수정일시"
@@ -68,22 +68,11 @@ erDiagram
         String status "예약 상태 (예약, 결제완료, 취소) (not null)"
         datetime create_datetime "생성일시"
     }
-```
 
-```mermaid
----
-title: 대기열, 참가열
----
-erDiagram
     waiting {
         long id PK "대기열 PK"
         String token UK "대기열 토큰(UUID) (not null)"
-        datetime expired_datetime "토큰 만료일시"
-        datetime create_datetime "생성일시"
-    }
-    participants {
-        long id PK "참가열 PK"
-        String token UK "대기열 토큰(UUID) (not null)"
+        String status "대기열 상태 (not null)"
         datetime expired_datetime "토큰 만료일시"
         datetime create_datetime "생성일시"
     }

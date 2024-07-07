@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.controller.reservation.dto;
+package io.hhplus.server_construction.presentation.reservation.dto;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,7 +15,6 @@ public record ReservationConcert(
 
     public record Response(
             Long reservationId,
-            Long reservationPaymentId,
             BigDecimal totalPrice,
             List<Item> reservationItemList
     ) {
