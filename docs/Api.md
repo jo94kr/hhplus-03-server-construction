@@ -9,7 +9,7 @@
 ```json
 {
   "token": "String - 토큰",
-  "rank": "long - 대기열 순번",
+  "waitingNumber": "long - 대기열 순번",
   "status": "enum - 대기열 상태"
 }
 ```
