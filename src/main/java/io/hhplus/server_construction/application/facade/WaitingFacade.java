@@ -1,10 +1,13 @@
 package io.hhplus.server_construction.application.facade;
 
 import io.hhplus.server_construction.application.dto.CheckTokenResult;
+import io.hhplus.server_construction.domain.waiting.Waiting;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
@@ -15,7 +18,19 @@ public class WaitingFacade {
 
     @Transactional(rollbackFor = {Exception.class})
     public CheckTokenResult checkToken(String token) {
+        // 대기열 체크
+        Waiting waiting = waitingService.checkToken(token);
 
-        return CheckTokenResult.create(null, null, null, null, null);
+        // 대기열 순번
+        Long waitingNumber = waitingService.calcWaitingNumber(waiting);
+
+        // 남은 시간(분)
+        Long timeRemainingMinutes = waitingService.calcTimeRemaining(waiting, waitingNumber, LocalDateTime.now());
+
+        return CheckTokenResult.create(waiting.getToken(),
+                timeRemainingMinutes,
+                waitingNumber,
+                waiting.getStatus(),
+                waiting.getExpiredDatetime());
     }
 }

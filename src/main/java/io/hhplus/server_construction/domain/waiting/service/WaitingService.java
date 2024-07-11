@@ -1,10 +1,62 @@
 package io.hhplus.server_construction.domain.waiting.service;
 
+import io.hhplus.server_construction.domain.waiting.Waiting;
+import io.hhplus.server_construction.domain.waiting.exceprtion.TokenExpiredException;
+import io.hhplus.server_construction.domain.waiting.repoisitory.WaitingRepository;
+import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Service
 @RequiredArgsConstructor
 public class WaitingService {
 
+    private final WaitingRepository waitingRepository;
+
+    public Waiting checkToken(String token) {
+        Waiting waiting;
+        // 토큰이 없으면 신규 토큰 발급
+        if (token == null) {
+            waiting = waitingRepository.save(Waiting.create());
+        } else {
+            waiting = waitingRepository.findWaitingByToken(token);
+            if (WaitingStatus.EXPIRED.equals(waiting.getStatus())) {
+                throw new TokenExpiredException();
+            }
+
+            // 토큰 만료일시 갱신
+            waitingRepository.save(waiting.renewalExpiredDatetime());
+        }
+
+        return waiting;
+    }
+
+    public Long calcWaitingNumber(Waiting waiting) {
+        // 가장 최근에 입장한 대기열 번호
+        Long lastProceedingWaitingNum = waitingRepository.findLastProceedingWaiting();
+        // 현재 대기열 번호
+        Long currentWaitingNum = waiting.getId();
+
+        // 대기열 순번 = 현재 대기열 번호 - 가장 최근에 입장한 대기열 번호
+        return currentWaitingNum - lastProceedingWaitingNum;
+    }
+
+    public Long calcTimeRemaining(Waiting waiting, Long waitingNumber, LocalDateTime now) {
+        // 분당 처리량 (1분전부터 현재까지 대기중이 아닌 대기열 개수 조회)
+        Long throughputPerMinute = waitingRepository.findThroughputPerMinute(now.minusMinutes(1));
+
+        // 한 사이클 시간 (임의로 지정한 사이클 시간(분))
+        long cycleTime = 5L;
+
+        // 남은 시간 = (본인 순서 / 분당 처리량) * 한 사이클 시간
+        LocalDateTime timeRemaining = now.plusMinutes((waitingNumber / throughputPerMinute) * cycleTime);
+
+        // 진입 시간 업데이트
+        waitingRepository.save(waiting.setRemainingDatetime(timeRemaining));
+
+        return now.until(timeRemaining, ChronoUnit.MINUTES);
+    }
 }
