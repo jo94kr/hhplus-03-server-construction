@@ -167,4 +167,20 @@ class WaitingServiceTest {
         // then
         assertThat(waitingList).allSatisfy(waiting -> assertThat(waiting.getStatus()).isEqualTo(WaitingStatus.PROCEEDING));
     }
+
+    @Test
+    @DisplayName("사용 가능한 토큰인지 체크한다.")
+    void checkWaitingStatus() {
+        // given
+        LocalDateTime now = LocalDateTime.now();
+        String token = "DUMMY_TOKEN";
+        Waiting waiting = new Waiting(1L, token, WaitingStatus.PROCEEDING, now, now, now);
+
+        // when
+        when(waitingRepository.findWaitingByToken(token)).thenReturn(waiting);
+        boolean isAvailable = waitingService.checkWaitingStatus(token);
+
+        // then
+        assertThat(isAvailable).isTrue();
+    }
 }

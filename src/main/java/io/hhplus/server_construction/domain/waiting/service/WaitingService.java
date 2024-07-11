@@ -80,4 +80,8 @@ public class WaitingService {
                 .map(Waiting::remainingToken)
                 .toList());
     }
+
+    public boolean checkWaitingStatus(String token) {
+        return waitingRepository.findWaitingByToken(token).isAvailableToken();
+    }
 }

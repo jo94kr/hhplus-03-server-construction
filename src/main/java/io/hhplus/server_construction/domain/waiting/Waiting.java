@@ -60,4 +60,8 @@ public class Waiting {
         this.status = WaitingStatus.PROCEEDING;
         return this;
     }
+
+    public boolean isAvailableToken() {
+        return WaitingStatus.PROCEEDING.equals(this.status);
+    }
 }
