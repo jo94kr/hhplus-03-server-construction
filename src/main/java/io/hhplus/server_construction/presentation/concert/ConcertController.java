@@ -29,15 +29,20 @@ public class ConcertController {
     }
 
     @GetMapping(value = "/{concertId}/schedules")
-    public ResponseEntity<FindConcertScheduleDto.Response> findConcertSchedule(@RequestHeader("token") String token,
-                                                                               @PathVariable(name = "concertId") Long concertId) {
-        return ResponseEntity.ok(new FindConcertScheduleDto.Response(1L, LocalDateTime.now().plusDays(1), false));
+    public ResponseEntity<List<FindConcertScheduleDto.Response>> findConcertSchedule(@RequestHeader("token") String token,
+                                                                                     @PathVariable(name = "concertId") Long concertId) {
+        return ResponseEntity.ok(List.of(new FindConcertScheduleDto.Response(1L,
+                LocalDateTime.now().plusDays(1),
+                false)));
     }
 
     @GetMapping(value = "/{concertId}/schedules/{concertScheduleId}/seats")
-    public ResponseEntity<FindConcertSeatDto.Response> findConcertSeat(@RequestHeader("token") String token,
-                                                                       @PathVariable(name = "concertId") Long concertId,
-                                                                       @PathVariable("concertScheduleId") Long concertScheduleId) {
-        return ResponseEntity.ok(new FindConcertSeatDto.Response(1L, ConcertSeatEnums.Grade.GOLD, BigDecimal.valueOf(1000L), ConcertSeatEnums.Status.POSSIBLE));
+    public ResponseEntity<List<FindConcertSeatDto.Response>> findConcertSeat(@RequestHeader("token") String token,
+                                                                             @PathVariable(name = "concertId") Long concertId,
+                                                                             @PathVariable("concertScheduleId") Long concertScheduleId) {
+        return ResponseEntity.ok(List.of(new FindConcertSeatDto.Response(1L,
+                ConcertSeatEnums.Grade.GOLD,
+                BigDecimal.valueOf(1000L),
+                ConcertSeatEnums.Status.POSSIBLE)));
     }
 }
