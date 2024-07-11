@@ -37,7 +37,7 @@ public class WaitingService {
 
     public Long calcWaitingNumber(Waiting waiting) {
         // 가장 최근에 입장한 대기열 번호
-        Long lastProceedingWaitingNum = waitingRepository.findLastProceedingWaiting();
+        Long lastProceedingWaitingNum = waitingRepository.findLastProceedingWaiting(WaitingStatus.PROCEEDING);
         // 현재 대기열 번호
         Long currentWaitingNum = waiting.getId();
 
@@ -47,7 +47,7 @@ public class WaitingService {
 
     public Long calcTimeRemaining(Waiting waiting, Long waitingNumber, LocalDateTime now) {
         // 분당 처리량 (1분전부터 현재까지 대기중이 아닌 대기열 개수 조회)
-        Long throughputPerMinute = waitingRepository.findThroughputPerMinute(now.minusMinutes(1));
+        Long throughputPerMinute = waitingRepository.findThroughputPerMinute(now, WaitingStatus.WAITING);
 
         // 한 사이클 시간 (임의로 지정한 사이클 시간(분))
         long cycleTime = 5L;
@@ -73,7 +73,7 @@ public class WaitingService {
 
     public void activeToken(LocalDateTime now) {
         // 진입 가능한 대기열 조회
-        List<Waiting> activeWaitingList = waitingRepository.findWaitingByStatusAndRemainingDatetimeIsBefore(WaitingStatus.WAITING, now);
+        List<Waiting> activeWaitingList = waitingRepository.findWaitingByStatusAndAccessDatetimeIsBefore(WaitingStatus.WAITING, now);
 
         // 대기열 활성화 처리
         waitingRepository.saveAll(activeWaitingList.stream()

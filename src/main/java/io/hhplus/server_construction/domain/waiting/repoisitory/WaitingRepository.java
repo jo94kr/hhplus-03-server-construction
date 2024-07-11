@@ -19,7 +19,7 @@ public interface WaitingRepository {
      *
      * @return 가장 최근에 대기열을 통과한 대기열 Id
      */
-    Long findLastProceedingWaiting();
+    Long findLastProceedingWaiting(WaitingStatus status);
 
     /**
      * 분당 처리량을 조회
@@ -27,11 +27,11 @@ public interface WaitingRepository {
      *
      * @return 분당 처리량
      */
-    Long findThroughputPerMinute(LocalDateTime targetDatetime);
+    Long findThroughputPerMinute(LocalDateTime now, WaitingStatus status);
 
     List<Waiting> findWaitingByStatusAndExpireDatetimeIsBefore(WaitingStatus waitingStatus, LocalDateTime targetDatetime);
 
     void saveAll(List<Waiting> waitingList);
 
-    List<Waiting> findWaitingByStatusAndRemainingDatetimeIsBefore(WaitingStatus waitingStatus, LocalDateTime targetDatetime);
+    List<Waiting> findWaitingByStatusAndAccessDatetimeIsBefore(WaitingStatus waitingStatus, LocalDateTime targetDatetime);
 }

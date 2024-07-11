@@ -12,7 +12,7 @@ public class Waiting {
     private final Long id;
     private final String token;
     private WaitingStatus status;
-    private LocalDateTime remainingDatetime;
+    private LocalDateTime accessDatetime;
     private LocalDateTime expiredDatetime;
     private final LocalDateTime createDatetime;
 
@@ -20,13 +20,13 @@ public class Waiting {
             Long id,
             String token,
             WaitingStatus status,
-            LocalDateTime remainingDatetime,
+            LocalDateTime accessDatetime,
             LocalDateTime expiredDatetime,
             LocalDateTime createDatetime
     ) {
         this.id = id;
         this.token = token;
-        this.remainingDatetime = remainingDatetime;
+        this.accessDatetime = accessDatetime;
         this.status = status;
         this.expiredDatetime = expiredDatetime;
         this.createDatetime = createDatetime;
@@ -52,7 +52,7 @@ public class Waiting {
     }
 
     public Waiting setRemainingDatetime(LocalDateTime timeRemaining) {
-        this.remainingDatetime = timeRemaining;
+        this.accessDatetime = timeRemaining;
         return this;
     }
 

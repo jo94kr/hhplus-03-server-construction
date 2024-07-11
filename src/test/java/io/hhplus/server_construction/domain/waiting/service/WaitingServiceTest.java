@@ -74,7 +74,7 @@ class WaitingServiceTest {
                 now);
 
         // when
-        when(waitingRepository.findLastProceedingWaiting()).thenReturn(lastProceedingId);
+        when(waitingRepository.findLastProceedingWaiting(WaitingStatus.PROCEEDING)).thenReturn(lastProceedingId);
         Long waitingNumber = waitingService.calcWaitingNumber(waiting);
 
         // then
@@ -100,14 +100,14 @@ class WaitingServiceTest {
         long cycleTime = 5L;
 
         // when
-        when(waitingRepository.findThroughputPerMinute(now.minusMinutes(1))).thenReturn(throughputPerMinute);
+        when(waitingRepository.findThroughputPerMinute(now.minusMinutes(1), WaitingStatus.WAITING)).thenReturn(throughputPerMinute);
         Long result = waitingService.calcTimeRemaining(waiting, waitingNumber, now);
 
         // then
         // 남은 시간 = (대기번호 / 분당 처리량) * 임의로 지정한 프로세스 처리 시간(분)
         long timeRemaining = (waitingNumber / throughputPerMinute) * cycleTime;
         assertThat(result).isEqualTo(timeRemaining);
-        assertThat(waiting.getRemainingDatetime()).isNotNull();
+        assertThat(waiting.getAccessDatetime()).isNotNull();
     }
 
     @Test
@@ -160,7 +160,7 @@ class WaitingServiceTest {
         );
 
         // when
-        when(waitingRepository.findWaitingByStatusAndRemainingDatetimeIsBefore(WaitingStatus.WAITING, now))
+        when(waitingRepository.findWaitingByStatusAndAccessDatetimeIsBefore(WaitingStatus.WAITING, now))
                 .thenReturn(waitingList);
         waitingService.activeToken(now);
 
