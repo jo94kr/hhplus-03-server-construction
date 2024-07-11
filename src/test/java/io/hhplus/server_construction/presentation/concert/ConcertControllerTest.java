@@ -1,5 +1,6 @@
 package io.hhplus.server_construction.presentation.concert;
 
+import io.hhplus.server_construction.application.concert.dto.FindConcertScheduleResult;
 import io.hhplus.server_construction.application.concert.facade.ConcertFacade;
 import io.hhplus.server_construction.domain.concert.Concert;
 import io.hhplus.server_construction.domain.concert.ConcertSchedule;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -63,18 +65,24 @@ class ConcertControllerTest {
     @DisplayName("콘서트 일정을 조회한다.")
     void findConcertSchedule() throws Exception {
         // given
-        Concert concert = Concert.create(1L, "항해 콘서트", LocalDateTime.now(), LocalDateTime.now());
+        LocalDateTime now = LocalDateTime.now();
+        Concert concert = Concert.create(1L, "항해 콘서트", now, now);
         ConcertSchedule concertSchedule = ConcertSchedule.create(1L,
                 concert,
-                LocalDateTime.now(),
+                now,
                 ConcertScheduleEnums.ScheduleStatus.AVAILABLE,
-                LocalDateTime.now(),
-                LocalDateTime.now());
+                now,
+                now);
+        FindConcertScheduleResult concertScheduleResult = FindConcertScheduleResult.create(concertSchedule);
 
         // when
-        when(concertFacade.findConcertScheduleList(1L, TOKEN)).thenReturn(List.of(concertSchedule));
+        LocalDate localDate = LocalDate.now();
+        when(concertFacade.findConcertScheduleList(1L, TOKEN, localDate.minusDays(7), localDate)).thenReturn(List.of(concertScheduleResult));
         ResultActions response = mockMvc.perform(get(PATH + "/{concertId}/schedules", 1L)
-                .header("token", TOKEN));
+                .header("token", TOKEN)
+                .param("startDate", localDate.minusDays(7).toString())
+                .param("endDate", localDate.toString())
+        );
 
         // then
         response.andDo(print())

@@ -15,8 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,10 +52,10 @@ class WaitingServiceTest {
 
         // when
         when(waitingRepository.findWaitingByToken(token)).thenReturn(waiting);
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> waitingService.checkToken(token);
 
         // then
-        assertThatExceptionOfType(TokenExpiredException.class).isThrownBy(throwingCallable);
+        assertThatThrownBy(() -> waitingService.checkToken(token))
+                .isInstanceOf(TokenExpiredException.class);
     }
 
     @Test
@@ -100,8 +99,8 @@ class WaitingServiceTest {
         long cycleTime = 5L;
 
         // when
-        when(waitingRepository.findThroughputPerMinute(now.minusMinutes(1), WaitingStatus.WAITING)).thenReturn(throughputPerMinute);
-        Long result = waitingService.calcTimeRemaining(waiting, waitingNumber, now);
+        when(waitingRepository.findThroughputPerMinute(now, WaitingStatus.WAITING)).thenReturn(throughputPerMinute);
+        Long result = waitingService.calcTimeRemaining(waiting, waitingNumber);
 
         // then
         // 남은 시간 = (대기번호 / 분당 처리량) * 임의로 지정한 프로세스 처리 시간(분)

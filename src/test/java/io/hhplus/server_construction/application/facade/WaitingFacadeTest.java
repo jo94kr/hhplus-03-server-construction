@@ -5,11 +5,14 @@ import io.hhplus.server_construction.domain.waiting.Waiting;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -37,7 +40,7 @@ class WaitingFacadeTest {
         // when
         when(waitingService.checkToken(null)).thenReturn(waiting);
         when(waitingService.calcWaitingNumber(waiting)).thenReturn(any());
-        when(waitingService.calcTimeRemaining(waiting, any(), any())).thenReturn(any());
+        when(waitingService.calcTimeRemaining(waiting, any())).thenReturn(any());
         CheckTokenResult result = waitingFacade.checkToken(null);
 
         // then
@@ -56,7 +59,7 @@ class WaitingFacadeTest {
         // when
         when(waitingService.checkToken(token)).thenReturn(waiting);
         when(waitingService.calcWaitingNumber(waiting)).thenReturn(waitingNumber);
-        when(waitingService.calcTimeRemaining(waiting, waitingNumber, LocalDateTime.now())).thenReturn(timeRemainingMinutes);
+        when(waitingService.calcTimeRemaining(waiting, waitingNumber)).thenReturn(timeRemainingMinutes);
         CheckTokenResult result = waitingFacade.checkToken(token);
 
         // then

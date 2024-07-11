@@ -15,7 +15,7 @@ public class ConcertSchedule {
     private final LocalDateTime createDatetime;
     private final LocalDateTime modifyDatetime;
 
-    private ConcertSchedule(Long id,
+    public ConcertSchedule(Long id,
                             Concert concert,
                             LocalDateTime concertDatetime,
                             ConcertScheduleEnums.ScheduleStatus status,
