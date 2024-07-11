@@ -1,6 +1,7 @@
 package io.hhplus.server_construction.presentation.waiting.dto;
 
-import io.hhplus.server_construction.domain.waiting.WaitingEnums;
+import io.hhplus.server_construction.application.dto.CheckTokenResult;
+import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
 
 public record CheckWaitingDto(
 
@@ -8,9 +9,12 @@ public record CheckWaitingDto(
 
     public record Response(
             String token,
-            long rank,
-            WaitingEnums status
+            Long waitingNumber,
+            WaitingStatus status
     ) {
 
+        public static Response from(CheckTokenResult checkTokenResult) {
+            return new Response(checkTokenResult.token(), checkTokenResult.waitingNumber(), checkTokenResult.status());
+        }
     }
 }
