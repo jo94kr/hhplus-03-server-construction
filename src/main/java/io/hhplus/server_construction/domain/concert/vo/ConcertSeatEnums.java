@@ -1,6 +1,6 @@
-package io.hhplus.server_construction.domain.concert;
+package io.hhplus.server_construction.domain.concert.vo;
 
-public class ConcertEnums {
+public class ConcertSeatEnums {
 
     public enum Grade {
         GOLD, SILVER, BRONZE

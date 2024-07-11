@@ -1,9 +1,9 @@
 package io.hhplus.server_construction.presentation.concert;
 
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatEnums;
 import io.hhplus.server_construction.presentation.concert.dto.FindConcertListDto;
 import io.hhplus.server_construction.presentation.concert.dto.FindConcertScheduleDto;
 import io.hhplus.server_construction.presentation.concert.dto.FindConcertSeatDto;
-import io.hhplus.server_construction.domain.concert.ConcertEnums;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -38,6 +38,6 @@ public class ConcertController {
     public ResponseEntity<FindConcertSeatDto.Response> findConcertSeat(@RequestHeader("token") String token,
                                                                        @PathVariable(name = "concertId") Long concertId,
                                                                        @PathVariable("concertScheduleId") Long concertScheduleId) {
-        return ResponseEntity.ok(new FindConcertSeatDto.Response(1L, ConcertEnums.Grade.GOLD, BigDecimal.valueOf(1000L), ConcertEnums.Status.POSSIBLE));
+        return ResponseEntity.ok(new FindConcertSeatDto.Response(1L, ConcertSeatEnums.Grade.GOLD, BigDecimal.valueOf(1000L), ConcertSeatEnums.Status.POSSIBLE));
     }
 }
