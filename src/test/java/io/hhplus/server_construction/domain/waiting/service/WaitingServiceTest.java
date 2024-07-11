@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -107,5 +108,63 @@ class WaitingServiceTest {
         long timeRemaining = (waitingNumber / throughputPerMinute) * cycleTime;
         assertThat(result).isEqualTo(timeRemaining);
         assertThat(waiting.getRemainingDatetime()).isNotNull();
+    }
+
+    @Test
+    @DisplayName("스케쥴러 - 대기열 만료 시간이 지난 대기열을 만료시킨다.")
+    void expiredToken() {
+        // given
+        LocalDateTime now = LocalDateTime.now();
+        List<Waiting> waitingList = List.of(
+                new Waiting(1L,
+                        "DUMMY_TOKEN_1",
+                        WaitingStatus.WAITING,
+                        null,
+                        now.minusMinutes(10),
+                        now),
+                new Waiting(2L,
+                        "DUMMY_TOKEN_2",
+                        WaitingStatus.WAITING,
+                        null,
+                        now.minusMinutes(10),
+                        now)
+        );
+
+        // when
+        when(waitingRepository.findWaitingByStatusAndExpireDatetimeIsBefore(WaitingStatus.WAITING, now.minusMinutes(5)))
+                .thenReturn(waitingList);
+        waitingService.expiredToken(now);
+
+        // then
+        assertThat(waitingList).allSatisfy(waiting -> assertThat(waiting.getStatus()).isEqualTo(WaitingStatus.EXPIRED));
+    }
+
+    @Test
+    @DisplayName("스케쥴러 - 진입 가능 시간에 도달한 대기열의 상태를 바꾼다.")
+    void activeToken() {
+        // given
+        LocalDateTime now = LocalDateTime.now();
+        List<Waiting> waitingList = List.of(
+                new Waiting(1L,
+                        "DUMMY_TOKEN_1",
+                        WaitingStatus.WAITING,
+                        now,
+                        now,
+                        now),
+                new Waiting(2L,
+                        "DUMMY_TOKEN_2",
+                        WaitingStatus.WAITING,
+                        now,
+                        now,
+                        now)
+        );
+
+        // when
+        when(waitingRepository.findWaitingByStatusAndRemainingDatetimeIsBefore(WaitingStatus.WAITING, now))
+                .thenReturn(waitingList);
+        waitingService.activeToken(now);
+
+        // then
+        assertThat(waitingList).allSatisfy(waiting -> assertThat(waiting.getStatus()).isEqualTo(WaitingStatus.PROCEEDING));
     }
 }

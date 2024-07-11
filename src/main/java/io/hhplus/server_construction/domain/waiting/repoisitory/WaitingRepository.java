@@ -1,8 +1,10 @@
 package io.hhplus.server_construction.domain.waiting.repoisitory;
 
 import io.hhplus.server_construction.domain.waiting.Waiting;
+import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface WaitingRepository {
 
@@ -27,4 +29,9 @@ public interface WaitingRepository {
      */
     Long findThroughputPerMinute(LocalDateTime targetDatetime);
 
+    List<Waiting> findWaitingByStatusAndExpireDatetimeIsBefore(WaitingStatus waitingStatus, LocalDateTime targetDatetime);
+
+    void saveAll(List<Waiting> waitingList);
+
+    List<Waiting> findWaitingByStatusAndRemainingDatetimeIsBefore(WaitingStatus waitingStatus, LocalDateTime targetDatetime);
 }

@@ -55,4 +55,9 @@ public class Waiting {
         this.remainingDatetime = timeRemaining;
         return this;
     }
+
+    public Waiting remainingToken() {
+        this.status = WaitingStatus.PROCEEDING;
+        return this;
+    }
 }
