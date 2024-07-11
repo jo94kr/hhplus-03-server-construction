@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +46,9 @@ public class WaitingService {
         return currentWaitingNum - lastProceedingWaitingNum;
     }
 
-    public Long calcTimeRemaining(Waiting waiting, Long waitingNumber, LocalDateTime now) {
+    public Long calcTimeRemaining(Waiting waiting, Long waitingNumber) {
+        LocalDateTime now = LocalDateTime.now();
+
         // 분당 처리량 (1분전부터 현재까지 대기중이 아닌 대기열 개수 조회)
         Long throughputPerMinute = waitingRepository.findThroughputPerMinute(now, WaitingStatus.WAITING);
 
@@ -82,6 +85,11 @@ public class WaitingService {
     }
 
     public boolean checkWaitingStatus(String token) {
-        return waitingRepository.findWaitingByToken(token).isAvailableToken();
+        Waiting waiting = waitingRepository.findWaitingByToken(token);
+        if (waiting != null) {
+            return waiting.isAvailableToken();
+        } else {
+            return false;
+        }
     }
 }

@@ -18,14 +18,14 @@ public class ConcertSeat {
     private final LocalDateTime createDatetime;
     private final LocalDateTime modifyDatetime;
 
-    private ConcertSeat(Long id,
-                        ConcertSchedule concertSchedule,
-                        String seatNum,
-                        ConcertSeatEnums.Grade grade,
-                        BigDecimal price,
-                        ConcertSeatEnums.Status status,
-                        LocalDateTime createDatetime,
-                        LocalDateTime modifyDatetime) {
+    public ConcertSeat(Long id,
+                       ConcertSchedule concertSchedule,
+                       String seatNum,
+                       ConcertSeatEnums.Grade grade,
+                       BigDecimal price,
+                       ConcertSeatEnums.Status status,
+                       LocalDateTime createDatetime,
+                       LocalDateTime modifyDatetime) {
         this.id = id;
         this.concertSchedule = concertSchedule;
         this.seatNum = seatNum;

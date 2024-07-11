@@ -25,7 +25,7 @@ public class WaitingFacade {
         Long waitingNumber = waitingService.calcWaitingNumber(waiting);
 
         // 남은 시간(분)
-        Long timeRemainingMinutes = waitingService.calcTimeRemaining(waiting, waitingNumber, LocalDateTime.now());
+        Long timeRemainingMinutes = waitingService.calcTimeRemaining(waiting, waitingNumber);
 
         return CheckTokenResult.create(waiting.getToken(),
                 timeRemainingMinutes,

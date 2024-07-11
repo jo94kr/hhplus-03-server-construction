@@ -100,8 +100,8 @@ class WaitingServiceTest {
         long cycleTime = 5L;
 
         // when
-        when(waitingRepository.findThroughputPerMinute(now.minusMinutes(1), WaitingStatus.WAITING)).thenReturn(throughputPerMinute);
-        Long result = waitingService.calcTimeRemaining(waiting, waitingNumber, now);
+        when(waitingRepository.findThroughputPerMinute(now, WaitingStatus.WAITING)).thenReturn(throughputPerMinute);
+        Long result = waitingService.calcTimeRemaining(waiting, waitingNumber);
 
         // then
         // 남은 시간 = (대기번호 / 분당 처리량) * 임의로 지정한 프로세스 처리 시간(분)
