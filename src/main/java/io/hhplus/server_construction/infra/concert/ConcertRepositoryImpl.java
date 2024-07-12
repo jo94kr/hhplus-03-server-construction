@@ -70,4 +70,11 @@ public class ConcertRepositoryImpl implements ConcertRepository {
     public ConcertSeat saveConcertSeat(ConcertSeat concertSeat) {
         return ConcertSeatMapper.toDomain(concertSeatJpaRepository.save(ConcertSeatMapper.toEntity(concertSeat)));
     }
+
+    @Override
+    public void saveAllConcertSeat(List<ConcertSeat> temporarySeatList) {
+        concertSeatJpaRepository.saveAll(temporarySeatList.stream()
+                .map(ConcertSeatMapper::toEntity)
+                .toList());
+    }
 }

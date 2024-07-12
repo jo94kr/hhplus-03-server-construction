@@ -51,7 +51,7 @@ public class ConcertSeat {
         return this.status.isPossible();
     }
 
-    public ConcertSeat setPending() {
+    public ConcertSeat changeStatus(ConcertSeatEnums.Status possible) {
         this.status = ConcertSeatEnums.Status.PENDING;
         return this;
     }
