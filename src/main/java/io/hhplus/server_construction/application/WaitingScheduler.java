@@ -1,7 +1,7 @@
 package io.hhplus.server_construction.application;
 
 
-import io.hhplus.server_construction.application.facade.WaitingFacade;
+import io.hhplus.server_construction.application.waiting.facade.WaitingFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

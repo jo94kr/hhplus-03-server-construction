@@ -14,7 +14,7 @@ public class ConcertSeat {
     private final String seatNum;
     private final ConcertSeatEnums.Grade grade;
     private final BigDecimal price;
-    private final ConcertSeatEnums.Status status;
+    private ConcertSeatEnums.Status status;
     private final LocalDateTime createDatetime;
     private final LocalDateTime modifyDatetime;
 
@@ -45,5 +45,14 @@ public class ConcertSeat {
                                      LocalDateTime createDatetime,
                                      LocalDateTime modifyDatetime) {
         return new ConcertSeat(id, concertSchedule, seatNum, grade, price, status, createDatetime, modifyDatetime);
+    }
+
+    public boolean isPossible() {
+        return this.status.isPossible();
+    }
+
+    public ConcertSeat setPending() {
+        this.status = ConcertSeatEnums.Status.PENDING;
+        return this;
     }
 }

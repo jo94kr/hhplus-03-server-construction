@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.application.dto;
+package io.hhplus.server_construction.application.waiting.dto;
 
 import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
 

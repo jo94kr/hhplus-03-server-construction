@@ -1,6 +1,6 @@
 package io.hhplus.server_construction.presentation.waiting.dto;
 
-import io.hhplus.server_construction.application.dto.CheckTokenResult;
+import io.hhplus.server_construction.application.waiting.dto.CheckTokenResult;
 import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
 
 public record CheckWaitingDto(

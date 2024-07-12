@@ -1,6 +1,6 @@
-package io.hhplus.server_construction.application.facade;
+package io.hhplus.server_construction.application.waiting.facade;
 
-import io.hhplus.server_construction.application.dto.CheckTokenResult;
+import io.hhplus.server_construction.application.waiting.dto.CheckTokenResult;
 import io.hhplus.server_construction.domain.waiting.Waiting;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;

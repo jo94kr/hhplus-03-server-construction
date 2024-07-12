@@ -59,4 +59,15 @@ public class ConcertRepositoryImpl implements ConcertRepository {
                 .map(ConcertSeatMapper::toDomain)
                 .toList();
     }
+
+    @Override
+    public ConcertSeat pessimisticLockFindById(Long concertSeatId) {
+        return ConcertSeatMapper.toDomain(concertSeatJpaRepository.pessimisticLockFindById(concertSeatId)
+                .orElseThrow(EntityNotFoundException::new));
+    }
+
+    @Override
+    public ConcertSeat saveConcertSeat(ConcertSeat concertSeat) {
+        return ConcertSeatMapper.toDomain(concertSeatJpaRepository.save(ConcertSeatMapper.toEntity(concertSeat)));
+    }
 }

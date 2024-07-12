@@ -1,22 +1,16 @@
 package io.hhplus.server_construction.application.facade;
 
-import io.hhplus.server_construction.application.dto.CheckTokenResult;
+import io.hhplus.server_construction.application.waiting.dto.CheckTokenResult;
+import io.hhplus.server_construction.application.waiting.facade.WaitingFacade;
 import io.hhplus.server_construction.domain.waiting.Waiting;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;

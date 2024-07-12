@@ -7,6 +7,10 @@ public class ConcertSeatEnums {
     }
 
     public enum Status {
-        POSSIBLE, TEMPORARY, AVAILABLE
+        POSSIBLE, PENDING, SOLD_OUT;
+
+        public boolean isPossible() {
+            return this == POSSIBLE;
+        }
     }
 }

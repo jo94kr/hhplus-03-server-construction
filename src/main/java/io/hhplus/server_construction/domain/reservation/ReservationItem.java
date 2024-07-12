@@ -14,7 +14,7 @@ public class ReservationItem {
     private final ConcertSeat concertSeat;
     private final BigDecimal price;
     private final ReservationEnums.ReservationStatus status;
-    private final LocalDateTime createDatetime;
+    private LocalDateTime createDatetime;
 
     private ReservationItem(Long id,
                             Reservation reservation,
@@ -30,6 +30,18 @@ public class ReservationItem {
         this.createDatetime = createDatetime;
     }
 
+    private ReservationItem(Long id,
+                            Reservation reservation,
+                            ConcertSeat concertSeat,
+                            BigDecimal price,
+                            ReservationEnums.ReservationStatus status) {
+        this.id = id;
+        this.reservation = reservation;
+        this.concertSeat = concertSeat;
+        this.price = price;
+        this.status = status;
+    }
+
     public static ReservationItem create(Long id,
                                          Reservation reservation,
                                          ConcertSeat concertSeat,
@@ -37,5 +49,14 @@ public class ReservationItem {
                                          ReservationEnums.ReservationStatus status,
                                          LocalDateTime createDatetime) {
         return new ReservationItem(id, reservation, concertSeat, price, status, createDatetime);
+    }
+
+    public static ReservationItem reservation(Reservation reservation,
+                                              ConcertSeat concertSeat) {
+        return new ReservationItem(null,
+                reservation,
+                concertSeat,
+                concertSeat.getPrice(),
+                ReservationEnums.ReservationStatus.RESERVATION);
     }
 }

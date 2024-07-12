@@ -107,7 +107,7 @@ class ConcertControllerTest {
                 "A1",
                 ConcertSeatEnums.Grade.GOLD,
                 BigDecimal.valueOf(1000),
-                ConcertSeatEnums.Status.AVAILABLE,
+                ConcertSeatEnums.Status.POSSIBLE,
                 LocalDateTime.now(),
                 LocalDateTime.now());
 

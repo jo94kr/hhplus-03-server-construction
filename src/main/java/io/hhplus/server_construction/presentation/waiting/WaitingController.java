@@ -1,6 +1,6 @@
 package io.hhplus.server_construction.presentation.waiting;
 
-import io.hhplus.server_construction.application.facade.WaitingFacade;
+import io.hhplus.server_construction.application.waiting.facade.WaitingFacade;
 import io.hhplus.server_construction.presentation.waiting.dto.CheckWaitingDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
