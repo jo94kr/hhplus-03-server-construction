@@ -1,3 +1,5 @@
+![swagger.png](swagger.png)
+
 # GET /waiting/check - 대기열 체크
 
 - Description
