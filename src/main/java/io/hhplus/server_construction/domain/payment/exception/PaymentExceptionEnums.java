@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.domain.user.exceprtion;
+package io.hhplus.server_construction.domain.payment.exception;
 
 import io.hhplus.server_construction.common.exception.ExceptionInterface;
 import lombok.Getter;
@@ -7,11 +7,10 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum UserExceptionEnums implements ExceptionInterface {
+public enum PaymentExceptionEnums implements ExceptionInterface {
 
-    INVALID_AMOUNT_VALUE(HttpStatus.BAD_REQUEST, "INVALID_AMOUNT_VALUE", "Invalid amount"),
-    INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "INSUFFICIENT_BALANCE", "insufficient balance")
-    ;
+    INVALID_RESERVATION_STATUS(HttpStatus.BAD_REQUEST, "INVALID_RESERVATION_STATUS", "invalid reservation status"),
+    INVALID_USER(HttpStatus.BAD_REQUEST, "INVALID_USER", "invalid user"),;
 
     private final HttpStatus httpStatus;
     private final String code;

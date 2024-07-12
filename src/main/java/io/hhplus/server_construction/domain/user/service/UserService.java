@@ -20,4 +20,8 @@ public class UserService {
     public User charge(User user, BigDecimal amount) {
         return userRepository.save(user.charge(amount));
     }
+
+    public User use(User user, BigDecimal amount) {
+        return userRepository.save(user.use(amount));
+    }
 }

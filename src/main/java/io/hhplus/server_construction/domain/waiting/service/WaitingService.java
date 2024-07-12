@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -64,7 +63,7 @@ public class WaitingService {
         return now.until(timeRemaining, ChronoUnit.MINUTES);
     }
 
-    public void expiredToken(LocalDateTime now) {
+    public void findExpiredToken(LocalDateTime now) {
         // 만료일이 지난 대기열 조회
         List<Waiting> expireWaitingList = waitingRepository.findWaitingByStatusAndExpireDatetimeIsBefore(WaitingStatus.WAITING, now.minusMinutes(5));
 
@@ -74,7 +73,7 @@ public class WaitingService {
                 .toList());
     }
 
-    public void activeToken(LocalDateTime now) {
+    public void findActiveToken(LocalDateTime now) {
         // 진입 가능한 대기열 조회
         List<Waiting> activeWaitingList = waitingRepository.findWaitingByStatusAndAccessDatetimeIsBefore(WaitingStatus.WAITING, now);
 
@@ -96,5 +95,10 @@ public class WaitingService {
         } else {
             return false;
         }
+    }
+
+    public void expiredToken(String token) {
+        Waiting waiting = waitingRepository.findWaitingByToken(token);
+        waitingRepository.save(waiting.expireToken());
     }
 }

@@ -38,9 +38,9 @@ public class WaitingFacade {
     public void tokenScheduler() {
         LocalDateTime now = LocalDateTime.now();
         // 만료 일시가 5분이 넘은 토큰 만료 처리
-        waitingService.expiredToken(now);
+        waitingService.findExpiredToken(now);
 
         // 대기열 진입 가능한 토큰 상태 변경
-        waitingService.activeToken(now);
+        waitingService.findActiveToken(now);
     }
 }

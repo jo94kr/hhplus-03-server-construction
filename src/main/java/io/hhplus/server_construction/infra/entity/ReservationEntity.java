@@ -1,6 +1,7 @@
 package io.hhplus.server_construction.infra.entity;
 
 import io.hhplus.server_construction.domain.reservation.ReservationItem;
+import io.hhplus.server_construction.domain.reservation.vo.ReservationStatusEnums;
 import io.hhplus.server_construction.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -26,13 +27,17 @@ public class ReservationEntity extends BaseEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
+    private ReservationStatusEnums status;
+
     private BigDecimal totalPrice;
 
     public ReservationEntity(Long id,
                              UserEntity user,
+                             ReservationStatusEnums status,
                              BigDecimal totalPrice) {
         this.id = id;
         this.user = user;
+        this.status = status;
         this.totalPrice = totalPrice;
     }
 

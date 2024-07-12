@@ -7,6 +7,7 @@ import io.hhplus.server_construction.domain.concert.vo.ConcertScheduleEnums;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatEnums;
 import io.hhplus.server_construction.domain.reservation.Reservation;
 import io.hhplus.server_construction.domain.reservation.repoisitory.ReservationRepository;
+import io.hhplus.server_construction.domain.reservation.vo.ReservationStatusEnums;
 import io.hhplus.server_construction.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -87,7 +88,7 @@ class ReservationServiceTest {
         BigDecimal totalPrice = concertSeatList.stream()
                 .map(ConcertSeat::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        Reservation reservation = Reservation.create(any(), user, totalPrice);
+        Reservation reservation = Reservation.create(any(), user, ReservationStatusEnums.PAYMENT_WAITING, totalPrice);
 
         // when
         when(reservationRepository.saveReservation(reservation)).thenReturn(reservation);

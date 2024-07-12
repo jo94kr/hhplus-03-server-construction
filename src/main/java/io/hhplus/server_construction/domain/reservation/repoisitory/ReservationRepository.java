@@ -18,4 +18,8 @@ public interface ReservationRepository {
     ReservationItem saveReservationItem(ReservationItem reservationItem);
 
     List<ReservationItem> saveAllReservationItems(List<ReservationItem> reservationItemList);
+
+    Reservation findReservationById(Long reservationId);
+
+    List<ReservationItem> findAllReservationItemByReservationId(Long reservationId);
 }

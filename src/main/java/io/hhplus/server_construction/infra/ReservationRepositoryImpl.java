@@ -6,6 +6,7 @@ import io.hhplus.server_construction.domain.reservation.repoisitory.ReservationR
 import io.hhplus.server_construction.infra.entity.ReservationItemEntity;
 import io.hhplus.server_construction.infra.mapper.ReservationItemMapper;
 import io.hhplus.server_construction.infra.mapper.ReservationMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -35,6 +36,19 @@ public class ReservationRepositoryImpl implements ReservationRepository {
                 .toList());
 
         return reservationItemEntityList.stream()
+                .map(ReservationItemMapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    public Reservation findReservationById(Long reservationId) {
+        return ReservationMapper.toDomain(reservationJpaRepository.findById(reservationId)
+                .orElseThrow(EntityNotFoundException::new));
+    }
+
+    @Override
+    public List<ReservationItem> findAllReservationItemByReservationId(Long reservationId) {
+        return reservationItemJpaRepository.findByReservationId(reservationId).stream()
                 .map(ReservationItemMapper::toDomain)
                 .toList();
     }
