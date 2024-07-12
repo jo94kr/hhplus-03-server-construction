@@ -1,5 +1,6 @@
 package io.hhplus.server_construction.presentation.user;
 
+import io.hhplus.server_construction.application.user.facade.UserFacade;
 import io.hhplus.server_construction.presentation.user.dto.AmountDto;
 import io.hhplus.server_construction.presentation.user.dto.ChargeDto;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +14,11 @@ import java.math.BigDecimal;
 @RequestMapping("/users")
 public class UserController {
 
+    private final UserFacade userFacade;
+
     @GetMapping("/{userId}/amount")
     public ResponseEntity<AmountDto.Response> amount(@PathVariable("userId") Long userId) {
-        return ResponseEntity.ok(new AmountDto.Response(BigDecimal.valueOf(100L)));
+        return ResponseEntity.ok(new AmountDto.Response(userFacade.findUserById(userId).getAmount()));
     }
 
     @PatchMapping("/{userId}/charge")
