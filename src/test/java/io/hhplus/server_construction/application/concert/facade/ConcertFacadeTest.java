@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,10 +34,10 @@ class ConcertFacadeTest {
 
         // when
         when(waitingService.checkWaitingStatus(TOKEN)).thenReturn(false);
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> concertFacade.findConcertList(pageRequest, TOKEN);
 
         // then
-        assertThatExceptionOfType(TokenExpiredException.class).isThrownBy(throwingCallable);
+        assertThatThrownBy(() -> concertFacade.findConcertList(pageRequest, TOKEN))
+                .isInstanceOf(TokenExpiredException.class);
     }
 
     @Test
@@ -47,10 +48,10 @@ class ConcertFacadeTest {
 
         // when
         when(waitingService.checkWaitingStatus(TOKEN)).thenReturn(false);
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> concertFacade.findConcertScheduleList(concertId, TOKEN, any(), any());
 
         // then
-        assertThatExceptionOfType(TokenExpiredException.class).isThrownBy(throwingCallable);
+        assertThatThrownBy(() -> concertFacade.findConcertScheduleList(concertId, TOKEN, any(), any()))
+                .isInstanceOf(TokenExpiredException.class);
     }
 
     @Test
@@ -62,9 +63,9 @@ class ConcertFacadeTest {
 
         // when
         when(waitingService.checkWaitingStatus(TOKEN)).thenReturn(false);
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> concertFacade.findConcertSeatList(concertId, concertScheduleId, TOKEN);
 
         // then
-        assertThatExceptionOfType(TokenExpiredException.class).isThrownBy(throwingCallable);
+        assertThatThrownBy(() -> concertFacade.findConcertSeatList(concertId, concertScheduleId, TOKEN))
+                .isInstanceOf(TokenExpiredException.class);
     }
 }
