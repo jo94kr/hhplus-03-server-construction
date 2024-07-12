@@ -87,7 +87,12 @@ public class WaitingService {
     public boolean checkWaitingStatus(String token) {
         Waiting waiting = waitingRepository.findWaitingByToken(token);
         if (waiting != null) {
-            return waiting.isAvailableToken();
+            boolean availableToken = waiting.isAvailableToken();
+            if (availableToken) {
+                // 유효한 토큰일 경우 만료일을 연장
+                waiting.renewalExpiredDatetime();
+            }
+            return availableToken;
         } else {
             return false;
         }
