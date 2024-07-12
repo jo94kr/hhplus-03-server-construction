@@ -15,8 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,10 +52,10 @@ class WaitingServiceTest {
 
         // when
         when(waitingRepository.findWaitingByToken(token)).thenReturn(waiting);
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> waitingService.checkToken(token);
 
         // then
-        assertThatExceptionOfType(TokenExpiredException.class).isThrownBy(throwingCallable);
+        assertThatThrownBy(() -> waitingService.checkToken(token))
+                .isInstanceOf(TokenExpiredException.class);
     }
 
     @Test
