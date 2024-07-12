@@ -5,6 +5,7 @@ import io.hhplus.server_construction.domain.concert.ConcertSchedule;
 import io.hhplus.server_construction.domain.concert.ConcertSeat;
 import io.hhplus.server_construction.domain.concert.exceprtion.AlreadyReservationException;
 import io.hhplus.server_construction.domain.concert.repoisitory.ConcertRepository;
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatEnums;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,9 +45,13 @@ public class ConcertService {
             }
 
             // 좌석 임시 예약 상태로 변경
-            concertSeatList.add(concertRepository.saveConcertSeat(concertSeat.setPending()));
+            concertSeatList.add(concertRepository.saveConcertSeat(concertSeat.changeStatus(ConcertSeatEnums.Status.PENDING)));
         }
 
         return concertSeatList;
+    }
+
+    public void saveAllConcertSeat(List<ConcertSeat> concertSeatList) {
+        concertRepository.saveAllConcertSeat(concertSeatList);
     }
 }

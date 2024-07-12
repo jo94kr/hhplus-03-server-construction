@@ -1,6 +1,8 @@
 package io.hhplus.server_construction.application.payment.facade;
 
 import io.hhplus.server_construction.application.payment.dto.PaymentResult;
+import io.hhplus.server_construction.domain.concert.service.ConcertService;
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatEnums;
 import io.hhplus.server_construction.domain.payment.Payment;
 import io.hhplus.server_construction.domain.payment.exception.InvalidReservationStatusException;
 import io.hhplus.server_construction.domain.payment.service.PaymentService;
@@ -21,6 +23,7 @@ public class PaymentFacade {
     private final PaymentService paymentService;
     private final WaitingService waitingService;
     private final ReservationService reservationService;
+    private final ConcertService concertService;
     private final UserService userService;
 
     public PaymentResult payment(Long reservationId, Long userId, String token) {
@@ -42,6 +45,9 @@ public class PaymentFacade {
 
         // 예약 상태 변경
         reservationService.save(reservation.changeStatus(ReservationStatusEnums.PAYMENT_COMPLETE));
+        concertService.saveAllConcertSeat(reservation.getReservationItemList().stream()
+                .map(reservationItem -> reservationItem.getConcertSeat().changeStatus(ConcertSeatEnums.Status.SOLD_OUT))
+                .toList());
 
         // 토큰 만료 처리
         waitingService.expiredToken(token);

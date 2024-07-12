@@ -24,4 +24,6 @@ public interface ConcertRepository {
     ConcertSeat pessimisticLockFindById(Long concertSeatId);
 
     ConcertSeat saveConcertSeat(ConcertSeat concertSeat);
+
+    void saveAllConcertSeat(List<ConcertSeat> concertSeatList);
 }
