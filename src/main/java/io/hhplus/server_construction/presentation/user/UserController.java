@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -24,6 +22,6 @@ public class UserController {
     @PatchMapping("/{userId}/charge")
     public ResponseEntity<ChargeDto.Response> charge(@PathVariable("userId") Long userId,
                                                      @RequestBody ChargeDto.Request request) {
-        return ResponseEntity.ok(new ChargeDto.Response(BigDecimal.valueOf(200L)));
+        return ResponseEntity.ok(new ChargeDto.Response(userFacade.charge(userId, request.amount()).getAmount()));
     }
 }

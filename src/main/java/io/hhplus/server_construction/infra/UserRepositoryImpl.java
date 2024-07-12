@@ -26,4 +26,9 @@ public class UserRepositoryImpl implements UserRepository {
         return UserMapper.toDomain(userJpaRepository.findById(userId)
                 .orElseThrow(EntityNotFoundException::new));
     }
+
+    @Override
+    public User save(User user) {
+        return UserMapper.toDomain(userJpaRepository.save(UserMapper.toEntity(user)));
+    }
 }
