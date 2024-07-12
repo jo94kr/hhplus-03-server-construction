@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
@@ -50,7 +52,7 @@ class ConcertFacadeTest {
         when(waitingService.checkWaitingStatus(TOKEN)).thenReturn(false);
 
         // then
-        assertThatThrownBy(() -> concertFacade.findConcertScheduleList(concertId, TOKEN, any(), any()))
+        assertThatThrownBy(() -> concertFacade.findConcertScheduleList(concertId, TOKEN, LocalDate.now().minusDays(1), LocalDate.now()))
                 .isInstanceOf(TokenExpiredException.class);
     }
 
