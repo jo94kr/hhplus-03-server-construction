@@ -1,6 +1,7 @@
 package io.hhplus.server_construction.infra.waiting.entity;
 
 import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
+import io.hhplus.server_construction.infra.BaseCreateDatetimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

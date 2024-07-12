@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.infra.waiting.entity;
+package io.hhplus.server_construction.infra;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

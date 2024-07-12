@@ -12,7 +12,7 @@ public class Concert {
     private final LocalDateTime createDatetime;
     private final LocalDateTime modifyDatetime;
 
-    private Concert(Long id,
+    public Concert(Long id,
                     String name,
                     LocalDateTime createDatetime,
                     LocalDateTime modifyDatetime) {
