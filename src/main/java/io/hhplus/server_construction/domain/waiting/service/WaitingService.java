@@ -21,7 +21,22 @@ public class WaitingService {
         Waiting waiting;
         // 토큰이 없으면 신규 토큰 발급
         if (token == null) {
+            // 현재 대기번호, 진입 시간 계산
             waiting = waitingRepository.save(Waiting.create());
+
+            Long waitingNumber = calcWaitingNumber(waiting);
+
+            // 분당 처리량 (1분전부터 현재까지 대기중이 아닌 대기열 개수 조회)
+            Long throughputPerMinute = waitingRepository.findThroughputPerMinute(waiting.getCreateDatetime(), WaitingStatus.WAITING);
+
+            // 한 사이클 시간 (임의로 지정한 사이클 시간(분))
+            long cycleTime = 5L;
+
+            // 남은 시간 = (본인 순서 / 분당 처리량) * 한 사이클 시간
+            LocalDateTime timeRemaining = waiting.getCreateDatetime().plusMinutes((waitingNumber / throughputPerMinute) * cycleTime);
+
+            // 진입 시간 업데이트
+            waitingRepository.save(waiting.setRemainingDatetime(timeRemaining));
         } else {
             waiting = waitingRepository.findWaitingByToken(token);
             if (WaitingStatus.EXPIRED.equals(waiting.getStatus())) {
@@ -45,7 +60,7 @@ public class WaitingService {
         return currentWaitingNum - lastProceedingWaitingNum;
     }
 
-    public Long calcTimeRemaining(Waiting waiting, Long waitingNumber) {
+    public Long calcTimeRemaining(Long waitingNumber) {
         LocalDateTime now = LocalDateTime.now();
 
         // 분당 처리량 (1분전부터 현재까지 대기중이 아닌 대기열 개수 조회)
@@ -56,9 +71,6 @@ public class WaitingService {
 
         // 남은 시간 = (본인 순서 / 분당 처리량) * 한 사이클 시간
         LocalDateTime timeRemaining = now.plusMinutes((waitingNumber / throughputPerMinute) * cycleTime);
-
-        // 진입 시간 업데이트
-        waitingRepository.save(waiting.setRemainingDatetime(timeRemaining));
 
         return now.until(timeRemaining, ChronoUnit.MINUTES);
     }

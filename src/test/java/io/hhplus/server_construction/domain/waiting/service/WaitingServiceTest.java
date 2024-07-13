@@ -4,7 +4,6 @@ import io.hhplus.server_construction.domain.waiting.Waiting;
 import io.hhplus.server_construction.domain.waiting.exceprtion.TokenExpiredException;
 import io.hhplus.server_construction.domain.waiting.repoisitory.WaitingRepository;
 import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -100,7 +99,7 @@ class WaitingServiceTest {
 
         // when
         when(waitingRepository.findThroughputPerMinute(now, WaitingStatus.WAITING)).thenReturn(throughputPerMinute);
-        Long result = waitingService.calcTimeRemaining(waiting, waitingNumber);
+        Long result = waitingService.calcTimeRemaining(waitingNumber);
 
         // then
         // 남은 시간 = (대기번호 / 분당 처리량) * 임의로 지정한 프로세스 처리 시간(분)

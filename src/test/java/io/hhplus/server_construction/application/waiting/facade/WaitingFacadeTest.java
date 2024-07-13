@@ -1,7 +1,6 @@
 package io.hhplus.server_construction.application.waiting.facade;
 
 import io.hhplus.server_construction.application.waiting.dto.CheckTokenResult;
-import io.hhplus.server_construction.application.waiting.facade.WaitingFacade;
 import io.hhplus.server_construction.domain.waiting.Waiting;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
@@ -33,8 +32,8 @@ class WaitingFacadeTest {
 
         // when
         when(waitingService.checkToken(null)).thenReturn(waiting);
-        when(waitingService.calcWaitingNumber(waiting)).thenReturn(any());
-        when(waitingService.calcTimeRemaining(waiting, any())).thenReturn(any());
+        when(waitingService.calcWaitingNumber(waiting)).thenReturn(15L);
+        when(waitingService.calcTimeRemaining(15L)).thenReturn(any());
         CheckTokenResult result = waitingFacade.checkToken(null);
 
         // then
@@ -53,7 +52,7 @@ class WaitingFacadeTest {
         // when
         when(waitingService.checkToken(token)).thenReturn(waiting);
         when(waitingService.calcWaitingNumber(waiting)).thenReturn(waitingNumber);
-        when(waitingService.calcTimeRemaining(waiting, waitingNumber)).thenReturn(timeRemainingMinutes);
+        when(waitingService.calcTimeRemaining(waitingNumber)).thenReturn(timeRemainingMinutes);
         CheckTokenResult result = waitingFacade.checkToken(token);
 
         // then
