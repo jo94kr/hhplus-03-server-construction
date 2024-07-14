@@ -1,5 +1,7 @@
 package io.hhplus.server_construction.domain.user;
 
+import io.hhplus.server_construction.domain.user.exceprtion.ChargeAmountException;
+import io.hhplus.server_construction.domain.user.exceprtion.UseAmountException;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -10,7 +12,7 @@ public class User {
 
     private final Long id;
     private final String name;
-    private final BigDecimal amount;
+    private BigDecimal amount;
     private final LocalDateTime createDatetime;
     private final LocalDateTime modifyDatetime;
 
@@ -32,5 +34,22 @@ public class User {
                               LocalDateTime createDatetime,
                               LocalDateTime modifyDatetime) {
         return new User(id, name, amount, createDatetime, modifyDatetime);
+    }
+
+    public User charge(BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new ChargeAmountException();
+        }
+
+        this.amount = this.amount.add(amount);
+        return this;
+    }
+
+    public User use(BigDecimal amount) {
+        if (amount.compareTo(this.amount) < 0) {
+            throw new UseAmountException();
+        }
+        this.amount = this.amount.min(amount);
+        return this;
     }
 }
