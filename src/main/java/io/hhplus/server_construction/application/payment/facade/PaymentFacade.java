@@ -1,12 +1,13 @@
 package io.hhplus.server_construction.application.payment.facade;
 
+import io.hhplus.server_construction.application.payment.dto.PaymentCommand;
 import io.hhplus.server_construction.application.payment.dto.PaymentResult;
 import io.hhplus.server_construction.domain.payment.Payment;
 import io.hhplus.server_construction.domain.payment.exception.InvalidReservationStatusException;
 import io.hhplus.server_construction.domain.payment.service.PaymentService;
 import io.hhplus.server_construction.domain.reservation.Reservation;
 import io.hhplus.server_construction.domain.reservation.service.ReservationService;
-import io.hhplus.server_construction.domain.reservation.vo.ReservationStatusEnums;
+import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import io.hhplus.server_construction.domain.user.service.UserService;
 import io.hhplus.server_construction.domain.waiting.exceprtion.TokenExpiredException;
@@ -23,25 +24,25 @@ public class PaymentFacade {
     private final ReservationService reservationService;
     private final UserService userService;
 
-    public PaymentResult payment(Long reservationId, Long userId, String token) {
+    public PaymentResult payment(PaymentCommand paymentCommand, String token) {
         // 토큰 유효성 검사
         if (!waitingService.checkWaitingStatus(token)) {
             throw new TokenExpiredException();
         }
 
         // 결제 가능여부 체크
-        Reservation reservation = reservationService.findReservationWithItemListById(reservationId);
+        Reservation reservation = reservationService.findReservationWithItemListById(paymentCommand.reservationId());
         if (!reservation.isPaymentWaiting()) {
             throw new InvalidReservationStatusException();
         }
 
-        User user = userService.findUserById(userId);
+        User user = userService.findUserById(paymentCommand.userId());
         // 결제
         userService.use(user, reservation.getTotalPrice());
         Payment payment = paymentService.payment(reservation, user);
 
         // 예약 상태 변경
-        reservationService.save(reservation.changeStatus(ReservationStatusEnums.PAYMENT_COMPLETE));
+        reservationService.save(reservation.changeStatus(ReservationStatus.PAYMENT_COMPLETE));
 
         // 토큰 만료 처리
         waitingService.expiredToken(token);

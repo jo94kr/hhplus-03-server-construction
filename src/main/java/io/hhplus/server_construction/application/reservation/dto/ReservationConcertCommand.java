@@ -4,7 +4,6 @@ import java.util.List;
 
 public record ReservationConcertCommand(
         List<Long> concertSeatIdList,
-        Long userId,
-        String token
+        Long userId
 ) {
 }

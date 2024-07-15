@@ -4,6 +4,7 @@ import io.hhplus.server_construction.domain.waiting.Waiting;
 import io.hhplus.server_construction.domain.waiting.repoisitory.WaitingRepository;
 import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
 import io.hhplus.server_construction.infra.waiting.mapper.WaitingMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +19,8 @@ public class WaitingRepositoryImpl implements WaitingRepository {
 
     @Override
     public Waiting findWaitingByToken(String token) {
-        return WaitingMapper.toDomain(waitingJpaRepository.findByToken(token));
+        return WaitingMapper.toDomain(waitingJpaRepository.findByToken(token)
+                .orElseThrow(EntityNotFoundException::new));
     }
 
     @Override
@@ -28,12 +30,8 @@ public class WaitingRepositoryImpl implements WaitingRepository {
 
     @Override
     public Long findLastProceedingWaiting(WaitingStatus status) {
-        return waitingJpaRepository.findLastProceedingWaiting(status);
-    }
-
-    @Override
-    public Long findThroughputPerMinute(LocalDateTime now, WaitingStatus status) {
-        return waitingJpaRepository.findThroughputPerMinute(now, now.minusMinutes(1), status);
+        return waitingJpaRepository.findLastProceedingWaiting(status)
+                .orElse(0L);
     }
 
     @Override

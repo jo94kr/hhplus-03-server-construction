@@ -1,6 +1,7 @@
 package io.hhplus.server_construction.domain.concert;
 
-import io.hhplus.server_construction.domain.concert.vo.ConcertSeatEnums;
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatGrade;
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -12,18 +13,18 @@ public class ConcertSeat {
     private final Long id;
     private final ConcertSchedule concertSchedule;
     private final String seatNum;
-    private final ConcertSeatEnums.Grade grade;
+    private final ConcertSeatGrade grade;
     private final BigDecimal price;
-    private ConcertSeatEnums.Status status;
+    private ConcertSeatStatus status;
     private final LocalDateTime createDatetime;
     private final LocalDateTime modifyDatetime;
 
     public ConcertSeat(Long id,
                        ConcertSchedule concertSchedule,
                        String seatNum,
-                       ConcertSeatEnums.Grade grade,
+                       ConcertSeatGrade grade,
                        BigDecimal price,
-                       ConcertSeatEnums.Status status,
+                       ConcertSeatStatus status,
                        LocalDateTime createDatetime,
                        LocalDateTime modifyDatetime) {
         this.id = id;
@@ -39,9 +40,9 @@ public class ConcertSeat {
     public static ConcertSeat create(Long id,
                                      ConcertSchedule concertSchedule,
                                      String seatNum,
-                                     ConcertSeatEnums.Grade grade,
+                                     ConcertSeatGrade grade,
                                      BigDecimal price,
-                                     ConcertSeatEnums.Status status,
+                                     ConcertSeatStatus status,
                                      LocalDateTime createDatetime,
                                      LocalDateTime modifyDatetime) {
         return new ConcertSeat(id, concertSchedule, seatNum, grade, price, status, createDatetime, modifyDatetime);
@@ -51,8 +52,8 @@ public class ConcertSeat {
         return this.status.isPossible();
     }
 
-    public ConcertSeat changeStatus(ConcertSeatEnums.Status possible) {
-        this.status = ConcertSeatEnums.Status.PENDING;
+    public ConcertSeat changeStatus(ConcertSeatStatus concertSeatStatus) {
+        this.status = concertSeatStatus;
         return this;
     }
 }

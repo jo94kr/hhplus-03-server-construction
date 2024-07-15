@@ -3,7 +3,7 @@ package io.hhplus.server_construction.infra.reservation;
 import io.hhplus.server_construction.domain.reservation.Reservation;
 import io.hhplus.server_construction.domain.reservation.ReservationItem;
 import io.hhplus.server_construction.domain.reservation.repoisitory.ReservationRepository;
-import io.hhplus.server_construction.domain.reservation.vo.ReservationStatusEnums;
+import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.infra.reservation.entity.ReservationItemEntity;
 import io.hhplus.server_construction.infra.reservation.mapper.ReservationItemMapper;
 import io.hhplus.server_construction.infra.reservation.mapper.ReservationMapper;
@@ -63,15 +63,15 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     }
 
     @Override
-    public List<Reservation> findTemporaryReservationSeatByTargetDate(ReservationStatusEnums status, LocalDateTime targetDate) {
+    public List<Reservation> findReservationByStatusAndTargetDate(ReservationStatus status, LocalDateTime targetDate) {
         return reservationJpaRepository.findAllByStatusAndCreateDatetimeAfter(status, targetDate).stream()
                 .map(ReservationMapper::toDomain)
                 .toList();
     }
 
     @Override
-    public List<Reservation> saveAllReservation(List<Reservation> temporaryReservationList) {
-        return reservationJpaRepository.saveAll(temporaryReservationList.stream()
+    public List<Reservation> saveAllReservation(List<Reservation> reservationList) {
+        return reservationJpaRepository.saveAll(reservationList.stream()
                         .map(ReservationMapper::toEntity)
                         .toList()).stream()
                 .map(ReservationMapper::toDomain)

@@ -33,18 +33,14 @@ public class ReservationItemEntity extends BaseCreateDatetimeEntity {
 
     private BigDecimal price;
 
-    private ReservationEnums.ReservationStatus status;
-
     public ReservationItemEntity(Long id,
                                  ReservationEntity reservation,
                                  ConcertSeatEntity concertSeat,
-                                 BigDecimal price,
-                                 ReservationEnums.ReservationStatus status) {
+                                 BigDecimal price) {
         this.id = id;
         this.reservation = reservation;
         this.concertSeat = concertSeat;
         this.price = price;
-        this.status = status;
     }
 
     @Override

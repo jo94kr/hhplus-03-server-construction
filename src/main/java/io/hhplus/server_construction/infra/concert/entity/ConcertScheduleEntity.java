@@ -1,7 +1,6 @@
 package io.hhplus.server_construction.infra.concert.entity;
 
-import io.hhplus.server_construction.domain.concert.Concert;
-import io.hhplus.server_construction.domain.concert.vo.ConcertScheduleEnums;
+import io.hhplus.server_construction.domain.concert.vo.ConcertScheduleStatus;
 import io.hhplus.server_construction.infra.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -27,12 +26,12 @@ public class ConcertScheduleEntity extends BaseEntity {
 
     private LocalDateTime concertDatetime;
 
-    private ConcertScheduleEnums.ScheduleStatus status;
+    private ConcertScheduleStatus status;
 
     public ConcertScheduleEntity(Long id,
                                  ConcertEntity concert,
                                  LocalDateTime concertDatetime,
-                                 ConcertScheduleEnums.ScheduleStatus status) {
+                                 ConcertScheduleStatus status) {
         this.id = id;
         this.concert = concert;
         this.concertDatetime = concertDatetime;

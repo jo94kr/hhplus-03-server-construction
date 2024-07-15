@@ -4,7 +4,7 @@ import io.hhplus.server_construction.domain.concert.ConcertSeat;
 import io.hhplus.server_construction.domain.reservation.Reservation;
 import io.hhplus.server_construction.domain.reservation.ReservationItem;
 import io.hhplus.server_construction.domain.reservation.repoisitory.ReservationRepository;
-import io.hhplus.server_construction.domain.reservation.vo.ReservationStatusEnums;
+import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class ReservationService {
 
         Reservation reservation = reservationRepository.saveReservation(Reservation.create(null,
                 user,
-                ReservationStatusEnums.PAYMENT_WAITING,
+                ReservationStatus.PAYMENT_WAITING,
                 totalPrice));
 
         List<ReservationItem> reservationItemList = concertSeatList.stream()
@@ -51,12 +51,13 @@ public class ReservationService {
         return reservation.setReservationItemList(reservationItemList);
     }
 
-    public List<ReservationItem> changeTemporaryReservationSeat(ReservationStatusEnums status, LocalDateTime targetDate) {
-        List<Reservation> temporaryReservationList = reservationRepository.findTemporaryReservationSeatByTargetDate(status, targetDate);
+    public List<ReservationItem> changeTemporaryReservationSeat(ReservationStatus status, LocalDateTime targetDate) {
+        List<Reservation> temporaryReservationList = reservationRepository.findReservationByStatusAndTargetDate(status, targetDate);
         if (temporaryReservationList == null || temporaryReservationList.isEmpty()) {
             return new ArrayList<>();
         }
-        temporaryReservationList.forEach(reservation -> reservation.changeStatus(ReservationStatusEnums.CANCEL));
+        temporaryReservationList.forEach(reservation -> reservation.changeStatus(ReservationStatus.CANCEL));
+        reservationRepository.saveAllReservation(temporaryReservationList);
 
         return reservationRepository.findAllReservationItemByReservationIdIn(temporaryReservationList.stream()
                 .map(Reservation::getId)

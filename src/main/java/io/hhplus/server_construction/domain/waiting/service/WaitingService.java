@@ -3,6 +3,7 @@ package io.hhplus.server_construction.domain.waiting.service;
 import io.hhplus.server_construction.domain.waiting.Waiting;
 import io.hhplus.server_construction.domain.waiting.exceprtion.TokenExpiredException;
 import io.hhplus.server_construction.domain.waiting.repoisitory.WaitingRepository;
+import io.hhplus.server_construction.domain.waiting.vo.WaitingConstant;
 import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,11 +27,11 @@ public class WaitingService {
 
             Long waitingNumber = calcWaitingNumber(waiting);
 
-            // 분당 처리량 (1분전부터 현재까지 대기중이 아닌 대기열 개수 조회)
-            Long throughputPerMinute = waitingRepository.findThroughputPerMinute(waiting.getCreateDatetime(), WaitingStatus.WAITING);
+            // 분당 처리량
+            Long throughputPerMinute = WaitingConstant.THROUGHPUT_PER_MINUTE;
 
-            // 한 사이클 시간 (임의로 지정한 사이클 시간(분))
-            long cycleTime = 5L;
+            // 한 사이클 시간
+            long cycleTime = WaitingConstant.CYCLE_TIME;
 
             // 남은 시간 = (본인 순서 / 분당 처리량) * 한 사이클 시간
             LocalDateTime timeRemaining = waiting.getCreateDatetime().plusMinutes((waitingNumber / throughputPerMinute) * cycleTime);
@@ -63,11 +64,11 @@ public class WaitingService {
     public Long calcTimeRemaining(Long waitingNumber) {
         LocalDateTime now = LocalDateTime.now();
 
-        // 분당 처리량 (1분전부터 현재까지 대기중이 아닌 대기열 개수 조회)
-        Long throughputPerMinute = waitingRepository.findThroughputPerMinute(now, WaitingStatus.WAITING);
+        // 분당 처리량
+        Long throughputPerMinute = WaitingConstant.THROUGHPUT_PER_MINUTE;
 
-        // 한 사이클 시간 (임의로 지정한 사이클 시간(분))
-        long cycleTime = 5L;
+        // 한 사이클 시간
+        long cycleTime = WaitingConstant.CYCLE_TIME;
 
         // 남은 시간 = (본인 순서 / 분당 처리량) * 한 사이클 시간
         LocalDateTime timeRemaining = now.plusMinutes((waitingNumber / throughputPerMinute) * cycleTime);

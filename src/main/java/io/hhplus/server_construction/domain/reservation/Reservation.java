@@ -1,6 +1,6 @@
 package io.hhplus.server_construction.domain.reservation;
 
-import io.hhplus.server_construction.domain.reservation.vo.ReservationStatusEnums;
+import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import lombok.Getter;
 
@@ -14,14 +14,14 @@ public class Reservation {
     private final Long id;
     private final User user;
     private final BigDecimal totalPrice;
-    private ReservationStatusEnums status;
+    private ReservationStatus status;
     private List<ReservationItem> reservationItemList;
     private LocalDateTime createDatetime;
 
     private Reservation(Long id,
                         User user,
                         BigDecimal totalPrice,
-                        ReservationStatusEnums status,
+                        ReservationStatus status,
                         List<ReservationItem> reservationItemList,
                         LocalDateTime createDatetime) {
         this.id = id;
@@ -34,7 +34,7 @@ public class Reservation {
 
     private Reservation(Long id,
                         User user,
-                        ReservationStatusEnums status,
+                        ReservationStatus status,
                         BigDecimal totalPrice) {
         this.id = id;
         this.user = user;
@@ -45,7 +45,7 @@ public class Reservation {
     public static Reservation create(Long id,
                                      User user,
                                      BigDecimal totalPrice,
-                                     ReservationStatusEnums status,
+                                     ReservationStatus status,
                                      List<ReservationItem> reservationItemList,
                                      LocalDateTime createDatetime) {
         return new Reservation(id, user, totalPrice, status, reservationItemList, createDatetime);
@@ -53,7 +53,7 @@ public class Reservation {
 
     public static Reservation create(Long id,
                                      User user,
-                                     ReservationStatusEnums status,
+                                     ReservationStatus status,
                                      BigDecimal totalPrice) {
         return new Reservation(id, user, status, totalPrice);
     }
@@ -67,7 +67,7 @@ public class Reservation {
         return this.status.isPaymentWaiting();
     }
 
-    public Reservation changeStatus(ReservationStatusEnums status) {
+    public Reservation changeStatus(ReservationStatus status) {
         this.status = status;
         return this;
     }

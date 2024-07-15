@@ -13,42 +13,36 @@ public class ReservationItem {
     private final Reservation reservation;
     private final ConcertSeat concertSeat;
     private final BigDecimal price;
-    private final ReservationEnums.ReservationStatus status;
     private LocalDateTime createDatetime;
 
     private ReservationItem(Long id,
                             Reservation reservation,
                             ConcertSeat concertSeat,
                             BigDecimal price,
-                            ReservationEnums.ReservationStatus status,
                             LocalDateTime createDatetime) {
         this.id = id;
         this.reservation = reservation;
         this.concertSeat = concertSeat;
         this.price = price;
-        this.status = status;
         this.createDatetime = createDatetime;
     }
 
     private ReservationItem(Long id,
                             Reservation reservation,
                             ConcertSeat concertSeat,
-                            BigDecimal price,
-                            ReservationEnums.ReservationStatus status) {
+                            BigDecimal price) {
         this.id = id;
         this.reservation = reservation;
         this.concertSeat = concertSeat;
         this.price = price;
-        this.status = status;
     }
 
     public static ReservationItem create(Long id,
                                          Reservation reservation,
                                          ConcertSeat concertSeat,
                                          BigDecimal price,
-                                         ReservationEnums.ReservationStatus status,
                                          LocalDateTime createDatetime) {
-        return new ReservationItem(id, reservation, concertSeat, price, status, createDatetime);
+        return new ReservationItem(id, reservation, concertSeat, price, createDatetime);
     }
 
     public static ReservationItem reservation(Reservation reservation,
@@ -56,7 +50,6 @@ public class ReservationItem {
         return new ReservationItem(null,
                 reservation,
                 concertSeat,
-                concertSeat.getPrice(),
-                ReservationEnums.ReservationStatus.RESERVATION);
+                concertSeat.getPrice());
     }
 }

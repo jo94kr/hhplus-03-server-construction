@@ -4,10 +4,11 @@ import io.hhplus.server_construction.application.reservation.dto.ReservationConc
 import io.hhplus.server_construction.application.reservation.dto.ReservationConcertResult;
 import io.hhplus.server_construction.domain.concert.ConcertSeat;
 import io.hhplus.server_construction.domain.concert.service.ConcertService;
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
 import io.hhplus.server_construction.domain.reservation.Reservation;
 import io.hhplus.server_construction.domain.reservation.ReservationItem;
 import io.hhplus.server_construction.domain.reservation.service.ReservationService;
-import io.hhplus.server_construction.domain.reservation.vo.ReservationStatusEnums;
+import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import io.hhplus.server_construction.domain.user.service.UserService;
 import io.hhplus.server_construction.domain.waiting.exceprtion.TokenExpiredException;
@@ -27,8 +28,8 @@ public class ReservationFacade {
     private final ReservationService reservationService;
     private final WaitingService waitingService;
 
-    public ReservationConcertResult reservationConcert(ReservationConcertCommand concertCommand) {
-        if (!waitingService.checkWaitingStatus(concertCommand.token())) {
+    public ReservationConcertResult reservationConcert(ReservationConcertCommand concertCommand, String token) {
+        if (!waitingService.checkWaitingStatus(token)) {
             throw new TokenExpiredException();
         }
 
@@ -36,27 +37,27 @@ public class ReservationFacade {
         User user = userService.findUserById(concertCommand.userId());
 
         // 콘서트 좌석 조회 - 임시 예약 처리
-        List<ConcertSeat> concertSeatList = concertService.temporaryReservationSeat(concertCommand.concertSeatIdList());
+        List<ConcertSeat> concertSeatList = concertService.reservationSeat(concertCommand.concertSeatIdList());
 
         // 콘서트 예약
         Reservation reservation = reservationService.reservationConcert(concertSeatList, user);
 
-        return ReservationConcertResult.create(reservation);
+        return ReservationConcertResult.from(reservation);
     }
 
     public void temporaryReservationSeatProcess() {
         LocalDateTime now = LocalDateTime.now();
         // 5분이 지난 미결제 예약건은 취소 처리
         List<ReservationItem> temporaryReservationItemList = reservationService.changeTemporaryReservationSeat(
-                ReservationStatusEnums.PAYMENT_WAITING,
+                ReservationStatus.PAYMENT_WAITING,
                 now.minusMinutes(5));
 
         // 5분이 지난 미결제 좌석은 활성화 처리
         if (!temporaryReservationItemList.isEmpty()) {
-            concertService.changeTemporarySeat(temporaryReservationItemList.stream()
+            concertService.saveAllConcertSeat(temporaryReservationItemList.stream()
                     .map(ReservationItem::getConcertSeat)
-                    .toList()
-            );
+                    .map(concertSeat -> concertSeat.changeStatus(ConcertSeatStatus.POSSIBLE))
+                    .toList());
         }
     }
 }

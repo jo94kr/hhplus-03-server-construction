@@ -42,7 +42,7 @@ public class Waiting {
     }
 
     public Waiting renewalExpiredDatetime() {
-        this.expiredDatetime = this.expiredDatetime.plusMinutes(5);
+        this.expiredDatetime = LocalDateTime.now().plusMinutes(5);
         return this;
     }
 

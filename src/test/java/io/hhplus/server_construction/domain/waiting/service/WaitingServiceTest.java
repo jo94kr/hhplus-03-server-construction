@@ -3,6 +3,7 @@ package io.hhplus.server_construction.domain.waiting.service;
 import io.hhplus.server_construction.domain.waiting.Waiting;
 import io.hhplus.server_construction.domain.waiting.exceprtion.TokenExpiredException;
 import io.hhplus.server_construction.domain.waiting.repoisitory.WaitingRepository;
+import io.hhplus.server_construction.domain.waiting.vo.WaitingConstant;
 import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -83,29 +84,20 @@ class WaitingServiceTest {
     @DisplayName("남은 대기 시간을 계산한다.")
     void calcTimeRemaining() {
         // given
-        LocalDateTime now = LocalDateTime.now();
-        Waiting waiting = new Waiting(100L,
-                "DUMMY_TOKEN",
-                WaitingStatus.WAITING,
-                null,
-                now,
-                now);
         // 대기 번호
         Long waitingNumber = 10L;
         // 분당 처리량
-        Long throughputPerMinute = 5L;
+        Long throughputPerMinute = WaitingConstant.THROUGHPUT_PER_MINUTE;
         // 임의로 지정한 프로세스 처리 시간(분)
-        long cycleTime = 5L;
+        long cycleTime = WaitingConstant.CYCLE_TIME;
 
         // when
-        when(waitingRepository.findThroughputPerMinute(now, WaitingStatus.WAITING)).thenReturn(throughputPerMinute);
         Long result = waitingService.calcTimeRemaining(waitingNumber);
 
         // then
         // 남은 시간 = (대기번호 / 분당 처리량) * 임의로 지정한 프로세스 처리 시간(분)
         long timeRemaining = (waitingNumber / throughputPerMinute) * cycleTime;
         assertThat(result).isEqualTo(timeRemaining);
-        assertThat(waiting.getAccessDatetime()).isNotNull();
     }
 
     @Test

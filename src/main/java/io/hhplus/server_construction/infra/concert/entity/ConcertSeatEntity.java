@@ -1,7 +1,7 @@
 package io.hhplus.server_construction.infra.concert.entity;
 
-import io.hhplus.server_construction.domain.concert.ConcertSchedule;
-import io.hhplus.server_construction.domain.concert.vo.ConcertSeatEnums;
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatGrade;
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
 import io.hhplus.server_construction.infra.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -27,18 +27,18 @@ public class ConcertSeatEntity extends BaseEntity {
 
     private String seatNum;
 
-    private ConcertSeatEnums.Grade grade;
+    private ConcertSeatGrade grade;
 
     private BigDecimal price;
 
-    private ConcertSeatEnums.Status status;
+    private ConcertSeatStatus status;
 
     public ConcertSeatEntity(Long id,
                              ConcertScheduleEntity concertSchedule,
                              String seatNum,
-                             ConcertSeatEnums.Grade grade,
+                             ConcertSeatGrade grade,
                              BigDecimal price,
-                             ConcertSeatEnums.Status status) {
+                             ConcertSeatStatus status) {
         this.id = id;
         this.concertSchedule = concertSchedule;
         this.seatNum = seatNum;

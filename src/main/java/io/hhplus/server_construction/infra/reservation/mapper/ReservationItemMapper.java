@@ -11,7 +11,6 @@ public class ReservationItemMapper {
                 ReservationMapper.toDomain(reservationItemEntity.getReservation()),
                 ConcertSeatMapper.toDomain(reservationItemEntity.getConcertSeat()),
                 reservationItemEntity.getPrice(),
-                reservationItemEntity.getStatus(),
                 reservationItemEntity.getCreateDatetime()
         );
     }
@@ -20,7 +19,6 @@ public class ReservationItemMapper {
         return new ReservationItemEntity(reservationItem.getId(),
                 ReservationMapper.toEntity(reservationItem.getReservation()),
                 ConcertSeatMapper.toEntity(reservationItem.getConcertSeat()),
-                reservationItem.getPrice(),
-                reservationItem.getStatus());
+                reservationItem.getPrice());
     }
 }

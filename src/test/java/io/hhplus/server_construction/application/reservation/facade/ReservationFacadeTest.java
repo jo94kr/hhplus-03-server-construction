@@ -1,11 +1,8 @@
 package io.hhplus.server_construction.application.reservation.facade;
 
 import io.hhplus.server_construction.application.reservation.dto.ReservationConcertCommand;
-import io.hhplus.server_construction.domain.concert.ConcertSeat;
 import io.hhplus.server_construction.domain.concert.exceprtion.AlreadyReservationException;
 import io.hhplus.server_construction.domain.concert.service.ConcertService;
-import io.hhplus.server_construction.domain.reservation.Reservation;
-import io.hhplus.server_construction.domain.reservation.vo.ReservationStatusEnums;
 import io.hhplus.server_construction.domain.user.service.UserService;
 import io.hhplus.server_construction.domain.waiting.exceprtion.TokenExpiredException;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
@@ -45,11 +42,11 @@ class ReservationFacadeTest {
     void reservationConcertTokenException() {
         // given
         Long userId = 1L;
-        ReservationConcertCommand reservationConcertCommand = new ReservationConcertCommand(List.of(1L, 2L, 3L), userId, TOKEN);
+        ReservationConcertCommand reservationConcertCommand = new ReservationConcertCommand(List.of(1L, 2L, 3L), userId);
 
         // when
         when(waitingService.checkWaitingStatus(TOKEN)).thenReturn(false);
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> reservationFacade.reservationConcert(reservationConcertCommand);
+        ThrowableAssert.ThrowingCallable throwingCallable = () -> reservationFacade.reservationConcert(reservationConcertCommand, TOKEN);
 
         // then
         assertThatExceptionOfType(TokenExpiredException.class).isThrownBy(throwingCallable);
@@ -61,13 +58,13 @@ class ReservationFacadeTest {
         // given
         Long userId = 1L;
         List<Long> concertSeatIdList = List.of(1L, 2L, 3L);
-        ReservationConcertCommand reservationConcertCommand = new ReservationConcertCommand(concertSeatIdList, userId, TOKEN);
+        ReservationConcertCommand reservationConcertCommand = new ReservationConcertCommand(concertSeatIdList, userId);
 
         // when
         when(waitingService.checkWaitingStatus(TOKEN)).thenReturn(true);
         when(userService.findUserById(userId)).thenReturn(any());
-        when(concertService.temporaryReservationSeat(concertSeatIdList)).thenThrow(AlreadyReservationException.class);
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> reservationFacade.reservationConcert(reservationConcertCommand);
+        when(concertService.reservationSeat(concertSeatIdList)).thenThrow(AlreadyReservationException.class);
+        ThrowableAssert.ThrowingCallable throwingCallable = () -> reservationFacade.reservationConcert(reservationConcertCommand, TOKEN);
 
         // then
         assertThatExceptionOfType(AlreadyReservationException.class).isThrownBy(throwingCallable);

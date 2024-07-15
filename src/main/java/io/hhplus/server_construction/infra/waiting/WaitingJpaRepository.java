@@ -8,16 +8,15 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalLong;
 
 public interface WaitingJpaRepository extends JpaRepository<WaitingEntity, Long> {
 
-    WaitingEntity findByToken(String token);
+    Optional<WaitingEntity> findByToken(String token);
 
     @Query("SELECT m.id FROM WaitingEntity m WHERE m.status = :status ORDER BY m.id ASC")
-    Long findLastProceedingWaiting(@Param("status") WaitingStatus status);
-
-    @Query("SELECT count(m.id) FROM WaitingEntity m WHERE m.status != :status AND m.accessDatetime BETWEEN :startTime AND :endTime")
-    Long findThroughputPerMinute(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime, @Param("status") WaitingStatus status);
+    Optional<Long> findLastProceedingWaiting(@Param("status") WaitingStatus status);
 
     List<WaitingEntity> findAllByStatusAndExpiredDatetimeIsBefore(WaitingStatus waitingStatus, LocalDateTime targetDatetime);
 

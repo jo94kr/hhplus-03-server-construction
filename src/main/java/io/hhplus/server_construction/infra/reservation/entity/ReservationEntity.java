@@ -1,8 +1,6 @@
 package io.hhplus.server_construction.infra.reservation.entity;
 
-import io.hhplus.server_construction.domain.reservation.ReservationItem;
-import io.hhplus.server_construction.domain.reservation.vo.ReservationStatusEnums;
-import io.hhplus.server_construction.domain.user.User;
+import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.infra.BaseEntity;
 import io.hhplus.server_construction.infra.user.entity.UserEntity;
 import jakarta.persistence.*;
@@ -11,8 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -29,13 +25,13 @@ public class ReservationEntity extends BaseEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    private ReservationStatusEnums status;
+    private ReservationStatus status;
 
     private BigDecimal totalPrice;
 
     public ReservationEntity(Long id,
                              UserEntity user,
-                             ReservationStatusEnums status,
+                             ReservationStatus status,
                              BigDecimal totalPrice) {
         this.id = id;
         this.user = user;

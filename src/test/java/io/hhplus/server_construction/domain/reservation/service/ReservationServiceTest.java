@@ -3,11 +3,12 @@ package io.hhplus.server_construction.domain.reservation.service;
 import io.hhplus.server_construction.domain.concert.Concert;
 import io.hhplus.server_construction.domain.concert.ConcertSchedule;
 import io.hhplus.server_construction.domain.concert.ConcertSeat;
-import io.hhplus.server_construction.domain.concert.vo.ConcertScheduleEnums;
-import io.hhplus.server_construction.domain.concert.vo.ConcertSeatEnums;
+import io.hhplus.server_construction.domain.concert.vo.ConcertScheduleStatus;
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatGrade;
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
 import io.hhplus.server_construction.domain.reservation.Reservation;
 import io.hhplus.server_construction.domain.reservation.repoisitory.ReservationRepository;
-import io.hhplus.server_construction.domain.reservation.vo.ReservationStatusEnums;
+import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,32 +49,32 @@ class ReservationServiceTest {
         ConcertSchedule concertSchedule = ConcertSchedule.create(1L,
                 concert,
                 LocalDateTime.now(),
-                ConcertScheduleEnums.ScheduleStatus.AVAILABLE,
+                ConcertScheduleStatus.AVAILABLE,
                 LocalDateTime.now(),
                 LocalDateTime.now());
 
         this.concertSeat1 = ConcertSeat.create(1L,
                 concertSchedule,
                 "A1",
-                ConcertSeatEnums.Grade.GOLD,
+                ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
-                ConcertSeatEnums.Status.POSSIBLE,
+                ConcertSeatStatus.POSSIBLE,
                 LocalDateTime.now(),
                 LocalDateTime.now());
         this.concertSeat2 = ConcertSeat.create(2L,
                 concertSchedule,
                 "A2",
-                ConcertSeatEnums.Grade.GOLD,
+                ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
-                ConcertSeatEnums.Status.POSSIBLE,
+                ConcertSeatStatus.POSSIBLE,
                 LocalDateTime.now(),
                 LocalDateTime.now());
         this.concertSeat3 = ConcertSeat.create(3L,
                 concertSchedule,
                 "A3",
-                ConcertSeatEnums.Grade.GOLD,
+                ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
-                ConcertSeatEnums.Status.POSSIBLE,
+                ConcertSeatStatus.POSSIBLE,
                 LocalDateTime.now(),
                 LocalDateTime.now());
     }
@@ -86,7 +87,7 @@ class ReservationServiceTest {
         BigDecimal totalPrice = concertSeatList.stream()
                 .map(ConcertSeat::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        Reservation reservation = Reservation.create(any(), user, ReservationStatusEnums.PAYMENT_WAITING, totalPrice);
+        Reservation reservation = Reservation.create(any(), user, ReservationStatus.PAYMENT_WAITING, totalPrice);
 
         // when
         when(reservationRepository.saveReservation(reservation)).thenReturn(reservation);

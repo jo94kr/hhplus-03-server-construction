@@ -13,7 +13,7 @@ public record ReservationConcertResult(
         List<ReservationItem> reservationItemList
 ) {
 
-    public static ReservationConcertResult create(Reservation reservation) {
+    public static ReservationConcertResult from(Reservation reservation) {
         return new ReservationConcertResult(reservation.getId(),
                 reservation.getTotalPrice(),
                 reservation.getReservationItemList());

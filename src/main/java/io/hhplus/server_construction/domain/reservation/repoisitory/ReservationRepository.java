@@ -1,15 +1,9 @@
 package io.hhplus.server_construction.domain.reservation.repoisitory;
 
-import io.hhplus.server_construction.domain.concert.Concert;
-import io.hhplus.server_construction.domain.concert.ConcertSchedule;
-import io.hhplus.server_construction.domain.concert.ConcertSeat;
 import io.hhplus.server_construction.domain.reservation.Reservation;
 import io.hhplus.server_construction.domain.reservation.ReservationItem;
-import io.hhplus.server_construction.domain.reservation.vo.ReservationStatusEnums;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,7 +21,7 @@ public interface ReservationRepository {
 
     List<ReservationItem> findAllReservationItemByReservationIdIn(List<Long> reservationIdList);
 
-    List<Reservation> findTemporaryReservationSeatByTargetDate(ReservationStatusEnums status, LocalDateTime targetDate);
+    List<Reservation> findReservationByStatusAndTargetDate(ReservationStatus status, LocalDateTime targetDate);
 
-    List<Reservation> saveAllReservation(List<Reservation> temporaryReservationList);
+    List<Reservation> saveAllReservation(List<Reservation> reservationList);
 }

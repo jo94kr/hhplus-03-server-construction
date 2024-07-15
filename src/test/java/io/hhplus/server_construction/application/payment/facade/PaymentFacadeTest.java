@@ -1,29 +1,28 @@
 package io.hhplus.server_construction.application.payment.facade;
 
-import io.hhplus.server_construction.application.payment.dto.PaymentResult;
+import io.hhplus.server_construction.application.payment.dto.PaymentCommand;
 import io.hhplus.server_construction.domain.concert.Concert;
 import io.hhplus.server_construction.domain.concert.ConcertSchedule;
 import io.hhplus.server_construction.domain.concert.ConcertSeat;
-import io.hhplus.server_construction.domain.concert.vo.ConcertScheduleEnums;
-import io.hhplus.server_construction.domain.concert.vo.ConcertSeatEnums;
+import io.hhplus.server_construction.domain.concert.vo.ConcertScheduleStatus;
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatGrade;
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
 import io.hhplus.server_construction.domain.payment.exception.InvalidReservationStatusException;
 import io.hhplus.server_construction.domain.payment.exception.InvalidUserException;
 import io.hhplus.server_construction.domain.payment.service.PaymentService;
 import io.hhplus.server_construction.domain.reservation.Reservation;
 import io.hhplus.server_construction.domain.reservation.service.ReservationService;
-import io.hhplus.server_construction.domain.reservation.vo.ReservationStatusEnums;
+import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import io.hhplus.server_construction.domain.user.exceprtion.UseAmountException;
 import io.hhplus.server_construction.domain.user.service.UserService;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -31,7 +30,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -67,35 +65,35 @@ class PaymentFacadeTest {
 
         ConcertSchedule concertSchedule = ConcertSchedule.create(1L,
                 concert,
-                LocalDateTime.now(),
-                ConcertScheduleEnums.ScheduleStatus.AVAILABLE,
-                LocalDateTime.now(),
-                LocalDateTime.now());
+                now,
+                ConcertScheduleStatus.AVAILABLE,
+                now,
+                now);
 
         this.concertSeat1 = ConcertSeat.create(1L,
                 concertSchedule,
                 "A1",
-                ConcertSeatEnums.Grade.GOLD,
+                ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
-                ConcertSeatEnums.Status.POSSIBLE,
-                LocalDateTime.now(),
-                LocalDateTime.now());
+                ConcertSeatStatus.POSSIBLE,
+                now,
+                now);
         this.concertSeat2 = ConcertSeat.create(2L,
                 concertSchedule,
                 "A2",
-                ConcertSeatEnums.Grade.GOLD,
+                ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
-                ConcertSeatEnums.Status.POSSIBLE,
-                LocalDateTime.now(),
-                LocalDateTime.now());
+                ConcertSeatStatus.POSSIBLE,
+                now,
+                now);
         this.concertSeat3 = ConcertSeat.create(3L,
                 concertSchedule,
                 "A3",
-                ConcertSeatEnums.Grade.GOLD,
+                ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
-                ConcertSeatEnums.Status.POSSIBLE,
-                LocalDateTime.now(),
-                LocalDateTime.now());
+                ConcertSeatStatus.POSSIBLE,
+                now,
+                now);
     }
 
     @Test
@@ -104,20 +102,21 @@ class PaymentFacadeTest {
         // given
         Long userId = 1L;
         Long reservationId = 1L;
+        PaymentCommand paymentCommand = new PaymentCommand(userId, reservationId);
 
         List<ConcertSeat> concertSeatList = List.of(this.concertSeat1, this.concertSeat2, this.concertSeat3);
         BigDecimal totalPrice = concertSeatList.stream()
                 .map(ConcertSeat::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        Reservation reservation = Reservation.create(any(), user, ReservationStatusEnums.CANCEL, totalPrice);
+        Reservation reservation = Reservation.create(any(), user, ReservationStatus.CANCEL, totalPrice);
 
         // when
         when(waitingService.checkWaitingStatus(TOKEN)).thenReturn(true);
         when(reservationService.findReservationWithItemListById(reservationId)).thenReturn(reservation);
 
         // then
-        assertThatThrownBy(() -> paymentFacade.payment(reservationId, userId, TOKEN))
+        assertThatThrownBy(() -> paymentFacade.payment(paymentCommand, TOKEN))
                 .isInstanceOf(InvalidReservationStatusException.class);
     }
 
@@ -127,6 +126,7 @@ class PaymentFacadeTest {
         // given
         Long userId = 1L;
         Long reservationId = 1L;
+        PaymentCommand paymentCommand = new PaymentCommand(userId, reservationId);
         LocalDateTime now = LocalDateTime.now();
         User user = User.create(1L, "조진우", BigDecimal.valueOf(100L), now, now);
 
@@ -135,7 +135,7 @@ class PaymentFacadeTest {
                 .map(ConcertSeat::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        Reservation reservation = Reservation.create(any(), user, ReservationStatusEnums.PAYMENT_WAITING, totalPrice);
+        Reservation reservation = Reservation.create(any(), user, ReservationStatus.PAYMENT_WAITING, totalPrice);
 
         // when
         when(waitingService.checkWaitingStatus(TOKEN)).thenReturn(true);
@@ -144,7 +144,7 @@ class PaymentFacadeTest {
         when(userService.use(user, totalPrice)).thenThrow(UseAmountException.class);
 
         // then
-        assertThatThrownBy(() -> paymentFacade.payment(reservationId, userId, TOKEN))
+        assertThatThrownBy(() -> paymentFacade.payment(paymentCommand, TOKEN))
                 .isInstanceOf(UseAmountException.class);
     }
 
@@ -154,6 +154,7 @@ class PaymentFacadeTest {
         // given
         Long userId = 1L;
         Long reservationId = 1L;
+        PaymentCommand paymentCommand = new PaymentCommand(userId, reservationId);
         LocalDateTime now = LocalDateTime.now();
         User user2 = User.create(2L, "다른사람", BigDecimal.valueOf(10000L), now, now);
 
@@ -162,7 +163,7 @@ class PaymentFacadeTest {
                 .map(ConcertSeat::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        Reservation reservation = Reservation.create(any(), user, ReservationStatusEnums.PAYMENT_WAITING, totalPrice);
+        Reservation reservation = Reservation.create(any(), user, ReservationStatus.PAYMENT_WAITING, totalPrice);
 
         // when
         when(waitingService.checkWaitingStatus(TOKEN)).thenReturn(true);
@@ -171,7 +172,7 @@ class PaymentFacadeTest {
         when(paymentService.payment(reservation, user2)).thenThrow(InvalidUserException.class);
 
         // then
-        assertThatThrownBy(() -> paymentFacade.payment(reservationId, userId, TOKEN))
+        assertThatThrownBy(() -> paymentFacade.payment(paymentCommand, TOKEN))
                 .isInstanceOf(InvalidUserException.class);
     }
 }

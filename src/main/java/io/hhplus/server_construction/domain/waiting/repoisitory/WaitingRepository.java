@@ -21,14 +21,6 @@ public interface WaitingRepository {
      */
     Long findLastProceedingWaiting(WaitingStatus status);
 
-    /**
-     * 분당 처리량을 조회
-     * <p>
-     *
-     * @return 분당 처리량
-     */
-    Long findThroughputPerMinute(LocalDateTime now, WaitingStatus status);
-
     List<Waiting> findWaitingByStatusAndExpireDatetimeIsBefore(WaitingStatus waitingStatus, LocalDateTime targetDatetime);
 
     void saveAll(List<Waiting> waitingList);

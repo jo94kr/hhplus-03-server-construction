@@ -5,7 +5,8 @@ import io.hhplus.server_construction.domain.concert.ConcertSchedule;
 import io.hhplus.server_construction.domain.concert.ConcertSeat;
 import io.hhplus.server_construction.domain.concert.exceprtion.AlreadyReservationException;
 import io.hhplus.server_construction.domain.concert.repoisitory.ConcertRepository;
-import io.hhplus.server_construction.domain.concert.vo.ConcertSeatEnums;
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatGrade;
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +37,7 @@ public class ConcertService {
         return concertRepository.findAllConcertSeat(concert, concertSchedule);
     }
 
-    public List<ConcertSeat> temporaryReservationSeat(List<Long> seatIdList) {
+    public List<ConcertSeat> reservationSeat(List<Long> seatIdList) {
         List<ConcertSeat> concertSeatList = new ArrayList<>();
         for (Long seatId : seatIdList) {
             ConcertSeat concertSeat = concertRepository.pessimisticLockFindById(seatId);
@@ -45,14 +46,13 @@ public class ConcertService {
             }
 
             // 좌석 임시 예약 상태로 변경
-            concertSeatList.add(concertRepository.saveConcertSeat(concertSeat.changeStatus(ConcertSeatEnums.Status.POSSIBLE)));
+            concertSeatList.add(concertRepository.saveConcertSeat(concertSeat.changeStatus(ConcertSeatStatus.PENDING)));
         }
 
         return concertSeatList;
     }
 
-    public void changeTemporarySeat(List<ConcertSeat> temporarySeatList) {
-        temporarySeatList.forEach(concertSeat -> concertSeat.changeStatus(ConcertSeatEnums.Status.POSSIBLE));
-        concertRepository.saveAllConcertSeat(temporarySeatList);
+    public void saveAllConcertSeat(List<ConcertSeat> concertSeatList) {
+        concertRepository.saveAllConcertSeat(concertSeatList);
     }
 }
