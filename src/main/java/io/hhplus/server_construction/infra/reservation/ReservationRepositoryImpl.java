@@ -64,7 +64,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
     @Override
     public List<Reservation> findReservationByStatusAndTargetDate(ReservationStatus status, LocalDateTime targetDate) {
-        return reservationJpaRepository.findAllByStatusAndCreateDatetimeAfter(status, targetDate).stream()
+        return reservationJpaRepository.findAllByStatusAndCreateDatetimeBefore(status, targetDate).stream()
                 .map(ReservationMapper::toDomain)
                 .toList();
     }

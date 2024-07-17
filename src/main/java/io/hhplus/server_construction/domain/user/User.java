@@ -49,7 +49,11 @@ public class User {
         if (amount.compareTo(this.amount) < 0) {
             throw new UseAmountException();
         }
-        this.amount = this.amount.min(amount);
+        BigDecimal subtracted = this.amount.subtract(amount);
+        if (subtracted.compareTo(BigDecimal.ZERO) < 0) {
+            throw new UseAmountException();
+        }
+        this.amount = subtracted;
         return this;
     }
 }

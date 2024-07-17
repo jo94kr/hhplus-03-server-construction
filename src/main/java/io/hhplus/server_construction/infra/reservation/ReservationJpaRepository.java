@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface ReservationJpaRepository extends JpaRepository<ReservationEntity, Long> {
 
-    List<ReservationEntity> findAllByStatusAndCreateDatetimeAfter(ReservationStatus status, LocalDateTime targetDate);
+    List<ReservationEntity> findAllByStatusAndCreateDatetimeBefore(ReservationStatus status, LocalDateTime targetDate);
 }

@@ -22,7 +22,7 @@ public class ReservationEntity extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "users_id")
     private UserEntity user;
 
     private ReservationStatus status;

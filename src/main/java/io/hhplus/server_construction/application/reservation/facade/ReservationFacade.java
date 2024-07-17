@@ -15,12 +15,14 @@ import io.hhplus.server_construction.domain.waiting.exceprtion.TokenExpiredExcep
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class ReservationFacade {
 
     private final UserService userService;
@@ -28,6 +30,7 @@ public class ReservationFacade {
     private final ReservationService reservationService;
     private final WaitingService waitingService;
 
+    @Transactional(rollbackFor = {Exception.class})
     public ReservationConcertResult reservationConcert(ReservationConcertCommand concertCommand, String token) {
         if (!waitingService.checkWaitingStatus(token)) {
             throw new TokenExpiredException();
@@ -45,6 +48,7 @@ public class ReservationFacade {
         return ReservationConcertResult.from(reservation);
     }
 
+    @Transactional(rollbackFor = {Exception.class})
     public void temporaryReservationSeatProcess() {
         LocalDateTime now = LocalDateTime.now();
         // 5분이 지난 미결제 예약건은 취소 처리

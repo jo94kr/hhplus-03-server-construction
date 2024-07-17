@@ -14,9 +14,11 @@ import io.hhplus.server_construction.domain.waiting.exceprtion.TokenExpiredExcep
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class PaymentFacade {
 
     private final PaymentService paymentService;
@@ -24,6 +26,7 @@ public class PaymentFacade {
     private final ReservationService reservationService;
     private final UserService userService;
 
+    @Transactional(rollbackFor = {Exception.class})
     public PaymentResult payment(PaymentCommand paymentCommand, String token) {
         // 토큰 유효성 검사
         if (!waitingService.checkWaitingStatus(token)) {

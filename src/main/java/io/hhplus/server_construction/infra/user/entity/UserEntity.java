@@ -12,7 +12,7 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "reservation")
+@Table(name = "users")
 public class UserEntity extends BaseEntity {
 
     @Id
