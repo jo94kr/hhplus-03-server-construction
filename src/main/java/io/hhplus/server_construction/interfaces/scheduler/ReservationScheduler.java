@@ -12,7 +12,7 @@ public class ReservationScheduler {
 
     private final ReservationFacade reservationFacade;
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 100000)
     public void run() {
         reservationFacade.temporaryReservationSeatProcess();
     }
