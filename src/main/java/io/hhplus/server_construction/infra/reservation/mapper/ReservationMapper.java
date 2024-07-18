@@ -6,8 +6,7 @@ import io.hhplus.server_construction.infra.user.mapper.UserMapper;
 
 public class ReservationMapper {
 
-    public static Reservation toDomain(ReservationEntity reservationEntity) {
-        return Reservation.create(reservationEntity.getId(),
+    public static Reservation toDomain(ReservationEntity reservationEntity) {return Reservation.create(reservationEntity.getId(),
                 UserMapper.toDomain(reservationEntity.getUser()),
                 reservationEntity.getStatus(),
                 reservationEntity.getTotalPrice());

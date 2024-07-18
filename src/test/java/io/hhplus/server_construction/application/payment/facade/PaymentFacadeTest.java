@@ -7,14 +7,15 @@ import io.hhplus.server_construction.domain.concert.ConcertSeat;
 import io.hhplus.server_construction.domain.concert.vo.ConcertScheduleStatus;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatGrade;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
-import io.hhplus.server_construction.domain.payment.exception.InvalidReservationStatusException;
-import io.hhplus.server_construction.domain.payment.exception.InvalidUserException;
+import io.hhplus.server_construction.domain.payment.exception.PaymentException;
+import io.hhplus.server_construction.domain.payment.exception.PaymentExceptionEnums;
 import io.hhplus.server_construction.domain.payment.service.PaymentService;
 import io.hhplus.server_construction.domain.reservation.Reservation;
 import io.hhplus.server_construction.domain.reservation.service.ReservationService;
 import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
-import io.hhplus.server_construction.domain.user.exceprtion.UseAmountException;
+import io.hhplus.server_construction.domain.user.exceprtion.UserException;
+import io.hhplus.server_construction.domain.user.exceprtion.UserExceptionEnums;
 import io.hhplus.server_construction.domain.user.service.UserService;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,6 +77,7 @@ class PaymentFacadeTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
+                0L,
                 now,
                 now);
         this.concertSeat2 = ConcertSeat.create(2L,
@@ -84,6 +86,7 @@ class PaymentFacadeTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
+                0L,
                 now,
                 now);
         this.concertSeat3 = ConcertSeat.create(3L,
@@ -92,6 +95,7 @@ class PaymentFacadeTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
+                0L,
                 now,
                 now);
     }
@@ -117,7 +121,7 @@ class PaymentFacadeTest {
 
         // then
         assertThatThrownBy(() -> paymentFacade.payment(paymentCommand, TOKEN))
-                .isInstanceOf(InvalidReservationStatusException.class);
+                .isInstanceOf(PaymentException.class);
     }
 
     @Test
@@ -141,11 +145,12 @@ class PaymentFacadeTest {
         when(waitingService.checkWaitingStatus(TOKEN)).thenReturn(true);
         when(reservationService.findReservationWithItemListById(reservationId)).thenReturn(reservation);
         when(userService.findUserById(userId)).thenReturn(user);
-        when(userService.use(user, totalPrice)).thenThrow(UseAmountException.class);
+        when(userService.use(user, totalPrice)).thenThrow(new UserException(UserExceptionEnums.INVALID_AMOUNT_VALUE));
 
         // then
         assertThatThrownBy(() -> paymentFacade.payment(paymentCommand, TOKEN))
-                .isInstanceOf(UseAmountException.class);
+                .isInstanceOf(UserException.class)
+                .hasMessageContaining(UserExceptionEnums.INVALID_AMOUNT_VALUE.getMessage());
     }
 
     @Test
@@ -169,10 +174,11 @@ class PaymentFacadeTest {
         when(waitingService.checkWaitingStatus(TOKEN)).thenReturn(true);
         when(reservationService.findReservationWithItemListById(reservationId)).thenReturn(reservation);
         when(userService.findUserById(userId)).thenReturn(user2);
-        when(paymentService.payment(reservation, user2)).thenThrow(InvalidUserException.class);
+        when(paymentService.payment(reservation, user2)).thenThrow(new PaymentException(PaymentExceptionEnums.INVALID_USER));
 
         // then
         assertThatThrownBy(() -> paymentFacade.payment(paymentCommand, TOKEN))
-                .isInstanceOf(InvalidUserException.class);
+                .isInstanceOf(PaymentException.class)
+                .hasMessageContaining(PaymentExceptionEnums.INVALID_USER.getMessage());
     }
 }

@@ -1,7 +1,7 @@
 package io.hhplus.server_construction.domain.waiting.service;
 
 import io.hhplus.server_construction.domain.waiting.Waiting;
-import io.hhplus.server_construction.domain.waiting.exceprtion.TokenExpiredException;
+import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingException;
 import io.hhplus.server_construction.domain.waiting.repoisitory.WaitingRepository;
 import io.hhplus.server_construction.domain.waiting.vo.WaitingConstant;
 import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
@@ -55,7 +55,7 @@ class WaitingServiceTest {
 
         // then
         assertThatThrownBy(() -> waitingService.checkToken(token))
-                .isInstanceOf(TokenExpiredException.class);
+                .isInstanceOf(WaitingException.class);
     }
 
     @Test

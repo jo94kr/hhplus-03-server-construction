@@ -1,6 +1,7 @@
 package io.hhplus.server_construction.domain.payment;
 
-import io.hhplus.server_construction.domain.payment.exception.InvalidUserException;
+import io.hhplus.server_construction.domain.payment.exception.PaymentException;
+import io.hhplus.server_construction.domain.payment.exception.PaymentExceptionEnums;
 import io.hhplus.server_construction.domain.reservation.Reservation;
 import io.hhplus.server_construction.domain.user.User;
 import lombok.Getter;
@@ -36,7 +37,7 @@ public class Payment {
                               User user) {
         // 동일한 주문자인지 체크
         if (!reservation.getUser().getId().equals(user.getId())) {
-            throw new InvalidUserException();
+            throw new PaymentException(PaymentExceptionEnums.INVALID_USER);
         }
 
         return new Payment(null,

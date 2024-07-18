@@ -1,7 +1,7 @@
 package io.hhplus.server_construction.domain.user;
 
-import io.hhplus.server_construction.domain.user.exceprtion.ChargeAmountException;
-import io.hhplus.server_construction.domain.user.exceprtion.UseAmountException;
+import io.hhplus.server_construction.domain.user.exceprtion.UserException;
+import io.hhplus.server_construction.domain.user.exceprtion.UserExceptionEnums;
 import lombok.Getter;
 
 import java.math.BigDecimal;
@@ -38,7 +38,7 @@ public class User {
 
     public User charge(BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new ChargeAmountException();
+            throw new UserException(UserExceptionEnums.INVALID_AMOUNT_VALUE);
         }
 
         this.amount = this.amount.add(amount);
@@ -47,9 +47,13 @@ public class User {
 
     public User use(BigDecimal amount) {
         if (amount.compareTo(this.amount) < 0) {
-            throw new UseAmountException();
+            throw new UserException(UserExceptionEnums.INVALID_AMOUNT_VALUE);
         }
-        this.amount = this.amount.min(amount);
+        BigDecimal subtracted = this.amount.subtract(amount);
+        if (subtracted.compareTo(BigDecimal.ZERO) < 0) {
+            throw new UserException(UserExceptionEnums.INVALID_AMOUNT_VALUE);
+        }
+        this.amount = subtracted;
         return this;
     }
 }

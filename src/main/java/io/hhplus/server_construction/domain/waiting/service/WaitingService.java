@@ -1,7 +1,8 @@
 package io.hhplus.server_construction.domain.waiting.service;
 
 import io.hhplus.server_construction.domain.waiting.Waiting;
-import io.hhplus.server_construction.domain.waiting.exceprtion.TokenExpiredException;
+import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingException;
+import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingExceptionEnums;
 import io.hhplus.server_construction.domain.waiting.repoisitory.WaitingRepository;
 import io.hhplus.server_construction.domain.waiting.vo.WaitingConstant;
 import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
@@ -41,7 +42,7 @@ public class WaitingService {
         } else {
             waiting = waitingRepository.findWaitingByToken(token);
             if (WaitingStatus.EXPIRED.equals(waiting.getStatus())) {
-                throw new TokenExpiredException();
+                throw new WaitingException(WaitingExceptionEnums.TOKEN_EXPIRED);
             }
 
             // 토큰 만료일시 갱신

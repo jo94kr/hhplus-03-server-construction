@@ -24,6 +24,6 @@ public enum ConcertScheduleStatus implements EnumInterface {
     }
 
     public boolean isAvailable() {
-        return this.equals(AVAILABLE);
+        return !this.equals(AVAILABLE);
     }
 }

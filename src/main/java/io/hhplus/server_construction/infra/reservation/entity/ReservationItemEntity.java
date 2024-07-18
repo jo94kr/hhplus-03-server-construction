@@ -1,7 +1,5 @@
 package io.hhplus.server_construction.infra.reservation.entity;
 
-import io.hhplus.server_construction.domain.concert.ConcertSeat;
-import io.hhplus.server_construction.domain.reservation.ReservationEnums;
 import io.hhplus.server_construction.infra.BaseCreateDatetimeEntity;
 import io.hhplus.server_construction.infra.concert.entity.ConcertSeatEntity;
 import jakarta.persistence.*;
@@ -10,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
