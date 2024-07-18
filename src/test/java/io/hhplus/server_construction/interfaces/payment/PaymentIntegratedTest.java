@@ -29,6 +29,27 @@ class PaymentIntegratedTest extends IntegratedTest {
     private final static String PATH = "/payment";
 
     @Test
+    @DisplayName("만료된 토큰으로 예약된 콘서트 결제")
+    void paymentByExpiredToken() {
+        // given
+        PaymentDto.Request request = new PaymentDto.Request(1L, 1L);
+        Map<String, Object> headers = new HashMap<>();
+        headers.put("Authorization", "DUMMY_TOKEN_1");
+
+        // when
+        ExtractableResponse<Response> response = RestAssured
+                .given().log().all()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(request)
+                .when().post(PATH)
+                .then().log().all().extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
     @DisplayName("예약된 콘서트 결제")
     void payment() {
         // given

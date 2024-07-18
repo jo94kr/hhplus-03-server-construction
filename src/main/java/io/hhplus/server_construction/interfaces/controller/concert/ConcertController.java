@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,9 +29,8 @@ public class ConcertController {
     @Operation(summary = "콘서트 목록 조회")
     @ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = FindConcertListDto.Response.class)))
     @GetMapping()
-    public ResponseEntity<Page<FindConcertListDto.Response>> findConcertList(@Schema(name = "대기열 토큰") @RequestHeader(name = "Authorization") String token,
-                                                                             @Schema(name = "페이징 정보") Pageable pageable) {
-        return ResponseEntity.ok(concertFacade.findConcertList(pageable, token)
+    public ResponseEntity<Page<FindConcertListDto.Response>> findConcertList(@Schema(name = "페이징 정보") Pageable pageable) {
+        return ResponseEntity.ok(concertFacade.findConcertList(pageable)
                 .map(FindConcertListDto.Response::from));
     }
 
@@ -40,11 +38,10 @@ public class ConcertController {
     @ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = FindConcertScheduleDto.Response.class)))
     @GetMapping(value = "/{concertId}/schedules")
     public ResponseEntity<List<FindConcertScheduleDto.Response>> findConcertSchedule(
-            @Schema(name = "대기열 토큰") @RequestHeader("Authorization") String token,
             @Schema(name = "콘서트 Id") @PathVariable(name = "concertId") Long concertId,
             @Schema(name = "날짜 필터 - 시작일") @RequestParam(name = "startDate") LocalDate startDate,
             @Schema(name = "날짜 필터 - 종료일") @RequestParam(name = "endDate") LocalDate endDate) {
-        return ResponseEntity.ok(concertFacade.findConcertScheduleList(concertId, token, startDate, endDate).stream()
+        return ResponseEntity.ok(concertFacade.findConcertScheduleList(concertId, startDate, endDate).stream()
                 .map(FindConcertScheduleDto.Response::from)
                 .toList());
     }
@@ -52,10 +49,9 @@ public class ConcertController {
     @Operation(summary = "콘서트 일정 목록 조회")
     @ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = FindConcertSeatDto.Response.class)))
     @GetMapping(value = "/{concertId}/schedules/{concertScheduleId}/seats")
-    public ResponseEntity<List<FindConcertSeatDto.Response>> findConcertSeat(@Schema(name = "대기열 토큰") @RequestHeader("Authorization") String token,
-                                                                             @Schema(name = "콘서트 Id") @PathVariable(name = "concertId") Long concertId,
+    public ResponseEntity<List<FindConcertSeatDto.Response>> findConcertSeat(@Schema(name = "콘서트 Id") @PathVariable(name = "concertId") Long concertId,
                                                                              @Schema(name = "콘서트 스케쥴 Id") @PathVariable("concertScheduleId") Long concertScheduleId) {
-        return ResponseEntity.ok(concertFacade.findConcertSeatList(concertId, concertScheduleId, token).stream()
+        return ResponseEntity.ok(concertFacade.findConcertSeatList(concertId, concertScheduleId).stream()
                 .map(FindConcertSeatDto.Response::from)
                 .toList());
     }

@@ -2,6 +2,7 @@ package io.hhplus.server_construction.domain.waiting.service;
 
 import io.hhplus.server_construction.domain.waiting.Waiting;
 import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingException;
+import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingExceptionEnums;
 import io.hhplus.server_construction.domain.waiting.repoisitory.WaitingRepository;
 import io.hhplus.server_construction.domain.waiting.vo.WaitingConstant;
 import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
@@ -159,18 +160,17 @@ class WaitingServiceTest {
     }
 
     @Test
-    @DisplayName("사용 가능한 토큰인지 체크한다.")
+    @DisplayName("사용 불가능한 토큰인지 체크")
     void checkWaitingStatus() {
         // given
-        LocalDateTime now = LocalDateTime.now();
         String token = "DUMMY_TOKEN";
-        Waiting waiting = new Waiting(1L, token, WaitingStatus.PROCEEDING, now, now, now);
 
         // when
-        when(waitingRepository.findWaitingByToken(token)).thenReturn(waiting);
-        boolean isAvailable = waitingService.checkWaitingStatus(token);
+        when(waitingRepository.findWaitingByToken(token)).thenThrow(new WaitingException(WaitingExceptionEnums.TOKEN_EXPIRED));
 
         // then
-        assertThat(isAvailable).isTrue();
+        assertThatThrownBy(() -> waitingService.checkWaitingStatus(token))
+                .isInstanceOf(WaitingException.class)
+                .hasMessageContaining(WaitingExceptionEnums.TOKEN_EXPIRED.getMessage());
     }
 }

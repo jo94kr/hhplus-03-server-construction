@@ -22,11 +22,9 @@ public class ReservationController {
     @Operation(summary = "콘서트 좌석 예약")
     @ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = ReservationConcert.Response.class)))
     @PostMapping()
-    public ResponseEntity<ReservationConcert.Response> reservationConcert(@Schema(name = "대기열 토큰")
-                                                                          @RequestHeader("Authorization") String token,
-                                                                          @RequestBody ReservationConcert.Request request) {
+    public ResponseEntity<ReservationConcert.Response> reservationConcert(@RequestBody ReservationConcert.Request request) {
         return ResponseEntity.ok(ReservationConcert.Response.from(
-                reservationFacade.reservationConcert(request.toCommand(), token))
+                reservationFacade.reservationConcert(request.toCommand()))
         );
     }
 }

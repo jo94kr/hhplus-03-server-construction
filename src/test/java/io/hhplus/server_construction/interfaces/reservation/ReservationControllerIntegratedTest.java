@@ -53,6 +53,32 @@ class ReservationControllerIntegratedTest extends IntegratedTest {
     private static final String PATH = "/reservations";
 
     @Test
+    @DisplayName("만료된 토큰으로 콘서트 좌석을 예약한다.")
+    void reservationConcertByExpiredToken() {
+        // given
+        String requestBody = """
+                {
+                    "concertSeatIdList": [1, 2],
+                    "userId": 1
+                }
+                """;
+        Map<String, Object> headers = new HashMap<>();
+        headers.put("Authorization", "DUMMY_TOKEN_1");
+
+        // when
+        ExtractableResponse<Response> response = RestAssured
+                .given().log().all()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(requestBody)
+                .when().post(PATH)
+                .then().log().all().extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @Test
     @DisplayName("콘서트 좌석을 예약한다.")
     void reservationConcert() {
         // given

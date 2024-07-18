@@ -22,6 +22,29 @@ class ConcertControllerIntegratedTest extends IntegratedTest {
     private final static String PATH = "/concerts";
 
     @Test
+    @DisplayName("만료된 토큰으로 콘서트 조회")
+    void findConcertByExpiredToken() {
+        // given
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("page", 0);
+        requestParams.put("size", 5);
+
+        Map<String, Object> headers = new HashMap<>();
+        headers.put("Authorization", "DUMMY_TOKEN_1");
+
+        // when
+        ExtractableResponse<Response> response = RestAssured
+                .given().log().all()
+                .headers(headers)
+                .queryParams(requestParams)
+                .when().get(PATH)
+                .then().log().all().extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+    
+    @Test
     @DisplayName("콘서트 목록을 조회한다.")
     void findConcertList() {
         // given

@@ -11,8 +11,6 @@ import io.hhplus.server_construction.domain.reservation.service.ReservationServi
 import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import io.hhplus.server_construction.domain.user.service.UserService;
-import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingException;
-import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingExceptionEnums;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -32,16 +30,12 @@ public class ReservationFacade {
     private final WaitingService waitingService;
 
     @Transactional(rollbackFor = {Exception.class})
-    public ReservationConcertResult reservationConcert(ReservationConcertCommand concertCommand, String token) {
-        if (!waitingService.checkWaitingStatus(token)) {
-            throw new WaitingException(WaitingExceptionEnums.TOKEN_EXPIRED);
-        }
-
+    public ReservationConcertResult reservationConcert(ReservationConcertCommand reservationConcertCommand) {
         // 사용자 조회
-        User user = userService.findUserById(concertCommand.userId());
+        User user = userService.findUserById(reservationConcertCommand.userId());
 
         // 콘서트 좌석 조회 - 임시 예약 처리
-        List<ConcertSeat> concertSeatList = concertService.reservationSeat(concertCommand.concertSeatIdList());
+        List<ConcertSeat> concertSeatList = concertService.reservationSeat(reservationConcertCommand.concertSeatIdList());
 
         // 콘서트 예약
         Reservation reservation = reservationService.reservationConcert(concertSeatList, user);

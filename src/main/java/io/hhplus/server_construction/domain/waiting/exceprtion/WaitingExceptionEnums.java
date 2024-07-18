@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum WaitingExceptionEnums implements ExceptionInterface {
 
-    TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "TOKEN_EXPIRED", "expired token.");
+    TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "TOKEN_EXPIRED", "expired token."),
+    EMPTY_TOKEN(HttpStatus.BAD_REQUEST, "EMPTY_TOKEN", "Token is empty.");
 
     private final HttpStatus httpStatus;
     private final String code;

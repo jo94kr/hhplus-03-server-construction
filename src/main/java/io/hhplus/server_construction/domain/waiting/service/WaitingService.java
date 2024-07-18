@@ -97,17 +97,13 @@ public class WaitingService {
                 .toList());
     }
 
-    public boolean checkWaitingStatus(String token) {
+    public void checkWaitingStatus(String token) {
         Waiting waiting = waitingRepository.findWaitingByToken(token);
-        if (waiting != null) {
-            boolean availableToken = waiting.isAvailableToken();
-            if (availableToken) {
-                // 유효한 토큰일 경우 만료일을 연장
-                waiting.renewalExpiredDatetime();
-            }
-            return availableToken;
+        if (waiting.isAvailableToken()) {
+            // 유효한 토큰일 경우 만료일을 연장
+            waitingRepository.save(waiting.renewalExpiredDatetime());
         } else {
-            return false;
+            throw new WaitingException(WaitingExceptionEnums.TOKEN_EXPIRED);
         }
     }
 

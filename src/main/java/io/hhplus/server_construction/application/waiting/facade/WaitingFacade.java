@@ -2,6 +2,8 @@ package io.hhplus.server_construction.application.waiting.facade;
 
 import io.hhplus.server_construction.application.waiting.dto.CheckTokenResult;
 import io.hhplus.server_construction.domain.waiting.Waiting;
+import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingException;
+import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingExceptionEnums;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -32,6 +34,10 @@ public class WaitingFacade {
                 waitingNumber,
                 waiting.getStatus(),
                 waiting.getExpiredDatetime());
+    }
+
+    public void auth(String token) {
+        waitingService.checkWaitingStatus(token);
     }
 
     @Transactional(rollbackFor = {Exception.class})
