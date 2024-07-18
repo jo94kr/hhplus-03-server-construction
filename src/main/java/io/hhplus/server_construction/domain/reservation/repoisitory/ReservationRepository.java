@@ -15,7 +15,7 @@ public interface ReservationRepository {
 
     List<ReservationItem> saveAllReservationItems(List<ReservationItem> reservationItemList);
 
-    Reservation findReservationById(Long reservationId);
+    Reservation pessimisticFindReservationById(Long reservationId);
 
     List<ReservationItem> findAllReservationItemByReservationId(Long reservationId);
 

@@ -46,7 +46,7 @@ public class ReservationService {
     }
 
     public Reservation findReservationWithItemListById(Long reservationId) {
-        Reservation reservation = reservationRepository.findReservationById(reservationId);
+        Reservation reservation = reservationRepository.pessimisticFindReservationById(reservationId);
         List<ReservationItem> reservationItemList = reservationRepository.findAllReservationItemByReservationId(reservationId);
         return reservation.setReservationItemList(reservationItemList);
     }
