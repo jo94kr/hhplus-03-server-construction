@@ -3,13 +3,14 @@ package io.hhplus.server_construction.domain.concert.service;
 import io.hhplus.server_construction.domain.concert.Concert;
 import io.hhplus.server_construction.domain.concert.ConcertSchedule;
 import io.hhplus.server_construction.domain.concert.ConcertSeat;
-import io.hhplus.server_construction.domain.concert.exceprtion.AlreadyReservationException;
+import io.hhplus.server_construction.domain.concert.exceprtion.ConcertException;
+import io.hhplus.server_construction.domain.concert.exceprtion.ConcertExceptionEnums;
 import io.hhplus.server_construction.domain.concert.repoisitory.ConcertRepository;
-import io.hhplus.server_construction.domain.concert.vo.ConcertSeatGrade;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -39,14 +40,19 @@ public class ConcertService {
 
     public List<ConcertSeat> reservationSeat(List<Long> seatIdList) {
         List<ConcertSeat> concertSeatList = new ArrayList<>();
-        for (Long seatId : seatIdList) {
-            ConcertSeat concertSeat = concertRepository.pessimisticLockFindById(seatId);
-            if (!concertSeat.isPossible()) {
-                throw new AlreadyReservationException();
+        try {
+            for (Long seatId : seatIdList) {
+                ConcertSeat concertSeat = concertRepository.findConcertSeatById(seatId);
+                if (!concertSeat.isPossible()) {
+                    throw new ConcertException(ConcertExceptionEnums.ALREADY_RESERVATION);
+                }
+
+                // 좌석 임시 예약 상태로 변경
+                concertSeatList.add(concertRepository.saveConcertSeat(concertSeat.changeStatus(ConcertSeatStatus.PENDING)));
             }
 
-            // 좌석 임시 예약 상태로 변경
-            concertSeatList.add(concertRepository.saveConcertSeat(concertSeat.changeStatus(ConcertSeatStatus.PENDING)));
+        } catch (ObjectOptimisticLockingFailureException e) {
+            throw new ConcertException(ConcertExceptionEnums.ALREADY_RESERVATION);
         }
 
         return concertSeatList;

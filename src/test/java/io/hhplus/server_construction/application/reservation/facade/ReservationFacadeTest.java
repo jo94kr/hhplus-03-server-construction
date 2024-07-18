@@ -1,10 +1,14 @@
 package io.hhplus.server_construction.application.reservation.facade;
 
 import io.hhplus.server_construction.application.reservation.dto.ReservationConcertCommand;
-import io.hhplus.server_construction.domain.concert.exceprtion.AlreadyReservationException;
+import io.hhplus.server_construction.domain.concert.exceprtion.ConcertException;
+import io.hhplus.server_construction.domain.concert.exceprtion.ConcertExceptionEnums;
 import io.hhplus.server_construction.domain.concert.service.ConcertService;
+import io.hhplus.server_construction.domain.payment.exception.PaymentException;
+import io.hhplus.server_construction.domain.payment.exception.PaymentExceptionEnums;
 import io.hhplus.server_construction.domain.user.service.UserService;
-import io.hhplus.server_construction.domain.waiting.exceprtion.TokenExpiredException;
+import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingException;
+import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingExceptionEnums;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -46,14 +51,15 @@ class ReservationFacadeTest {
 
         // when
         when(waitingService.checkWaitingStatus(TOKEN)).thenReturn(false);
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> reservationFacade.reservationConcert(reservationConcertCommand, TOKEN);
 
         // then
-        assertThatExceptionOfType(TokenExpiredException.class).isThrownBy(throwingCallable);
+        assertThatThrownBy(() -> reservationFacade.reservationConcert(reservationConcertCommand, TOKEN))
+                .isInstanceOf(WaitingException.class)
+                .hasMessageContaining(WaitingExceptionEnums.TOKEN_EXPIRED.getMessage());
     }
 
     @Test
-    @DisplayName("유요한 상태가 아닌 콘서트를 예약한다.")
+    @DisplayName("유효한 상태가 아닌 콘서트를 예약한다.")
     void reservationConcertNotPossible() {
         // given
         Long userId = 1L;
@@ -63,10 +69,11 @@ class ReservationFacadeTest {
         // when
         when(waitingService.checkWaitingStatus(TOKEN)).thenReturn(true);
         when(userService.findUserById(userId)).thenReturn(any());
-        when(concertService.reservationSeat(concertSeatIdList)).thenThrow(AlreadyReservationException.class);
-        ThrowableAssert.ThrowingCallable throwingCallable = () -> reservationFacade.reservationConcert(reservationConcertCommand, TOKEN);
+        when(concertService.reservationSeat(concertSeatIdList)).thenThrow(new ConcertException(ConcertExceptionEnums.ALREADY_RESERVATION));
 
         // then
-        assertThatExceptionOfType(AlreadyReservationException.class).isThrownBy(throwingCallable);
+        assertThatThrownBy(() -> reservationFacade.reservationConcert(reservationConcertCommand, TOKEN))
+                .isInstanceOf(ConcertException.class)
+                .hasMessageContaining(ConcertExceptionEnums.ALREADY_RESERVATION.getMessage());
     }
 }

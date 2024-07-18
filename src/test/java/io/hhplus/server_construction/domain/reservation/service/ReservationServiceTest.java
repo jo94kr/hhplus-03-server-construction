@@ -59,6 +59,7 @@ class ReservationServiceTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
+                0L,
                 LocalDateTime.now(),
                 LocalDateTime.now());
         this.concertSeat2 = ConcertSeat.create(2L,
@@ -67,6 +68,7 @@ class ReservationServiceTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
+                0L,
                 LocalDateTime.now(),
                 LocalDateTime.now());
         this.concertSeat3 = ConcertSeat.create(3L,
@@ -75,6 +77,7 @@ class ReservationServiceTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
+                0L,
                 LocalDateTime.now(),
                 LocalDateTime.now());
     }
@@ -97,4 +100,6 @@ class ReservationServiceTest {
         // then
         assertThat(result.getTotalPrice()).isEqualTo(totalPrice);
     }
+
+
 }

@@ -3,12 +3,12 @@ package io.hhplus.server_construction.domain.concert.service;
 import io.hhplus.server_construction.domain.concert.Concert;
 import io.hhplus.server_construction.domain.concert.ConcertSchedule;
 import io.hhplus.server_construction.domain.concert.ConcertSeat;
-import io.hhplus.server_construction.domain.concert.exceprtion.AlreadyReservationException;
+import io.hhplus.server_construction.domain.concert.exceprtion.ConcertException;
+import io.hhplus.server_construction.domain.concert.exceprtion.ConcertExceptionEnums;
 import io.hhplus.server_construction.domain.concert.repoisitory.ConcertRepository;
 import io.hhplus.server_construction.domain.concert.vo.ConcertScheduleStatus;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatGrade;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,11 +50,12 @@ class ConcertServiceTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
+                0L,
                 LocalDateTime.now(),
                 LocalDateTime.now());
 
         // when
-        when(concertRepository.pessimisticLockFindById(concertSeatId)).thenReturn(concertSeat);
+        when(concertRepository.findConcertSeatById(concertSeatId)).thenReturn(concertSeat);
         when(concertRepository.saveConcertSeat(concertSeat)).thenReturn(concertSeat);
         List<ConcertSeat> concertSeatList = concertService.reservationSeat(List.of(1L));
 
@@ -81,14 +82,16 @@ class ConcertServiceTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.PENDING,
+                0L,
                 LocalDateTime.now(),
                 LocalDateTime.now());
 
         // when
-        when(concertRepository.pessimisticLockFindById(concertSeatId)).thenReturn(concertSeat);
-        ThrowableAssert.ThrowingCallable throwingCallable = () ->concertService.reservationSeat(List.of(1L));
+        when(concertRepository.findConcertSeatById(concertSeatId)).thenReturn(concertSeat);
 
         // then
-        assertThatExceptionOfType(AlreadyReservationException.class).isThrownBy(throwingCallable);
+        assertThatThrownBy(() -> concertService.reservationSeat(List.of(1L)))
+                .isInstanceOf(ConcertException.class)
+                .hasMessageContaining(ConcertExceptionEnums.ALREADY_RESERVATION.getMessage());
     }
 }

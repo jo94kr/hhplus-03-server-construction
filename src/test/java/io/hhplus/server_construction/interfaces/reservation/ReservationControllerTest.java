@@ -71,6 +71,7 @@ class ReservationControllerTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
+                0L,
                 LocalDateTime.now(),
                 LocalDateTime.now());
 

@@ -1,9 +1,9 @@
 package io.hhplus.server_construction.application.user.facade;
 
 import io.hhplus.server_construction.domain.user.User;
-import io.hhplus.server_construction.domain.user.exceprtion.ChargeAmountException;
+import io.hhplus.server_construction.domain.user.exceprtion.UserException;
+import io.hhplus.server_construction.domain.user.exceprtion.UserExceptionEnums;
 import io.hhplus.server_construction.domain.user.service.UserService;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -55,10 +54,11 @@ class UserFacadeTest {
 
         // when
         when(userService.findUserById(userId)).thenReturn(user);
-        when(userService.charge(user, chargeAmount)).thenThrow(ChargeAmountException.class);
+        when(userService.charge(user, chargeAmount)).thenThrow(new UserException(UserExceptionEnums.INVALID_AMOUNT_VALUE));
 
         // then
         assertThatThrownBy(() -> userFacade.charge(userId, chargeAmount))
-                .isInstanceOf(ChargeAmountException.class);
+                .isInstanceOf(UserException.class)
+                .hasMessageContaining(UserExceptionEnums.INVALID_AMOUNT_VALUE.getMessage());
     }
 }

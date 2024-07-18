@@ -11,7 +11,8 @@ import io.hhplus.server_construction.domain.reservation.service.ReservationServi
 import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import io.hhplus.server_construction.domain.user.service.UserService;
-import io.hhplus.server_construction.domain.waiting.exceprtion.TokenExpiredException;
+import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingException;
+import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingExceptionEnums;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -33,7 +34,7 @@ public class ReservationFacade {
     @Transactional(rollbackFor = {Exception.class})
     public ReservationConcertResult reservationConcert(ReservationConcertCommand concertCommand, String token) {
         if (!waitingService.checkWaitingStatus(token)) {
-            throw new TokenExpiredException();
+            throw new WaitingException(WaitingExceptionEnums.TOKEN_EXPIRED);
         }
 
         // 사용자 조회

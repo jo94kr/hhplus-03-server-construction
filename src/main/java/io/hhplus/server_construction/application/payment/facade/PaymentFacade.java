@@ -3,14 +3,16 @@ package io.hhplus.server_construction.application.payment.facade;
 import io.hhplus.server_construction.application.payment.dto.PaymentCommand;
 import io.hhplus.server_construction.application.payment.dto.PaymentResult;
 import io.hhplus.server_construction.domain.payment.Payment;
-import io.hhplus.server_construction.domain.payment.exception.InvalidReservationStatusException;
+import io.hhplus.server_construction.domain.payment.exception.PaymentException;
+import io.hhplus.server_construction.domain.payment.exception.PaymentExceptionEnums;
 import io.hhplus.server_construction.domain.payment.service.PaymentService;
 import io.hhplus.server_construction.domain.reservation.Reservation;
 import io.hhplus.server_construction.domain.reservation.service.ReservationService;
 import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import io.hhplus.server_construction.domain.user.service.UserService;
-import io.hhplus.server_construction.domain.waiting.exceprtion.TokenExpiredException;
+import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingException;
+import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingExceptionEnums;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -30,13 +32,13 @@ public class PaymentFacade {
     public PaymentResult payment(PaymentCommand paymentCommand, String token) {
         // 토큰 유효성 검사
         if (!waitingService.checkWaitingStatus(token)) {
-            throw new TokenExpiredException();
+            throw new WaitingException(WaitingExceptionEnums.TOKEN_EXPIRED);
         }
 
         // 결제 가능여부 체크
         Reservation reservation = reservationService.findReservationWithItemListById(paymentCommand.reservationId());
         if (!reservation.isPaymentWaiting()) {
-            throw new InvalidReservationStatusException();
+            throw new PaymentException(PaymentExceptionEnums.INVALID_RESERVATION_STATUS);
         }
 
         User user = userService.findUserById(paymentCommand.userId());

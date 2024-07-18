@@ -1,8 +1,7 @@
 package io.hhplus.server_construction.application.concert.facade;
 
-import io.hhplus.server_construction.domain.waiting.exceprtion.TokenExpiredException;
+import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingException;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
 
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
@@ -39,7 +37,7 @@ class ConcertFacadeTest {
 
         // then
         assertThatThrownBy(() -> concertFacade.findConcertList(pageRequest, TOKEN))
-                .isInstanceOf(TokenExpiredException.class);
+                .isInstanceOf(WaitingException.class);
     }
 
     @Test
@@ -53,7 +51,7 @@ class ConcertFacadeTest {
 
         // then
         assertThatThrownBy(() -> concertFacade.findConcertScheduleList(concertId, TOKEN, LocalDate.now().minusDays(1), LocalDate.now()))
-                .isInstanceOf(TokenExpiredException.class);
+                .isInstanceOf(WaitingException.class);
     }
 
     @Test
@@ -68,6 +66,6 @@ class ConcertFacadeTest {
 
         // then
         assertThatThrownBy(() -> concertFacade.findConcertSeatList(concertId, concertScheduleId, TOKEN))
-                .isInstanceOf(TokenExpiredException.class);
+                .isInstanceOf(WaitingException.class);
     }
 }
