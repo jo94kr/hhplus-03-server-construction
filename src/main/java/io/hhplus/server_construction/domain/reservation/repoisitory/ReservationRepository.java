@@ -11,10 +11,13 @@ public interface ReservationRepository {
 
     Reservation saveReservation(Reservation reservation);
 
-    ReservationItem saveReservationItem(ReservationItem reservationItem);
-
     List<ReservationItem> saveAllReservationItems(List<ReservationItem> reservationItemList);
 
+    /**
+     * 비관적 락 조회
+     * @param reservationId 예약 Id
+     * @return Reservation
+     */
     Reservation pessimisticFindReservationById(Long reservationId);
 
     List<ReservationItem> findAllReservationItemByReservationId(Long reservationId);

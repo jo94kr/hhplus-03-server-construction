@@ -19,6 +19,16 @@ public class WaitingService {
 
     private final WaitingRepository waitingRepository;
 
+    /**
+     * 대기열 토큰 검증
+     * <pre>
+     *     - 토큰검증 시 토큰이 없다면 신규 토큰 발급
+     *     - 분당 처리량, 진입시점의 대기열 순번, 처리 시간을 가지고 입장 시간을 계산
+     *     - 토큰이 만료되는 일시는 유효한 API 를 호출할때마다 갱신해준다
+     * </pre>
+     * @param token 대기열 토큰
+     * @return Waiting
+     */
     public Waiting checkToken(String token) {
         Waiting waiting;
         // 토큰이 없으면 신규 토큰 발급
@@ -52,6 +62,11 @@ public class WaitingService {
         return waiting;
     }
 
+    /**
+     * 대기열 순번 계산
+     * @param waiting 대상 대기열
+     * @return 대기열 순번
+     */
     public Long calcWaitingNumber(Waiting waiting) {
         // 가장 최근에 입장한 대기열 번호
         Long lastProceedingWaitingNum = waitingRepository.findLastProceedingWaiting(WaitingStatus.PROCEEDING);
@@ -62,6 +77,11 @@ public class WaitingService {
         return currentWaitingNum - lastProceedingWaitingNum;
     }
 
+    /**
+     * 남은 시간 계산
+     * @param waitingNumber 대기열 순번
+     * @return 남은 시간 (분)
+     */
     public Long calcTimeRemaining(Long waitingNumber) {
         LocalDateTime now = LocalDateTime.now();
 
@@ -77,6 +97,10 @@ public class WaitingService {
         return now.until(timeRemaining, ChronoUnit.MINUTES);
     }
 
+    /**
+     * 만료일이 지난 대기열 조회
+     * @param now 현재시간
+     */
     public void findExpiredToken(LocalDateTime now) {
         // 만료일이 지난 대기열 조회
         List<Waiting> expireWaitingList = waitingRepository.findWaitingByStatusAndExpireDatetimeIsBefore(WaitingStatus.WAITING, now.minusMinutes(5));
@@ -87,6 +111,10 @@ public class WaitingService {
                 .toList());
     }
 
+    /**
+     * 진입 가능한 대기열 조회
+     * @param now 현재시간
+     */
     public void findActiveToken(LocalDateTime now) {
         // 진입 가능한 대기열 조회
         List<Waiting> activeWaitingList = waitingRepository.findWaitingByStatusAndAccessDatetimeIsBefore(WaitingStatus.WAITING, now);
@@ -97,6 +125,10 @@ public class WaitingService {
                 .toList());
     }
 
+    /**
+     * 대기열 상태 체크
+     * @param token 대기열 토큰
+     */
     public void checkWaitingStatus(String token) {
         Waiting waiting = waitingRepository.findWaitingByToken(token);
         if (waiting.isAvailableToken()) {
@@ -107,6 +139,10 @@ public class WaitingService {
         }
     }
 
+    /**
+     * 대기열 만료처리
+     * @param token 대기열 토큰
+     */
     public void expiredToken(String token) {
         Waiting waiting = waitingRepository.findWaitingByToken(token);
         waitingRepository.save(waiting.expireToken());

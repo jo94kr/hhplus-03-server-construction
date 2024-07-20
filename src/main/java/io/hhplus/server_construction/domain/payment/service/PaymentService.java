@@ -13,6 +13,12 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
 
+    /**
+     * 결제
+     * @param reservation 예약
+     * @param user 사용자
+     * @return Payment
+     */
     public Payment payment(Reservation reservation, User user) {
         return paymentRepository.save(Payment.pay( reservation, user));
     }
