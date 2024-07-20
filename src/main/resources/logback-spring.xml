@@ -26,17 +26,37 @@
         </rollingPolicy>
     </appender>
 
+    <!-- Slack Appender -->
+    <springProperty name="SLACK_WEBHOOK_URL" source="slack.webhook.url"/>
+    <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">
+        <webhookUri>${SLACK_WEBHOOK_URL}</webhookUri>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%date %-5level - %msg%n</pattern>
+        </layout>
+        <username>Error-Logger</username>
+        <iconEmoji>:large_red_circle:</iconEmoji>
+        <colorCoding>true</colorCoding>
+    </appender>
+
+    <appender name="ASYNC_SLACK" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="SLACK" />
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
+
     <!-- local Profile에서의 로그 설정 -->
     <springProfile name="default">
         <root level="INFO">
             <appender-ref ref="THREAD_CONSOLE" />
+            <appender-ref ref="ASYNC_SLACK" />
         </root>
     </springProfile>
 
     <!-- test Profile에서의 로그 설정 -->
     <springProfile name="test">
         <root level="INFO">
-            <appender-ref ref="THREAD_CONSOLE" />
+            <appender-ref ref="ASYNC_SLACK" />
             <appender-ref ref="FILE" />
         </root>
     </springProfile>
