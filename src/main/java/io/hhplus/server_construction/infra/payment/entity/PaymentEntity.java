@@ -1,6 +1,6 @@
 package io.hhplus.server_construction.infra.payment.entity;
 
-import io.hhplus.server_construction.domain.payment.PaymentEnums;
+import io.hhplus.server_construction.domain.payment.vo.PaymentStatus;
 import io.hhplus.server_construction.infra.BaseCreateDatetimeEntity;
 import io.hhplus.server_construction.infra.reservation.entity.ReservationEntity;
 import io.hhplus.server_construction.infra.user.entity.UserEntity;
@@ -33,7 +33,7 @@ public class PaymentEntity extends BaseCreateDatetimeEntity {
 
     private BigDecimal price;
 
-    private PaymentEnums.PaymentStatus status;
+    private PaymentStatus status;
 
     private LocalDateTime paymentDateTime;
 
@@ -41,7 +41,7 @@ public class PaymentEntity extends BaseCreateDatetimeEntity {
                          ReservationEntity reservation,
                          UserEntity user,
                          BigDecimal price,
-                         PaymentEnums.PaymentStatus status,
+                         PaymentStatus status,
                          LocalDateTime paymentDateTime) {
         this.id = id;
         this.reservation = reservation;
