@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.common.interceptor;
+package io.hhplus.server_construction.support.interceptor;
 
 import io.hhplus.server_construction.application.waiting.facade.WaitingFacade;
 import jakarta.servlet.http.HttpServletRequest;

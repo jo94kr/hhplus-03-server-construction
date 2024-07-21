@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.common.enums;
+package io.hhplus.server_construction.support.enums;
 
 public interface EnumInterface {
     String getCode();

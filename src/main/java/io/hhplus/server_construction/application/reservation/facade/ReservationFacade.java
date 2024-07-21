@@ -11,7 +11,6 @@ import io.hhplus.server_construction.domain.reservation.service.ReservationServi
 import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import io.hhplus.server_construction.domain.user.service.UserService;
-import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,18 +26,17 @@ public class ReservationFacade {
     private final UserService userService;
     private final ConcertService concertService;
     private final ReservationService reservationService;
-    private final WaitingService waitingService;
 
     @Transactional(rollbackFor = {Exception.class})
-    public ReservationConcertResult reservationConcert(ReservationConcertCommand reservationConcertCommand) {
+    public ReservationConcertResult setConcertReservation(ReservationConcertCommand reservationConcertCommand) {
         // 사용자 조회
         User user = userService.findUserById(reservationConcertCommand.userId());
 
         // 콘서트 좌석 조회 - 임시 예약 처리
-        List<ConcertSeat> concertSeatList = concertService.reservationSeat(reservationConcertCommand.concertSeatIdList());
+        List<ConcertSeat> concertSeatList = concertService.setSeatReservation(reservationConcertCommand.concertSeatIdList());
 
         // 콘서트 예약
-        Reservation reservation = reservationService.reservationConcert(concertSeatList, user);
+        Reservation reservation = reservationService.setConcertReservation(concertSeatList, user);
 
         return ReservationConcertResult.from(reservation);
     }

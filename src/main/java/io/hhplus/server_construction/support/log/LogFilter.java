@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.common.log;
+package io.hhplus.server_construction.support.log;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

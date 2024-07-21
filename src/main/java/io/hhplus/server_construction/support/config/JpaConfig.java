@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.common.config;
+package io.hhplus.server_construction.support.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

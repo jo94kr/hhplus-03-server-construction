@@ -62,7 +62,7 @@ public class ConcertService {
      * @throws ConcertException - ALREADY_RESERVATION: 이미 선택된 좌석
      * @return List<ConcertSeat>
      */
-    public List<ConcertSeat> reservationSeat(List<Long> seatIdList) {
+    public List<ConcertSeat> setSeatReservation(List<Long> seatIdList) {
         List<ConcertSeat> concertSeatList = new ArrayList<>();
         try {
             for (Long seatId : seatIdList) {

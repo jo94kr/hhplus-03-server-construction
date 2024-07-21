@@ -57,7 +57,7 @@ class ConcertServiceTest {
         // when
         when(concertRepository.findConcertSeatById(concertSeatId)).thenReturn(concertSeat);
         when(concertRepository.saveConcertSeat(concertSeat)).thenReturn(concertSeat);
-        List<ConcertSeat> concertSeatList = concertService.reservationSeat(List.of(1L));
+        List<ConcertSeat> concertSeatList = concertService.setSeatReservation(List.of(1L));
 
         // then
         assertThat(concertSeatList).isNotEmpty()
@@ -90,7 +90,7 @@ class ConcertServiceTest {
         when(concertRepository.findConcertSeatById(concertSeatId)).thenReturn(concertSeat);
 
         // then
-        assertThatThrownBy(() -> concertService.reservationSeat(List.of(1L)))
+        assertThatThrownBy(() -> concertService.setSeatReservation(List.of(1L)))
                 .isInstanceOf(ConcertException.class)
                 .hasMessageContaining(ConcertExceptionEnums.ALREADY_RESERVATION.getMessage());
     }

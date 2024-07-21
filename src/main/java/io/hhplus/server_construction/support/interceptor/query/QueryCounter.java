@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.common.interceptor.query;
+package io.hhplus.server_construction.support.interceptor.query;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;

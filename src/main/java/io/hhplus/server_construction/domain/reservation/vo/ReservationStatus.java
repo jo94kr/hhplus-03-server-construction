@@ -1,7 +1,7 @@
 package io.hhplus.server_construction.domain.reservation.vo;
 
-import io.hhplus.server_construction.common.enums.EnumConverter;
-import io.hhplus.server_construction.common.enums.EnumInterface;
+import io.hhplus.server_construction.support.enums.EnumConverter;
+import io.hhplus.server_construction.support.enums.EnumInterface;
 import jakarta.persistence.Converter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

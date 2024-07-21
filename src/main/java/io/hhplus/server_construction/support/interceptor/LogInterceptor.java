@@ -1,7 +1,7 @@
-package io.hhplus.server_construction.common.interceptor;
+package io.hhplus.server_construction.support.interceptor;
 
-import io.hhplus.server_construction.common.interceptor.query.QueryCounter;
-import io.hhplus.server_construction.common.log.ResponseInfoLogData;
+import io.hhplus.server_construction.support.interceptor.query.QueryCounter;
+import io.hhplus.server_construction.support.log.ResponseInfoLogData;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

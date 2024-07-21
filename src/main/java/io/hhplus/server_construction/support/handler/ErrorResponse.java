@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.common.handler;
+package io.hhplus.server_construction.support.handler;
 
 public record ErrorResponse(
         String code,

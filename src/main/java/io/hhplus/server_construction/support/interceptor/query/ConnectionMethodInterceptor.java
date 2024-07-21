@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.common.interceptor.query;
+package io.hhplus.server_construction.support.interceptor.query;
 
 import lombok.RequiredArgsConstructor;
 import org.aopalliance.intercept.MethodInterceptor;

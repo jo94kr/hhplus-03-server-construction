@@ -85,7 +85,7 @@ class ReservationControllerTest {
                 LocalDateTime.now())));
 
         // when
-        when(reservationFacade.reservationConcert(any())).thenReturn(ReservationConcertResult.from(reservation));
+        when(reservationFacade.setConcertReservation(any())).thenReturn(ReservationConcertResult.from(reservation));
         ResultActions response = mockMvc.perform(post(PATH)
                 .header("Authorization", TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)

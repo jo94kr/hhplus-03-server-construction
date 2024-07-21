@@ -1,7 +1,7 @@
-package io.hhplus.server_construction.common.config;
+package io.hhplus.server_construction.support.config;
 
-import io.hhplus.server_construction.common.interceptor.LogInterceptor;
-import io.hhplus.server_construction.common.interceptor.WaitingInterceptor;
+import io.hhplus.server_construction.support.interceptor.LogInterceptor;
+import io.hhplus.server_construction.support.interceptor.WaitingInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

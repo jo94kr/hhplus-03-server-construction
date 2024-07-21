@@ -35,7 +35,7 @@ public class ReservationService {
      * @param user 사용자
      * @return Reservation
      */
-    public Reservation reservationConcert(List<ConcertSeat> concertSeatList, User user) {
+    public Reservation setConcertReservation(List<ConcertSeat> concertSeatList, User user) {
         // 총 결제가
         BigDecimal totalPrice = concertSeatList.stream()
                 .map(ConcertSeat::getPrice)

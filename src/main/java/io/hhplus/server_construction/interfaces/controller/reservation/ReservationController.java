@@ -24,7 +24,7 @@ public class ReservationController {
     @PostMapping()
     public ResponseEntity<ReservationConcert.Response> reservationConcert(@RequestBody ReservationConcert.Request request) {
         return ResponseEntity.ok(ReservationConcert.Response.from(
-                reservationFacade.reservationConcert(request.toCommand()))
+                reservationFacade.setConcertReservation(request.toCommand()))
         );
     }
 }

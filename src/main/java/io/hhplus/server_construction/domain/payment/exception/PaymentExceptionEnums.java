@@ -1,6 +1,6 @@
 package io.hhplus.server_construction.domain.payment.exception;
 
-import io.hhplus.server_construction.common.exception.ExceptionInterface;
+import io.hhplus.server_construction.support.exception.ExceptionInterface;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

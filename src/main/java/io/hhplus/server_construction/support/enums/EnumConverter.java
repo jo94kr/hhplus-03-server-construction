@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.common.enums;
+package io.hhplus.server_construction.support.enums;
 
 import jakarta.persistence.AttributeConverter;
 

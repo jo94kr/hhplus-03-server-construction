@@ -1,6 +1,6 @@
-package io.hhplus.server_construction.common.handler;
+package io.hhplus.server_construction.support.handler;
 
-import io.hhplus.server_construction.common.exception.BaseException;
+import io.hhplus.server_construction.support.exception.BaseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

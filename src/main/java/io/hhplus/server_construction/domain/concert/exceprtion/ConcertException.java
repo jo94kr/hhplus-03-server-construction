@@ -1,6 +1,6 @@
 package io.hhplus.server_construction.domain.concert.exceprtion;
 
-import io.hhplus.server_construction.common.exception.BaseException;
+import io.hhplus.server_construction.support.exception.BaseException;
 
 public class ConcertException extends BaseException {
 
