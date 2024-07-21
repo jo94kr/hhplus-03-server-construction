@@ -73,7 +73,6 @@ class PaymentFacadeTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
-                0L,
                 now,
                 now);
         this.concertSeat2 = ConcertSeat.create(2L,
@@ -82,7 +81,6 @@ class PaymentFacadeTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
-                0L,
                 now,
                 now);
         this.concertSeat3 = ConcertSeat.create(3L,
@@ -91,7 +89,6 @@ class PaymentFacadeTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
-                0L,
                 now,
                 now);
     }

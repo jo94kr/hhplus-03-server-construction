@@ -64,9 +64,8 @@ public class ConcertService {
      */
     public List<ConcertSeat> setSeatReservation(List<Long> seatIdList) {
         List<ConcertSeat> concertSeatList = new ArrayList<>();
-        try {
             for (Long seatId : seatIdList) {
-                ConcertSeat concertSeat = concertRepository.findConcertSeatById(seatId);
+                ConcertSeat concertSeat = concertRepository.pessimisticLockFindById(seatId);
                 if (!concertSeat.isPossible()) {
                     throw new ConcertException(ConcertExceptionEnums.ALREADY_RESERVATION);
                 }
@@ -74,11 +73,6 @@ public class ConcertService {
                 // 좌석 임시 예약 상태로 변경
                 concertSeatList.add(concertRepository.saveConcertSeat(concertSeat.changeStatus(ConcertSeatStatus.PENDING)));
             }
-
-        } catch (ObjectOptimisticLockingFailureException e) {
-            throw new ConcertException(ConcertExceptionEnums.ALREADY_RESERVATION);
-        }
-
         return concertSeatList;
     }
 

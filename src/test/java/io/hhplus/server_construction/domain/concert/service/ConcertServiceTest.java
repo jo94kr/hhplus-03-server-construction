@@ -50,12 +50,11 @@ class ConcertServiceTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
-                0L,
                 LocalDateTime.now(),
                 LocalDateTime.now());
 
         // when
-        when(concertRepository.findConcertSeatById(concertSeatId)).thenReturn(concertSeat);
+        when(concertRepository.pessimisticLockFindById(concertSeatId)).thenReturn(concertSeat);
         when(concertRepository.saveConcertSeat(concertSeat)).thenReturn(concertSeat);
         List<ConcertSeat> concertSeatList = concertService.setSeatReservation(List.of(1L));
 
@@ -82,12 +81,11 @@ class ConcertServiceTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.PENDING,
-                0L,
                 LocalDateTime.now(),
                 LocalDateTime.now());
 
         // when
-        when(concertRepository.findConcertSeatById(concertSeatId)).thenReturn(concertSeat);
+        when(concertRepository.pessimisticLockFindById(concertSeatId)).thenReturn(concertSeat);
 
         // then
         assertThatThrownBy(() -> concertService.setSeatReservation(List.of(1L)))

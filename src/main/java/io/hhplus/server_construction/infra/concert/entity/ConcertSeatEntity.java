@@ -33,23 +33,18 @@ public class ConcertSeatEntity extends BaseEntity {
 
     private ConcertSeatStatus status;
 
-    @Version
-    private Long version = 0L;
-
     public ConcertSeatEntity(Long id,
                              ConcertScheduleEntity concertSchedule,
                              String seatNum,
                              ConcertSeatGrade grade,
                              BigDecimal price,
-                             ConcertSeatStatus status,
-                             Long version) {
+                             ConcertSeatStatus status) {
         this.id = id;
         this.concertSchedule = concertSchedule;
         this.seatNum = seatNum;
         this.grade = grade;
         this.price = price;
         this.status = status;
-        this.version = version;
     }
 
     @Override

@@ -72,7 +72,6 @@ class ReservationFacadeTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
-                0L,
                 now,
                 now));
 

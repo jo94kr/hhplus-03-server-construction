@@ -8,8 +8,6 @@ import io.hhplus.server_construction.domain.concert.service.ConcertService;
 import io.hhplus.server_construction.domain.concert.vo.ConcertScheduleStatus;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatGrade;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
-import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingException;
-import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -98,7 +96,6 @@ class ConcertFacadeTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
-                0L,
                 now,
                 now));
 

@@ -197,7 +197,7 @@ class ReservationControllerIntegratedTest extends IntegratedTest {
                 .toList();
 
         // then
-        assertThat(failCnt).hasSize(1);
+        assertThat(failCnt).hasSize(3);
     }
 
     @Test
