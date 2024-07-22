@@ -23,7 +23,6 @@ public class UserService {
      * @return User
      */
     public User findUserById(Long userId) {
-        System.out.println("2.user = " + TransactionSynchronizationManager.getCurrentTransactionName());
         return userRepository.findById(userId);
     }
 

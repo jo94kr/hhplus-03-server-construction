@@ -41,7 +41,6 @@ public class ReservationService {
      */
     @Transactional(rollbackFor = {Exception.class})
     public Reservation setConcertReservation(List<ConcertSeat> concertSeatList, User user) {
-        System.out.println("4.reservation = " + TransactionSynchronizationManager.getCurrentTransactionName());
         // 총 결제가
         BigDecimal totalPrice = concertSeatList.stream()
                 .map(ConcertSeat::getPrice)

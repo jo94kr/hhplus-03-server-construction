@@ -67,7 +67,6 @@ public class ConcertService {
      */
     @Transactional(rollbackFor = {Exception.class})
     public List<ConcertSeat> setSeatReservation(List<Long> seatIdList) {
-        System.out.println("3.concert = " + TransactionSynchronizationManager.getCurrentTransactionName());
         List<ConcertSeat> concertSeatList = new ArrayList<>();
             for (Long seatId : seatIdList) {
                 ConcertSeat concertSeat = concertRepository.pessimisticLockFindById(seatId);

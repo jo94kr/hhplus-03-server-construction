@@ -29,7 +29,6 @@ public class ReservationFacade {
 
     public ReservationConcertResult setConcertReservation(ReservationConcertCommand reservationConcertCommand) {
         // 사용자 조회
-        System.out.println("1.first = " + TransactionSynchronizationManager.getCurrentTransactionName());
         User user = userService.findUserById(reservationConcertCommand.userId());
 
         // 콘서트 좌석 조회 - 임시 예약 처리
@@ -38,7 +37,6 @@ public class ReservationFacade {
         // 콘서트 예약
         Reservation reservation = reservationService.setConcertReservation(concertSeatList, user);
 
-        System.out.println("5.last = " + TransactionSynchronizationManager.getCurrentTransactionName());
         return ReservationConcertResult.from(reservation);
     }
 
