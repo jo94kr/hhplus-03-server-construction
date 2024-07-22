@@ -1,14 +1,14 @@
 package io.hhplus.server_construction.application.payment.dto;
 
 import io.hhplus.server_construction.domain.payment.Payment;
-import io.hhplus.server_construction.domain.payment.PaymentEnums;
+import io.hhplus.server_construction.domain.payment.vo.PaymentStatus;
 
 import java.math.BigDecimal;
 
 public record PaymentResult(
 
         Long paymentId,
-        PaymentEnums.PaymentStatus status,
+        PaymentStatus status,
         BigDecimal paymentPrice,
         BigDecimal amount
 ) {

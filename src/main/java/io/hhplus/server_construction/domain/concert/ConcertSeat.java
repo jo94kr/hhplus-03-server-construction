@@ -16,7 +16,6 @@ public class ConcertSeat {
     private final ConcertSeatGrade grade;
     private final BigDecimal price;
     private ConcertSeatStatus status;
-    private Long version;
     private final LocalDateTime createDatetime;
     private final LocalDateTime modifyDatetime;
 
@@ -26,7 +25,6 @@ public class ConcertSeat {
                        ConcertSeatGrade grade,
                        BigDecimal price,
                        ConcertSeatStatus status,
-                       Long version,
                        LocalDateTime createDatetime,
                        LocalDateTime modifyDatetime) {
         this.id = id;
@@ -35,7 +33,6 @@ public class ConcertSeat {
         this.grade = grade;
         this.price = price;
         this.status = status;
-        this.version = version;
         this.createDatetime = createDatetime;
         this.modifyDatetime = modifyDatetime;
     }
@@ -46,10 +43,9 @@ public class ConcertSeat {
                                      ConcertSeatGrade grade,
                                      BigDecimal price,
                                      ConcertSeatStatus status,
-                                     Long version,
                                      LocalDateTime createDatetime,
                                      LocalDateTime modifyDatetime) {
-        return new ConcertSeat(id, concertSchedule, seatNum, grade, price, status, version, createDatetime, modifyDatetime);
+        return new ConcertSeat(id, concertSchedule, seatNum, grade, price, status, createDatetime, modifyDatetime);
     }
 
     public boolean isPossible() {

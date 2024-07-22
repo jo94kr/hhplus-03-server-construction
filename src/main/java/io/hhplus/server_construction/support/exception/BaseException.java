@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.common.exception;
+package io.hhplus.server_construction.support.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

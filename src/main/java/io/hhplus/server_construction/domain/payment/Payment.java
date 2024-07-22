@@ -2,6 +2,7 @@ package io.hhplus.server_construction.domain.payment;
 
 import io.hhplus.server_construction.domain.payment.exception.PaymentException;
 import io.hhplus.server_construction.domain.payment.exception.PaymentExceptionEnums;
+import io.hhplus.server_construction.domain.payment.vo.PaymentStatus;
 import io.hhplus.server_construction.domain.reservation.Reservation;
 import io.hhplus.server_construction.domain.user.User;
 import lombok.Getter;
@@ -16,14 +17,14 @@ public class Payment {
     private final Reservation reservation;
     private final User user;
     private final BigDecimal price;
-    private final PaymentEnums.PaymentStatus status;
+    private final PaymentStatus status;
     private final LocalDateTime createDatetime;
 
     public Payment(Long id,
                    Reservation reservation,
                    User user,
                    BigDecimal price,
-                   PaymentEnums.PaymentStatus status,
+                   PaymentStatus status,
                    LocalDateTime createDatetime) {
         this.id = id;
         this.reservation = reservation;
@@ -44,7 +45,7 @@ public class Payment {
                 reservation,
                 user,
                 reservation.getTotalPrice(),
-                PaymentEnums.PaymentStatus.COMPLETE,
+                PaymentStatus.COMPLETE,
                 null);
     }
 }

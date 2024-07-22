@@ -17,7 +17,6 @@ import io.hhplus.server_construction.domain.user.User;
 import io.hhplus.server_construction.domain.user.exceprtion.UserException;
 import io.hhplus.server_construction.domain.user.exceprtion.UserExceptionEnums;
 import io.hhplus.server_construction.domain.user.service.UserService;
-import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,9 +47,6 @@ class PaymentFacadeTest {
     @Mock
     private UserService userService;
 
-    @Mock
-    private WaitingService waitingService;
-
     private static final String TOKEN = "DUMMY_TOKEN";
     private User user;
     private ConcertSeat concertSeat1;
@@ -77,7 +73,6 @@ class PaymentFacadeTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
-                0L,
                 now,
                 now);
         this.concertSeat2 = ConcertSeat.create(2L,
@@ -86,7 +81,6 @@ class PaymentFacadeTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
-                0L,
                 now,
                 now);
         this.concertSeat3 = ConcertSeat.create(3L,
@@ -95,7 +89,6 @@ class PaymentFacadeTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
-                0L,
                 now,
                 now);
     }
@@ -116,7 +109,6 @@ class PaymentFacadeTest {
         Reservation reservation = Reservation.create(any(), user, ReservationStatus.CANCEL, totalPrice);
 
         // when
-        when(waitingService.checkWaitingStatus(TOKEN)).thenReturn(true);
         when(reservationService.findReservationWithItemListById(reservationId)).thenReturn(reservation);
 
         // then
@@ -142,7 +134,6 @@ class PaymentFacadeTest {
         Reservation reservation = Reservation.create(any(), user, ReservationStatus.PAYMENT_WAITING, totalPrice);
 
         // when
-        when(waitingService.checkWaitingStatus(TOKEN)).thenReturn(true);
         when(reservationService.findReservationWithItemListById(reservationId)).thenReturn(reservation);
         when(userService.findUserById(userId)).thenReturn(user);
         when(userService.use(user, totalPrice)).thenThrow(new UserException(UserExceptionEnums.INVALID_AMOUNT_VALUE));
@@ -171,7 +162,6 @@ class PaymentFacadeTest {
         Reservation reservation = Reservation.create(any(), user, ReservationStatus.PAYMENT_WAITING, totalPrice);
 
         // when
-        when(waitingService.checkWaitingStatus(TOKEN)).thenReturn(true);
         when(reservationService.findReservationWithItemListById(reservationId)).thenReturn(reservation);
         when(userService.findUserById(userId)).thenReturn(user2);
         when(paymentService.payment(reservation, user2)).thenThrow(new PaymentException(PaymentExceptionEnums.INVALID_USER));

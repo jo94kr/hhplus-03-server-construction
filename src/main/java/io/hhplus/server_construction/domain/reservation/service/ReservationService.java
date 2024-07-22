@@ -8,6 +8,8 @@ import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,15 +18,30 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
 
+    /**
+     * 예약 정보 저장
+     * @param reservation 예약
+     * @return Reservation
+     */
+    @Transactional(rollbackFor = {Exception.class})
     public Reservation save(Reservation reservation) {
         return reservationRepository.saveReservation(reservation);
     }
 
-    public Reservation reservationConcert(List<ConcertSeat> concertSeatList, User user) {
+    /**
+     * 콘서트 예약
+     * @param concertSeatList 좌석 목록
+     * @param user 사용자
+     * @return Reservation
+     */
+    @Transactional(rollbackFor = {Exception.class})
+    public Reservation setConcertReservation(List<ConcertSeat> concertSeatList, User user) {
+        System.out.println("4.reservation = " + TransactionSynchronizationManager.getCurrentTransactionName());
         // 총 결제가
         BigDecimal totalPrice = concertSeatList.stream()
                 .map(ConcertSeat::getPrice)
@@ -45,12 +62,24 @@ public class ReservationService {
         return reservation.setReservationItemList(reservationItemList);
     }
 
+    /**
+     * 예약 정보 조회 - 좌석 목록 포함
+     * @param reservationId 예약 Id
+     * @return Reservation
+     */
     public Reservation findReservationWithItemListById(Long reservationId) {
-        Reservation reservation = reservationRepository.findReservationById(reservationId);
+        Reservation reservation = reservationRepository.pessimisticFindReservationById(reservationId);
         List<ReservationItem> reservationItemList = reservationRepository.findAllReservationItemByReservationId(reservationId);
         return reservation.setReservationItemList(reservationItemList);
     }
 
+    /**
+     * 5분 지난 예약 취소 처리
+     * @param status 예약 상태
+     * @param targetDate 조회 대상 일시
+     * @return List<ReservationItem> 
+     */
+    @Transactional(rollbackFor = {Exception.class})
     public List<ReservationItem> changeTemporaryReservationSeat(ReservationStatus status, LocalDateTime targetDate) {
         List<Reservation> temporaryReservationList = reservationRepository.findReservationByStatusAndTargetDate(status, targetDate);
         if (temporaryReservationList == null || temporaryReservationList.isEmpty()) {

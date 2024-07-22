@@ -59,7 +59,6 @@ class ReservationServiceTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
-                0L,
                 LocalDateTime.now(),
                 LocalDateTime.now());
         this.concertSeat2 = ConcertSeat.create(2L,
@@ -68,7 +67,6 @@ class ReservationServiceTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
-                0L,
                 LocalDateTime.now(),
                 LocalDateTime.now());
         this.concertSeat3 = ConcertSeat.create(3L,
@@ -77,14 +75,13 @@ class ReservationServiceTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
-                0L,
                 LocalDateTime.now(),
                 LocalDateTime.now());
     }
 
     @Test
     @DisplayName("콘서트를 예약한다. - 좌석의 총 합계 계산")
-    void reservationConcert() {
+    void setConcertReservation() {
         // given
         List<ConcertSeat> concertSeatList = List.of(this.concertSeat1, this.concertSeat2, this.concertSeat3);
         BigDecimal totalPrice = concertSeatList.stream()
@@ -95,7 +92,7 @@ class ReservationServiceTest {
         // when
         when(reservationRepository.saveReservation(reservation)).thenReturn(reservation);
         when(reservationRepository.saveAllReservationItems(any())).thenReturn(any());
-        Reservation result = reservationService.reservationConcert(concertSeatList, this.user);
+        Reservation result = reservationService.setConcertReservation(concertSeatList, this.user);
 
         // then
         assertThat(result.getTotalPrice()).isEqualTo(totalPrice);

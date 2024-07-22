@@ -27,11 +27,6 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     }
 
     @Override
-    public ReservationItem saveReservationItem(ReservationItem reservationItem) {
-        return ReservationItemMapper.toDomain(reservationItemJpaRepository.save(ReservationItemMapper.toEntity(reservationItem)));
-    }
-
-    @Override
     public List<ReservationItem> saveAllReservationItems(List<ReservationItem> reservationItemList) {
         List<ReservationItemEntity> reservationItemEntityList = reservationItemJpaRepository.saveAll(reservationItemList.stream()
                 .map(ReservationItemMapper::toEntity)
@@ -43,8 +38,8 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     }
 
     @Override
-    public Reservation findReservationById(Long reservationId) {
-        return ReservationMapper.toDomain(reservationJpaRepository.findById(reservationId)
+    public Reservation pessimisticFindReservationById(Long reservationId) {
+        return ReservationMapper.toDomain(reservationJpaRepository.pessimisticFindReservationById(reservationId)
                 .orElseThrow(EntityNotFoundException::new));
     }
 

@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class PaymentFacade {
 
     private final PaymentService paymentService;
@@ -28,13 +27,7 @@ public class PaymentFacade {
     private final ReservationService reservationService;
     private final UserService userService;
 
-    @Transactional(rollbackFor = {Exception.class})
     public PaymentResult payment(PaymentCommand paymentCommand, String token) {
-        // 토큰 유효성 검사
-        if (!waitingService.checkWaitingStatus(token)) {
-            throw new WaitingException(WaitingExceptionEnums.TOKEN_EXPIRED);
-        }
-
         // 결제 가능여부 체크
         Reservation reservation = reservationService.findReservationWithItemListById(paymentCommand.reservationId());
         if (!reservation.isPaymentWaiting()) {

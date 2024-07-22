@@ -12,7 +12,6 @@ public class ConcertSeatMapper {
                 concertSeatEntity.getGrade(),
                 concertSeatEntity.getPrice(),
                 concertSeatEntity.getStatus(),
-                concertSeatEntity.getVersion(),
                 concertSeatEntity.getCreateDatetime(),
                 concertSeatEntity.getModifyDatetime());
     }
@@ -23,7 +22,6 @@ public class ConcertSeatMapper {
                 concertSeat.getSeatNum(),
                 concertSeat.getGrade(),
                 concertSeat.getPrice(),
-                concertSeat.getStatus(),
-                concertSeat.getVersion());
+                concertSeat.getStatus());
     }
 }

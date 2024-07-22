@@ -9,7 +9,6 @@ import io.hhplus.server_construction.domain.concert.vo.ConcertScheduleStatus;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatGrade;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
 import io.hhplus.server_construction.domain.reservation.Reservation;
-import io.hhplus.server_construction.domain.reservation.ReservationEnums;
 import io.hhplus.server_construction.domain.reservation.ReservationItem;
 import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
@@ -71,7 +70,6 @@ class ReservationControllerTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
-                0L,
                 LocalDateTime.now(),
                 LocalDateTime.now());
 
@@ -86,7 +84,7 @@ class ReservationControllerTest {
                 LocalDateTime.now())));
 
         // when
-        when(reservationFacade.reservationConcert(any(), TOKEN)).thenReturn(ReservationConcertResult.from(reservation));
+        when(reservationFacade.setConcertReservation(any())).thenReturn(ReservationConcertResult.from(reservation));
         ResultActions response = mockMvc.perform(post(PATH)
                 .header("Authorization", TOKEN)
                 .contentType(MediaType.APPLICATION_JSON)

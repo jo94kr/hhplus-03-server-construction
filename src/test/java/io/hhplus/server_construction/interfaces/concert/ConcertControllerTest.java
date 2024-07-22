@@ -50,7 +50,7 @@ class ConcertControllerTest {
         Concert concert = Concert.create(1L, "항해 콘서트", LocalDateTime.now(), LocalDateTime.now());
 
         // when
-        when(concertFacade.findConcertList(pageable, TOKEN)).thenReturn(new PageImpl<>(List.of(concert)));
+        when(concertFacade.findConcertList(pageable)).thenReturn(new PageImpl<>(List.of(concert)));
         ResultActions response = mockMvc.perform(get(PATH)
                 .header("Authorization", TOKEN)
                 .param("page", "0")
@@ -79,7 +79,7 @@ class ConcertControllerTest {
 
         // when
         LocalDate localDate = LocalDate.now();
-        when(concertFacade.findConcertScheduleList(1L, TOKEN, localDate.minusDays(7), localDate)).thenReturn(List.of(concertScheduleResult));
+        when(concertFacade.findConcertScheduleList(1L, localDate.minusDays(7), localDate)).thenReturn(List.of(concertScheduleResult));
         ResultActions response = mockMvc.perform(get(PATH + "/{concertId}/schedules", 1L)
                 .header("Authorization", TOKEN)
                 .param("startDate", localDate.minusDays(7).toString())
@@ -110,12 +110,11 @@ class ConcertControllerTest {
                 ConcertSeatGrade.GOLD,
                 BigDecimal.valueOf(1000),
                 ConcertSeatStatus.POSSIBLE,
-                0L,
                 LocalDateTime.now(),
                 LocalDateTime.now());
 
         // when
-        when(concertFacade.findConcertSeatList(1L, 2L, TOKEN)).thenReturn(List.of(concertSeat));
+        when(concertFacade.findConcertSeatList(1L, 2L)).thenReturn(List.of(concertSeat));
         ResultActions response = mockMvc.perform(get(PATH + "/{concertId}/schedules/{concertScheduleId}/seats", 1L, 2L)
                 .header("Authorization", TOKEN));
 

@@ -11,45 +11,37 @@ import io.hhplus.server_construction.domain.reservation.service.ReservationServi
 import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import io.hhplus.server_construction.domain.user.service.UserService;
-import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingException;
-import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingExceptionEnums;
-import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class ReservationFacade {
 
     private final UserService userService;
     private final ConcertService concertService;
     private final ReservationService reservationService;
-    private final WaitingService waitingService;
 
-    @Transactional(rollbackFor = {Exception.class})
-    public ReservationConcertResult reservationConcert(ReservationConcertCommand concertCommand, String token) {
-        if (!waitingService.checkWaitingStatus(token)) {
-            throw new WaitingException(WaitingExceptionEnums.TOKEN_EXPIRED);
-        }
-
+    public ReservationConcertResult setConcertReservation(ReservationConcertCommand reservationConcertCommand) {
         // 사용자 조회
-        User user = userService.findUserById(concertCommand.userId());
+        System.out.println("1.first = " + TransactionSynchronizationManager.getCurrentTransactionName());
+        User user = userService.findUserById(reservationConcertCommand.userId());
 
         // 콘서트 좌석 조회 - 임시 예약 처리
-        List<ConcertSeat> concertSeatList = concertService.reservationSeat(concertCommand.concertSeatIdList());
+        List<ConcertSeat> concertSeatList = concertService.setSeatReservation(reservationConcertCommand.concertSeatIdList());
 
         // 콘서트 예약
-        Reservation reservation = reservationService.reservationConcert(concertSeatList, user);
+        Reservation reservation = reservationService.setConcertReservation(concertSeatList, user);
 
+        System.out.println("5.last = " + TransactionSynchronizationManager.getCurrentTransactionName());
         return ReservationConcertResult.from(reservation);
     }
 
-    @Transactional(rollbackFor = {Exception.class})
     public void temporaryReservationSeatProcess() {
         LocalDateTime now = LocalDateTime.now();
         // 5분이 지난 미결제 예약건은 취소 처리

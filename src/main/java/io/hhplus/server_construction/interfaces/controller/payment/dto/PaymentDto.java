@@ -2,7 +2,7 @@ package io.hhplus.server_construction.interfaces.controller.payment.dto;
 
 import io.hhplus.server_construction.application.payment.dto.PaymentCommand;
 import io.hhplus.server_construction.application.payment.dto.PaymentResult;
-import io.hhplus.server_construction.domain.payment.PaymentEnums;
+import io.hhplus.server_construction.domain.payment.vo.PaymentStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.math.BigDecimal;
@@ -29,7 +29,7 @@ public record PaymentDto(
             Long paymentId,
 
             @Schema(name = "결제 상태")
-            PaymentEnums.PaymentStatus status,
+            PaymentStatus status,
 
             @Schema(name = "총 결제 금액")
             BigDecimal paymentPrice,
