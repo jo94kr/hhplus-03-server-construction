@@ -16,7 +16,6 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class ConcertFacade {
 
     private final ConcertService concertService;

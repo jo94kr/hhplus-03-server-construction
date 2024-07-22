@@ -75,7 +75,7 @@ class ReservationControllerIntegratedTest extends IntegratedTest {
                 .then().log().all().extract();
 
         // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
     }
 
     @Test

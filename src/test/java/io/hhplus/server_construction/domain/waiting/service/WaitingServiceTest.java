@@ -103,7 +103,7 @@ class WaitingServiceTest {
 
     @Test
     @DisplayName("스케쥴러 - 대기열 만료 시간이 지난 대기열을 만료시킨다.")
-    void findExpiredToken() {
+    void expiredToken() {
         // given
         LocalDateTime now = LocalDateTime.now();
         List<Waiting> waitingList = List.of(
@@ -124,7 +124,7 @@ class WaitingServiceTest {
         // when
         when(waitingRepository.findWaitingByStatusAndExpireDatetimeIsBefore(WaitingStatus.WAITING, now.minusMinutes(5)))
                 .thenReturn(waitingList);
-        waitingService.findExpiredToken(now);
+        waitingService.expiredToken(now);
 
         // then
         assertThat(waitingList).allSatisfy(waiting -> assertThat(waiting.getStatus()).isEqualTo(WaitingStatus.EXPIRED));
@@ -132,7 +132,7 @@ class WaitingServiceTest {
 
     @Test
     @DisplayName("스케쥴러 - 진입 가능 시간에 도달한 대기열의 상태를 바꾼다.")
-    void findActiveToken() {
+    void activeToken() {
         // given
         LocalDateTime now = LocalDateTime.now();
         List<Waiting> waitingList = List.of(
@@ -153,7 +153,7 @@ class WaitingServiceTest {
         // when
         when(waitingRepository.findWaitingByStatusAndAccessDatetimeIsBefore(WaitingStatus.WAITING, now))
                 .thenReturn(waitingList);
-        waitingService.findActiveToken(now);
+        waitingService.activeToken(now);
 
         // then
         assertThat(waitingList).allSatisfy(waiting -> assertThat(waiting.getStatus()).isEqualTo(WaitingStatus.PROCEEDING));

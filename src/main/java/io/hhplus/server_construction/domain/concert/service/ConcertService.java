@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class ConcertService {
 
     private final ConcertRepository concertRepository;
@@ -62,7 +65,9 @@ public class ConcertService {
      * @throws ConcertException - ALREADY_RESERVATION: 이미 선택된 좌석
      * @return List<ConcertSeat>
      */
+    @Transactional(rollbackFor = {Exception.class})
     public List<ConcertSeat> setSeatReservation(List<Long> seatIdList) {
+        System.out.println("3.concert = " + TransactionSynchronizationManager.getCurrentTransactionName());
         List<ConcertSeat> concertSeatList = new ArrayList<>();
             for (Long seatId : seatIdList) {
                 ConcertSeat concertSeat = concertRepository.pessimisticLockFindById(seatId);
@@ -80,6 +85,7 @@ public class ConcertService {
      * 좌석 목록 저장
      * @param concertSeatList 좌석 목록
      */
+    @Transactional(rollbackFor = {Exception.class})
     public void saveAllConcertSeat(List<ConcertSeat> concertSeatList) {
         concertRepository.saveAllConcertSeat(concertSeatList);
     }

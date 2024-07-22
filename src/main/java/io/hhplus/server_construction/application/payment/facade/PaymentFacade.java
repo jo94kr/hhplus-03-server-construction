@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class PaymentFacade {
 
     private final PaymentService paymentService;
@@ -28,7 +27,6 @@ public class PaymentFacade {
     private final ReservationService reservationService;
     private final UserService userService;
 
-    @Transactional(rollbackFor = {Exception.class})
     public PaymentResult payment(PaymentCommand paymentCommand, String token) {
         // 결제 가능여부 체크
         Reservation reservation = reservationService.findReservationWithItemListById(paymentCommand.reservationId());
