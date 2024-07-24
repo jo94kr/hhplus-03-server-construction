@@ -50,14 +50,15 @@
         <root level="INFO">
             <appender-ref ref="THREAD_CONSOLE" />
             <appender-ref ref="ASYNC_SLACK" />
+            <appender-ref ref="FILE" />
         </root>
     </springProfile>
 
     <!-- test Profile에서의 로그 설정 -->
     <springProfile name="test">
         <root level="INFO">
+            <appender-ref ref="THREAD_CONSOLE" />
             <appender-ref ref="ASYNC_SLACK" />
-            <appender-ref ref="FILE" />
         </root>
     </springProfile>
 
