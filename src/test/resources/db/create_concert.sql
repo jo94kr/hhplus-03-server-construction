@@ -5,12 +5,9 @@ from concert_schedule;
 delete
 from concert_seat;
 
-alter table concert
-    alter column id restart with 1;
-alter table concert_schedule
-    alter column id restart with 1;
-alter table concert_seat
-    alter column id restart with 1;
+alter table concert AUTO_INCREMENT = 1;
+alter table concert_schedule AUTO_INCREMENT = 1;
+alter table concert_seat AUTO_INCREMENT = 1;
 
 insert into concert(id, name, create_datetime)
 values (1, '백엔드 콘서트', now()),

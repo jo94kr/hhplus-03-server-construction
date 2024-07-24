@@ -1,8 +1,7 @@
 delete
 from users;
 
-alter table users
-    alter column id restart with 1;
+alter table users AUTO_INCREMENT = 1;
 
 insert into users(id, name, amount, create_datetime)
 values (1, '조진우', 5000, now()),
