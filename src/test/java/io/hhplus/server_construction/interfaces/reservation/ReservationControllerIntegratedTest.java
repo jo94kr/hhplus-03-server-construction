@@ -159,12 +159,24 @@ class ReservationControllerIntegratedTest extends IntegratedTest {
                 "userId": 2
             }
             """;
+        String requestBody3 = """
+            {
+                "concertSeatIdList": [1, 3],
+                "userId": 3
+            }
+            """;
+        String requestBody4 = """
+            {
+                "concertSeatIdList": [1],
+                "userId": 4
+            }
+            """;
 
         Map<String, Object> headers = new HashMap<>();
         headers.put("Authorization", "DUMMY_TOKEN_2");
 
         // when
-        CompletableFuture<Integer>[] futureArray = new CompletableFuture[2];
+        CompletableFuture<Integer>[] futureArray = new CompletableFuture[4];
         futureArray[0] = CompletableFuture.supplyAsync(() -> {
             ExtractableResponse<Response> response = RestAssured
                     .given().log().all()
@@ -175,13 +187,32 @@ class ReservationControllerIntegratedTest extends IntegratedTest {
                     .then().log().all().extract();
             return response.statusCode();
         });
-
         futureArray[1] = CompletableFuture.supplyAsync(() -> {
             ExtractableResponse<Response> response = RestAssured
                     .given().log().all()
                     .headers(headers)
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .body(requestBody2)
+                    .when().post(PATH)
+                    .then().log().all().extract();
+            return response.statusCode();
+        });
+        futureArray[2] = CompletableFuture.supplyAsync(() -> {
+            ExtractableResponse<Response> response = RestAssured
+                    .given().log().all()
+                    .headers(headers)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .body(requestBody3)
+                    .when().post(PATH)
+                    .then().log().all().extract();
+            return response.statusCode();
+        });
+        futureArray[3] = CompletableFuture.supplyAsync(() -> {
+            ExtractableResponse<Response> response = RestAssured
+                    .given().log().all()
+                    .headers(headers)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .body(requestBody4)
                     .when().post(PATH)
                     .then().log().all().extract();
             return response.statusCode();

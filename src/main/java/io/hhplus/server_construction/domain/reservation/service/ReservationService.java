@@ -9,6 +9,7 @@ import io.hhplus.server_construction.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -38,6 +39,7 @@ public class ReservationService {
      * @param user 사용자
      * @return Reservation
      */
+    @Transactional(rollbackFor = {Exception.class})
     public Reservation setConcertReservation(List<ConcertSeat> concertSeatList, User user) {
         // 총 결제가
         BigDecimal totalPrice = concertSeatList.stream()
@@ -76,6 +78,7 @@ public class ReservationService {
      * @param targetDate 조회 대상 일시
      * @return List<ReservationItem> 
      */
+    @Transactional(rollbackFor = {Exception.class})
     public List<ReservationItem> changeTemporaryReservationSeat(ReservationStatus status, LocalDateTime targetDate) {
         List<Reservation> temporaryReservationList = reservationRepository.findReservationByStatusAndTargetDate(status, targetDate);
         if (temporaryReservationList == null || temporaryReservationList.isEmpty()) {

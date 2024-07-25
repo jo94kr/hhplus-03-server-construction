@@ -21,7 +21,7 @@ public interface ConcertRepository {
 
     List<ConcertSeat> findAllConcertSeat(Concert concert, ConcertSchedule concertSchedule);
 
-    ConcertSeat pessimisticLockFindById(Long concertSeatId);
+    ConcertSeat findById(Long concertSeatId);
 
     ConcertSeat saveConcertSeat(ConcertSeat concertSeat);
 

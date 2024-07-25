@@ -11,6 +11,7 @@ import io.hhplus.server_construction.domain.reservation.service.ReservationServi
 import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import io.hhplus.server_construction.domain.user.service.UserService;
+import io.hhplus.server_construction.support.aop.annotation.RedissonLock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,14 +22,13 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class ReservationFacade {
 
     private final UserService userService;
     private final ConcertService concertService;
     private final ReservationService reservationService;
 
-    @Transactional(rollbackFor = {Exception.class})
+    @RedissonLock(value = "#reservationConcertCommand.concertSeatIdList")
     public ReservationConcertResult setConcertReservation(ReservationConcertCommand reservationConcertCommand) {
         // 사용자 조회
         User user = userService.findUserById(reservationConcertCommand.userId());
@@ -42,7 +42,6 @@ public class ReservationFacade {
         return ReservationConcertResult.from(reservation);
     }
 
-    @Transactional(rollbackFor = {Exception.class})
     public void temporaryReservationSeatProcess() {
         LocalDateTime now = LocalDateTime.now();
         // 5분이 지난 미결제 예약건은 취소 처리

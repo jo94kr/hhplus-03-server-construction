@@ -54,7 +54,7 @@ class ConcertServiceTest {
                 LocalDateTime.now());
 
         // when
-        when(concertRepository.pessimisticLockFindById(concertSeatId)).thenReturn(concertSeat);
+        when(concertRepository.findById(concertSeatId)).thenReturn(concertSeat);
         when(concertRepository.saveConcertSeat(concertSeat)).thenReturn(concertSeat);
         List<ConcertSeat> concertSeatList = concertService.setSeatReservation(List.of(1L));
 
@@ -85,7 +85,7 @@ class ConcertServiceTest {
                 LocalDateTime.now());
 
         // when
-        when(concertRepository.pessimisticLockFindById(concertSeatId)).thenReturn(concertSeat);
+        when(concertRepository.findById(concertSeatId)).thenReturn(concertSeat);
 
         // then
         assertThatThrownBy(() -> concertService.setSeatReservation(List.of(1L)))

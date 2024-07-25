@@ -61,8 +61,8 @@ public class ConcertRepositoryImpl implements ConcertRepository {
     }
 
     @Override
-    public ConcertSeat pessimisticLockFindById(Long concertSeatId) {
-        return ConcertSeatMapper.toDomain(concertSeatJpaRepository.pessimisticLockFindById(concertSeatId)
+    public ConcertSeat findById(Long concertSeatId) {
+        return ConcertSeatMapper.toDomain(concertSeatJpaRepository.findById(concertSeatId)
                 .orElseThrow(EntityNotFoundException::new));
     }
 
