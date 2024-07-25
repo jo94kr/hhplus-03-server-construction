@@ -23,10 +23,14 @@ public class UserEntity extends BaseEntity {
 
     private BigDecimal amount;
 
-    public UserEntity(Long id, String name, BigDecimal amount) {
+    @Version
+    private Long version = 0L;
+
+    public UserEntity(Long id, String name, BigDecimal amount, Long version) {
         this.id = id;
         this.name = name;
         this.amount = amount;
+        this.version = version;
     }
 
     @Override

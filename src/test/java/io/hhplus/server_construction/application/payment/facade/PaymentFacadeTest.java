@@ -56,7 +56,7 @@ class PaymentFacadeTest {
     @BeforeEach
     void setUp() {
         LocalDateTime now = LocalDateTime.now();
-        this.user = User.create(1L, "조진우", BigDecimal.valueOf(10000L), now, now);
+        this.user = User.create(1L, "조진우", BigDecimal.valueOf(10000L), now, now, 0L);
 
         Concert concert = Concert.create(1L, "항해 콘서트", LocalDateTime.now(), LocalDateTime.now());
 
@@ -124,7 +124,7 @@ class PaymentFacadeTest {
         Long reservationId = 1L;
         PaymentCommand paymentCommand = new PaymentCommand(userId, reservationId);
         LocalDateTime now = LocalDateTime.now();
-        User user = User.create(1L, "조진우", BigDecimal.valueOf(100L), now, now);
+        User user = User.create(1L, "조진우", BigDecimal.valueOf(100L), now, now, 0L);
 
         List<ConcertSeat> concertSeatList = List.of(this.concertSeat1, this.concertSeat2, this.concertSeat3);
         BigDecimal totalPrice = concertSeatList.stream()
@@ -152,7 +152,7 @@ class PaymentFacadeTest {
         Long reservationId = 1L;
         PaymentCommand paymentCommand = new PaymentCommand(userId, reservationId);
         LocalDateTime now = LocalDateTime.now();
-        User user2 = User.create(2L, "다른사람", BigDecimal.valueOf(10000L), now, now);
+        User user2 = User.create(2L, "다른사람", BigDecimal.valueOf(10000L), now, now, 0L);
 
         List<ConcertSeat> concertSeatList = List.of(this.concertSeat1, this.concertSeat2, this.concertSeat3);
         BigDecimal totalPrice = concertSeatList.stream()

@@ -79,7 +79,8 @@ class ReservationFacadeTest {
                 "조진우",
                 BigDecimal.valueOf(10000),
                 now,
-                now);
+                now,
+                0L);
 
         // when
         when(userService.findUserById(reservationConcertCommand.userId())).thenReturn(user);

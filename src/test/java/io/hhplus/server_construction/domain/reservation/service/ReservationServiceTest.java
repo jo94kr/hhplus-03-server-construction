@@ -42,7 +42,7 @@ class ReservationServiceTest {
     @BeforeEach
     void setUp() {
         LocalDateTime now = LocalDateTime.now();
-        this.user = User.create(1L, "조진우", BigDecimal.valueOf(10000L), now, now);
+        this.user = User.create(1L, "조진우", BigDecimal.valueOf(10000L), now, now, 0L);
 
         Concert concert = Concert.create(1L, "항해 콘서트", LocalDateTime.now(), LocalDateTime.now());
 

@@ -17,7 +17,7 @@ class UserTest {
     void chargeLessThanZero() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        User user = User.create(1L, "조진우", BigDecimal.valueOf(10000L), now, now);
+        User user = User.create(1L, "조진우", BigDecimal.valueOf(10000L), now, now, 0L);
         BigDecimal zero = BigDecimal.ZERO;
 
         // when
@@ -32,7 +32,7 @@ class UserTest {
     void useLessThanZero() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        User user = User.create(1L, "조진우", BigDecimal.valueOf(10000L), now, now);
+        User user = User.create(1L, "조진우", BigDecimal.valueOf(10000L), now, now, 0L);
         BigDecimal zero = BigDecimal.ZERO;
 
         // when
@@ -47,7 +47,7 @@ class UserTest {
     void useBiggerThanAmountHeld() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        User user = User.create(1L, "조진우", BigDecimal.valueOf(10000L), now, now);
+        User user = User.create(1L, "조진우", BigDecimal.valueOf(10000L), now, now, 0L);
         BigDecimal useAmount = BigDecimal.valueOf(50000);
 
         // when

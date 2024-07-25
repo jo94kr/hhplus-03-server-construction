@@ -10,13 +10,15 @@ public class UserMapper {
                 userEntity.getName(),
                 userEntity.getAmount(),
                 userEntity.getCreateDatetime(),
-                userEntity.getModifyDatetime()
+                userEntity.getModifyDatetime(),
+                userEntity.getVersion()
         );
     }
 
     public static UserEntity toEntity(User user) {
         return new UserEntity(user.getId(),
                 user.getName(),
-                user.getAmount());
+                user.getAmount(),
+                user.getVersion());
     }
 }

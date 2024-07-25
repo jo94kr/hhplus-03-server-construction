@@ -52,7 +52,7 @@ class PaymentControllerTest {
 
         PaymentCommand paymentCommand = new PaymentCommand(userId, reservationId);
         LocalDateTime now = LocalDateTime.now();
-        User user = User.create(1L, "조진우", BigDecimal.valueOf(1000L), now, now);
+        User user = User.create(1L, "조진우", BigDecimal.valueOf(1000L), now, now, 0L);
         Reservation reservation = Reservation.create(1L,
                 user,
                 ReservationStatus.PAYMENT_WAITING,

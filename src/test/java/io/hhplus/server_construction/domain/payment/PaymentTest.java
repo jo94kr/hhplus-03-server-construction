@@ -28,8 +28,8 @@ class PaymentTest {
     void payOtherUser() {
         // given
         LocalDateTime now = LocalDateTime.now();
-        User user = User.create(1L, "조진우", BigDecimal.valueOf(10000L), now, now);
-        User otherUser = User.create(2L, "다른사람", BigDecimal.valueOf(20000L), now, now);
+        User user = User.create(1L, "조진우", BigDecimal.valueOf(10000L), now, now, 0L);
+        User otherUser = User.create(2L, "다른사람", BigDecimal.valueOf(20000L), now, now, 0L);
 
         Concert concert = Concert.create(1L, "항해 콘서트", now, now);
         ConcertSchedule concertSchedule = ConcertSchedule.create(1L,

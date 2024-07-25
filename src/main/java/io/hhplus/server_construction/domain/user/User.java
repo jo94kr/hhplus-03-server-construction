@@ -15,25 +15,29 @@ public class User {
     private BigDecimal amount;
     private final LocalDateTime createDatetime;
     private final LocalDateTime modifyDatetime;
+    private final Long version;
 
     private User(Long id,
                  String name,
                  BigDecimal amount,
                  LocalDateTime createDatetime,
-                 LocalDateTime modifyDatetime) {
+                 LocalDateTime modifyDatetime,
+                 Long version) {
         this.id = id;
         this.name = name;
         this.amount = amount;
         this.createDatetime = createDatetime;
         this.modifyDatetime = modifyDatetime;
+        this.version = version;
     }
 
     public static User create(Long id,
                               String name,
                               BigDecimal amount,
                               LocalDateTime createDatetime,
-                              LocalDateTime modifyDatetime) {
-        return new User(id, name, amount, createDatetime, modifyDatetime);
+                              LocalDateTime modifyDatetime,
+                              Long version) {
+        return new User(id, name, amount, createDatetime, modifyDatetime, version);
     }
 
     public User charge(BigDecimal amount) {

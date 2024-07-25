@@ -33,7 +33,7 @@ class UserFacadeTest {
         // given
         Long userId = 1L;
         LocalDateTime now = LocalDateTime.now();
-        User user = User.create(1L, "조진우", BigDecimal.valueOf(1000L), now, now);
+        User user = User.create(1L, "조진우", BigDecimal.valueOf(1000L), now, now, 0L);
 
         // when
         when(userService.findUserById(userId)).thenReturn(user);
@@ -49,7 +49,7 @@ class UserFacadeTest {
         // given
         Long userId = 1L;
         LocalDateTime now = LocalDateTime.now();
-        User user = User.create(1L, "조진우", BigDecimal.valueOf(1000L), now, now);
+        User user = User.create(1L, "조진우", BigDecimal.valueOf(1000L), now, now, 0L);
         BigDecimal chargeAmount = BigDecimal.valueOf(-100L);
 
         // when

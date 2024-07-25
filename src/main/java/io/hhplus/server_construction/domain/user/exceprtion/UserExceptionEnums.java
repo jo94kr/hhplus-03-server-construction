@@ -10,8 +10,8 @@ import org.springframework.http.HttpStatus;
 public enum UserExceptionEnums implements ExceptionInterface {
 
     INVALID_AMOUNT_VALUE(HttpStatus.BAD_REQUEST, "INVALID_AMOUNT_VALUE", "Invalid amount"),
-    INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "INSUFFICIENT_BALANCE", "insufficient balance")
-    ;
+    INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "INSUFFICIENT_BALANCE", "insufficient balance"),
+    ALREADY_CHARGE(HttpStatus.BAD_REQUEST, "ALREADY_CHARGE", "already charge");
 
     private final HttpStatus httpStatus;
     private final String code;

@@ -41,6 +41,7 @@ public class UserService {
      * @param amount 충전 금액
      * @return User
      */
+    @Transactional(rollbackFor = {Exception.class})
     public User charge(User user, BigDecimal amount) {
         return userRepository.save(user.charge(amount));
     }

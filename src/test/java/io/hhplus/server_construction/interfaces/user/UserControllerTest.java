@@ -38,7 +38,7 @@ class UserControllerTest {
         // given
         Long userId = 1L;
         LocalDateTime now = LocalDateTime.now();
-        User user = User.create(1L, "조진우", BigDecimal.valueOf(1000L), now, now);
+        User user = User.create(1L, "조진우", BigDecimal.valueOf(1000L), now, now, 0L);
 
         // when
         when(userFacade.findUserById(userId)).thenReturn(user);
@@ -59,7 +59,7 @@ class UserControllerTest {
                 { "amount" :1000 }
                 """;
         LocalDateTime now = LocalDateTime.now();
-        User user = User.create(1L, "조진우", BigDecimal.valueOf(2000L), now, now);
+        User user = User.create(1L, "조진우", BigDecimal.valueOf(2000L), now, now, 0L);
 
         // when
         when(userFacade.charge(userId, amount)).thenReturn(user);
