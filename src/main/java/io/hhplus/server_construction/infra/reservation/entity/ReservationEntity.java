@@ -29,14 +29,19 @@ public class ReservationEntity extends BaseEntity {
 
     private BigDecimal totalPrice;
 
+    @Version
+    private Long version = 0L;
+
     public ReservationEntity(Long id,
                              UserEntity user,
                              ReservationStatus status,
-                             BigDecimal totalPrice) {
+                             BigDecimal totalPrice,
+                             Long version) {
         this.id = id;
         this.user = user;
         this.status = status;
         this.totalPrice = totalPrice;
+        this.version = version;
     }
 
     @Override

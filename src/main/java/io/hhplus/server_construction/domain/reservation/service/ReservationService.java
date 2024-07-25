@@ -8,8 +8,6 @@ import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,6 +22,7 @@ public class ReservationService {
 
     /**
      * 예약 정보 저장
+     *
      * @param reservation 예약
      * @return Reservation
      */
@@ -33,8 +32,9 @@ public class ReservationService {
 
     /**
      * 콘서트 예약
+     *
      * @param concertSeatList 좌석 목록
-     * @param user 사용자
+     * @param user            사용자
      * @return Reservation
      */
     public Reservation setConcertReservation(List<ConcertSeat> concertSeatList, User user) {
@@ -46,7 +46,8 @@ public class ReservationService {
         Reservation reservation = reservationRepository.saveReservation(Reservation.create(null,
                 user,
                 ReservationStatus.PAYMENT_WAITING,
-                totalPrice));
+                totalPrice,
+                0L));
 
         List<ReservationItem> reservationItemList = concertSeatList.stream()
                 .map(concertSeat ->
@@ -60,20 +61,22 @@ public class ReservationService {
 
     /**
      * 예약 정보 조회 - 좌석 목록 포함
+     *
      * @param reservationId 예약 Id
      * @return Reservation
      */
     public Reservation findReservationWithItemListById(Long reservationId) {
-        Reservation reservation = reservationRepository.pessimisticFindReservationById(reservationId);
+        Reservation reservation = reservationRepository.findReservationById(reservationId);
         List<ReservationItem> reservationItemList = reservationRepository.findAllReservationItemByReservationId(reservationId);
         return reservation.setReservationItemList(reservationItemList);
     }
 
     /**
      * 5분 지난 예약 취소 처리
-     * @param status 예약 상태
+     *
+     * @param status     예약 상태
      * @param targetDate 조회 대상 일시
-     * @return List<ReservationItem> 
+     * @return List<ReservationItem>
      */
     public List<ReservationItem> changeTemporaryReservationSeat(ReservationStatus status, LocalDateTime targetDate) {
         List<Reservation> temporaryReservationList = reservationRepository.findReservationByStatusAndTargetDate(status, targetDate);

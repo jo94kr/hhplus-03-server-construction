@@ -67,7 +67,7 @@ class PaymentTest {
         BigDecimal totalPrice = concertSeatList.stream()
                 .map(ConcertSeat::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        Reservation reservation = Reservation.create(any(), user, ReservationStatus.PAYMENT_WAITING, totalPrice);
+        Reservation reservation = Reservation.create(any(), user, ReservationStatus.PAYMENT_WAITING, totalPrice, 0L);
 
         // when
         // then

@@ -56,7 +56,8 @@ class PaymentControllerTest {
         Reservation reservation = Reservation.create(1L,
                 user,
                 ReservationStatus.PAYMENT_WAITING,
-                BigDecimal.valueOf(1000L));
+                BigDecimal.valueOf(1000L),
+                0L);
         Payment payment = Payment.pay(reservation, user);
         PaymentResult paymentResult = PaymentResult.create(payment);
 

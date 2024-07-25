@@ -38,8 +38,8 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     }
 
     @Override
-    public Reservation pessimisticFindReservationById(Long reservationId) {
-        return ReservationMapper.toDomain(reservationJpaRepository.pessimisticFindReservationById(reservationId)
+    public Reservation findReservationById(Long reservationId) {
+        return ReservationMapper.toDomain(reservationJpaRepository.findReservationEntityById(reservationId)
                 .orElseThrow(EntityNotFoundException::new));
     }
 

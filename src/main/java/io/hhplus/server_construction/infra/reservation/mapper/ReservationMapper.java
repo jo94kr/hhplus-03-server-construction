@@ -6,16 +6,19 @@ import io.hhplus.server_construction.infra.user.mapper.UserMapper;
 
 public class ReservationMapper {
 
-    public static Reservation toDomain(ReservationEntity reservationEntity) {return Reservation.create(reservationEntity.getId(),
+    public static Reservation toDomain(ReservationEntity reservationEntity) {
+        return Reservation.create(reservationEntity.getId(),
                 UserMapper.toDomain(reservationEntity.getUser()),
                 reservationEntity.getStatus(),
-                reservationEntity.getTotalPrice());
+                reservationEntity.getTotalPrice(),
+                reservationEntity.getVersion());
     }
 
     public static ReservationEntity toEntity(Reservation reservation) {
         return new ReservationEntity(reservation.getId(),
                 UserMapper.toEntity(reservation.getUser()),
                 reservation.getStatus(),
-                reservation.getTotalPrice());
+                reservation.getTotalPrice(),
+                reservation.getVersion());
     }
 }

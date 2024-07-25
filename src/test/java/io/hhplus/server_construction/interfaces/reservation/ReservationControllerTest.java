@@ -76,7 +76,8 @@ class ReservationControllerTest {
         Reservation reservation = Reservation.create(1L,
                 User.create(1L, "조진우", BigDecimal.valueOf(1000L), now, now),
                 ReservationStatus.PAYMENT_WAITING,
-                BigDecimal.valueOf(1000L));
+                BigDecimal.valueOf(1000L),
+                0L);
         reservation.setReservationItemList(List.of(ReservationItem.create(1L,
                 reservation,
                 concertSeat,

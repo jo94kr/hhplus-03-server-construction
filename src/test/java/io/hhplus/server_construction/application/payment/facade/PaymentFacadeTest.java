@@ -106,7 +106,7 @@ class PaymentFacadeTest {
                 .map(ConcertSeat::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        Reservation reservation = Reservation.create(any(), user, ReservationStatus.CANCEL, totalPrice);
+        Reservation reservation = Reservation.create(any(), user, ReservationStatus.CANCEL, totalPrice, 0L);
 
         // when
         when(reservationService.findReservationWithItemListById(reservationId)).thenReturn(reservation);
@@ -131,7 +131,7 @@ class PaymentFacadeTest {
                 .map(ConcertSeat::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        Reservation reservation = Reservation.create(any(), user, ReservationStatus.PAYMENT_WAITING, totalPrice);
+        Reservation reservation = Reservation.create(any(), user, ReservationStatus.PAYMENT_WAITING, totalPrice, 0L);
 
         // when
         when(reservationService.findReservationWithItemListById(reservationId)).thenReturn(reservation);
@@ -159,7 +159,7 @@ class PaymentFacadeTest {
                 .map(ConcertSeat::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        Reservation reservation = Reservation.create(any(), user, ReservationStatus.PAYMENT_WAITING, totalPrice);
+        Reservation reservation = Reservation.create(any(), user, ReservationStatus.PAYMENT_WAITING, totalPrice, 0L);
 
         // when
         when(reservationService.findReservationWithItemListById(reservationId)).thenReturn(reservation);
