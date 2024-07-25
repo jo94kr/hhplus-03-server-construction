@@ -1,5 +1,16 @@
 # hhplus-03-server-construction
 
+---
+
+- [Architecture](docs%2FArchitecture.md)
+- [Milestone](https://github.com/users/jo94kr/projects/1/views/1)
+- [ERD](docs%2FERD.md)
+- [Sequence Diagram](docs%2FSequenceDiagram.md)
+- [API 명세](docs%2FApi.md)
+- [🌟동시성 문제와 극복](docs%2FConcurrencyIssue.md)
+
+---
+
 ## Description
 
 - `콘서트 예약 서비스`를 구현해 봅니다.
@@ -69,17 +80,5 @@
 
 - 유저간 대기열을 요청 순서대로 정확하게 제공할 방법을 고민해 봅니다.
 - 동시에 여러 사용자가 예약 요청을 했을 때, 좌석이 중복으로 배정 가능하지 않도록 합니다.
-
----
-
-## [Architecture](docs%2FArchitecture.md)
-
-## [Milestone](https://github.com/users/jo94kr/projects/1/views/1)
-
-## [ERD](docs%2FERD.md)
-
-## [Sequence Diagram](docs%2FSequenceDiagram.md)
-
-## [API 명세](docs%2FApi.md)
 
 ---
