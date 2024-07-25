@@ -9,7 +9,6 @@ import io.hhplus.server_construction.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,6 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
@@ -27,6 +27,7 @@ public class ReservationService {
      * @param reservation 예약
      * @return Reservation
      */
+    @Transactional(rollbackFor = {Exception.class})
     public Reservation save(Reservation reservation) {
         return reservationRepository.saveReservation(reservation);
     }
@@ -64,7 +65,7 @@ public class ReservationService {
      * @return Reservation
      */
     public Reservation findReservationWithItemListById(Long reservationId) {
-        Reservation reservation = reservationRepository.pessimisticFindReservationById(reservationId);
+        Reservation reservation = reservationRepository.findReservationById(reservationId);
         List<ReservationItem> reservationItemList = reservationRepository.findAllReservationItemByReservationId(reservationId);
         return reservation.setReservationItemList(reservationItemList);
     }

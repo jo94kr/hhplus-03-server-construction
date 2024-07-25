@@ -54,6 +54,7 @@ public class UserService {
      * @param amount 사용 금액
      * @return User
      */
+    @Transactional(rollbackFor = {Exception.class})
     public User use(User user, BigDecimal amount) {
         return userRepository.save(user.use(amount));
     }

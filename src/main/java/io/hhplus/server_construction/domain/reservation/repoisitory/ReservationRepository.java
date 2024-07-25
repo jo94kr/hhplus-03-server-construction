@@ -18,7 +18,7 @@ public interface ReservationRepository {
      * @param reservationId 예약 Id
      * @return Reservation
      */
-    Reservation pessimisticFindReservationById(Long reservationId);
+    Reservation findReservationById(Long reservationId);
 
     List<ReservationItem> findAllReservationItemByReservationId(Long reservationId);
 
