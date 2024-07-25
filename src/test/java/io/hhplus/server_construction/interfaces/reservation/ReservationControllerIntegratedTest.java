@@ -140,7 +140,6 @@ class ReservationControllerIntegratedTest extends IntegratedTest {
                 .filter(statusCode -> statusCode != HttpStatus.OK.value())
                 .toList();
 
-        // then
         assertThat(failCnt).hasSize(1);
     }
 

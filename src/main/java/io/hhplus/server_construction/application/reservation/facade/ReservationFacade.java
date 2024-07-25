@@ -21,12 +21,14 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class ReservationFacade {
 
     private final UserService userService;
     private final ConcertService concertService;
     private final ReservationService reservationService;
 
+    @Transactional(rollbackFor = {Exception.class})
     public ReservationConcertResult setConcertReservation(ReservationConcertCommand reservationConcertCommand) {
         // 사용자 조회
         User user = userService.findUserById(reservationConcertCommand.userId());
@@ -40,6 +42,7 @@ public class ReservationFacade {
         return ReservationConcertResult.from(reservation);
     }
 
+    @Transactional(rollbackFor = {Exception.class})
     public void temporaryReservationSeatProcess() {
         LocalDateTime now = LocalDateTime.now();
         // 5분이 지난 미결제 예약건은 취소 처리

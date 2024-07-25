@@ -11,8 +11,6 @@ import io.hhplus.server_construction.domain.reservation.service.ReservationServi
 import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import io.hhplus.server_construction.domain.user.service.UserService;
-import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingException;
-import io.hhplus.server_construction.domain.waiting.exceprtion.WaitingExceptionEnums;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -20,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class PaymentFacade {
 
     private final PaymentService paymentService;
@@ -27,6 +26,7 @@ public class PaymentFacade {
     private final ReservationService reservationService;
     private final UserService userService;
 
+    @Transactional(rollbackFor = {Exception.class})
     public PaymentResult payment(PaymentCommand paymentCommand, String token) {
         // 결제 가능여부 체크
         Reservation reservation = reservationService.findReservationWithItemListById(paymentCommand.reservationId());

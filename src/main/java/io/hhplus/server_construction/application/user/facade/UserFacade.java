@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class UserFacade {
 
     private final UserService userService;
@@ -18,8 +19,9 @@ public class UserFacade {
         return userService.findUserById(userId);
     }
 
+    @Transactional(rollbackFor = {Exception.class})
     public User charge(Long userId, BigDecimal amount) {
-        User user = userService.findUserById(userId);
+        User user = userService.pessimisticFindById(userId);
         return userService.charge(user, amount);
     }
 }

@@ -8,8 +8,6 @@ import io.hhplus.server_construction.domain.waiting.vo.WaitingConstant;
 import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -17,7 +15,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class WaitingService {
 
     private final WaitingRepository waitingRepository;
@@ -32,7 +29,6 @@ public class WaitingService {
      * @param token 대기열 토큰
      * @return Waiting
      */
-    @Transactional(rollbackFor = {Exception.class})
     public Waiting checkToken(String token) {
         Waiting waiting;
         // 토큰이 없으면 신규 토큰 발급
@@ -105,7 +101,6 @@ public class WaitingService {
      * 만료일이 지난 대기열 만료 처리
      * @param now 현재시간
      */
-    @Transactional(rollbackFor = {Exception.class})
     public void expiredToken(LocalDateTime now) {
         // 만료일이 지난 대기열 조회
         List<Waiting> expireWaitingList = waitingRepository.findWaitingByStatusAndExpireDatetimeIsBefore(WaitingStatus.WAITING, now.minusMinutes(5));
@@ -120,7 +115,6 @@ public class WaitingService {
      * 진입 가능한 대기열 활성화 처리
      * @param now 현재시간
      */
-    @Transactional(rollbackFor = {Exception.class})
     public void activeToken(LocalDateTime now) {
         // 진입 가능한 대기열 조회
         List<Waiting> activeWaitingList = waitingRepository.findWaitingByStatusAndAccessDatetimeIsBefore(WaitingStatus.WAITING, now);
@@ -135,7 +129,6 @@ public class WaitingService {
      * 대기열 상태 체크
      * @param token 대기열 토큰
      */
-    @Transactional(rollbackFor = {Exception.class})
     public void checkWaitingStatus(String token) {
         Waiting waiting = waitingRepository.findWaitingByToken(token);
         if (waiting.isAvailableToken()) {
@@ -150,7 +143,6 @@ public class WaitingService {
      * 대기열 만료처리
      * @param token 대기열 토큰
      */
-    @Transactional(rollbackFor = {Exception.class})
     public void expiredToken(String token) {
         Waiting waiting = waitingRepository.findWaitingByToken(token);
         waitingRepository.save(waiting.expireToken());

@@ -16,8 +16,14 @@ public class UserRepositoryImpl implements UserRepository {
     private final UserJpaRepository userJpaRepository;
 
     @Override
-    public User findById(Long userId) {
+    public User findByUserById(Long userId) {
         return UserMapper.toDomain(userJpaRepository.findById(userId)
+                .orElseThrow(EntityNotFoundException::new));
+    }
+
+    @Override
+    public User pessimisticFindById(Long userId) {
+        return UserMapper.toDomain(userJpaRepository.pessimisticLockFindById(userId)
                 .orElseThrow(EntityNotFoundException::new));
     }
 

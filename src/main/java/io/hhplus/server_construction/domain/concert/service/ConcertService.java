@@ -21,7 +21,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class ConcertService {
 
     private final ConcertRepository concertRepository;
@@ -65,7 +64,6 @@ public class ConcertService {
      * @throws ConcertException - ALREADY_RESERVATION: 이미 선택된 좌석
      * @return List<ConcertSeat>
      */
-    @Transactional(rollbackFor = {Exception.class})
     public List<ConcertSeat> setSeatReservation(List<Long> seatIdList) {
         List<ConcertSeat> concertSeatList = new ArrayList<>();
             for (Long seatId : seatIdList) {
@@ -84,7 +82,6 @@ public class ConcertService {
      * 좌석 목록 저장
      * @param concertSeatList 좌석 목록
      */
-    @Transactional(rollbackFor = {Exception.class})
     public void saveAllConcertSeat(List<ConcertSeat> concertSeatList) {
         concertRepository.saveAllConcertSeat(concertSeatList);
     }
