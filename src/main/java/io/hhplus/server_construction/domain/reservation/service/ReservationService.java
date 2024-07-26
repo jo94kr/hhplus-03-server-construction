@@ -9,7 +9,6 @@ import io.hhplus.server_construction.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -63,11 +62,12 @@ public class ReservationService {
 
     /**
      * 예약 정보 조회 - 좌석 목록 포함
+     * 비관적 락 사용
      * @param reservationId 예약 Id
      * @return Reservation
      */
     public Reservation findReservationWithItemListById(Long reservationId) {
-        Reservation reservation = reservationRepository.findReservationById(reservationId);
+        Reservation reservation = reservationRepository.pessimisticFindReservationById(reservationId);
         List<ReservationItem> reservationItemList = reservationRepository.findAllReservationItemByReservationId(reservationId);
         return reservation.setReservationItemList(reservationItemList);
     }

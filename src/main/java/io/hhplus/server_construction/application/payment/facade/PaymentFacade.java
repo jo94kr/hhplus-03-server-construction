@@ -15,6 +15,7 @@ import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import io.hhplus.server_construction.support.aop.annotation.RedissonLock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -25,7 +26,7 @@ public class PaymentFacade {
     private final ReservationService reservationService;
     private final UserService userService;
 
-    @RedissonLock(value = "#paymentCommand.reservationId")
+    @Transactional
     public PaymentResult payment(PaymentCommand paymentCommand, String token) {
         // 결제 가능여부 체크
         Reservation reservation = reservationService.findReservationWithItemListById(paymentCommand.reservationId());
