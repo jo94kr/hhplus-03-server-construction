@@ -7,7 +7,7 @@
 - [ERD](docs%2FERD.md)
 - [Sequence Diagram](docs%2FSequenceDiagram.md)
 - [API 명세](docs%2FApi.md)
-- [🌟동시성 문제와 극복](docs%2FConcurrencyIssue.md)
+- [🌟동시성 문제와 극복](docs%2FconcurrencyIssue.md)
 
 ---
 
