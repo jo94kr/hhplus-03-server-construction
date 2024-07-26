@@ -88,15 +88,18 @@
 
 #### 좌석 예약
 
-- 비관적 락
+- [비관적 락](https://github.com/jo94kr/hhplus-03-server-construction/pull/33/commits/867ede835ca10ba79e40d36ef038454820ef10d6)
   - 여러 유저가 동일한 좌석에 요청을 많이 한다는 가정하에 적용
   - 좌석 예약을 요청이 많이 몰리기 대문에 트랜잭션 충돌에 대한 실패를 적절하게 방지 할 수 있음
   - 인기가 없는 좌석은 충돌빈도가 적으므로 불필요한 자원 낭비가 존재
-- 낙관적 락
+  - ![좌석예약_비관적락.png](images%2F%EC%A2%8C%EC%84%9D%EC%98%88%EC%95%BD_%EB%B9%84%EA%B4%80%EC%A0%81%EB%9D%BD.png)
+- [낙관적 락](https://github.com/jo94kr/hhplus-03-server-construction/pull/37) 
   - 잦은 충돌이 발생하는 시점(인기있는 좌석)엔 트랜잭션 롤백 자원이 오히려 더 많이 들어갈 것으로 예상
   - 공유 자원에 대한 읽기 비율이 높은 좌석 예약에선 적절할듯 하지만 충돌 빈도가 높으므로 성능이 저하 될 수 있음
-- 분산락 (Redis)
+  - ![좌석예약_낙관적락.png](images%2F%EC%A2%8C%EC%84%9D%EC%98%88%EC%95%BD_%EB%82%99%EA%B4%80%EC%A0%81%EB%9D%BD.png)
+- [분산락 (Redis)](https://github.com/jo94kr/hhplus-03-server-construction/pull/39)
   - 락을 점유해야 트랜잭션이 시작되므로 사용자가 몰리는 좌석 예약의 경우엔 DB의 부하를 줄일수있음
+  - ![좌석예약_레디스.png](images%2F%EC%A2%8C%EC%84%9D%EC%98%88%EC%95%BD_%EB%A0%88%EB%94%94%EC%8A%A4.png)
 - 최종 선택
   - 분산 락
     - DB 자원을 무한대로 늘릴수 없으므로 결국 분산락을 사용해야 한다고 생각
@@ -108,21 +111,36 @@
 
 #### 결제
 
-- 비관적 락
+- [비관적 락](https://github.com/jo94kr/hhplus-03-server-construction/pull/40/commits/2199943f9b7e558f7ba854ebb8245541996db05f)
   - 데이터 무결성을 보장해야하는 결제에서는 비관적 락이 적합하다고 판단
   - 본인의 자원을 본인이 사용하는 구조이기 때문에 자원에 접근못해도 문제가 없다고 생각
-- 낙관적 락
+  - ![결제_비관적락.png](images%2F%EA%B2%B0%EC%A0%9C_%EB%B9%84%EA%B4%80%EC%A0%81%EB%9D%BD.png)
+- [낙관적 락](https://github.com/jo94kr/hhplus-03-server-construction/pull/37)
   - 충돌이 발생하는 경우가 거의 없으므로 성능상으로는 이점
-- 분산락 (Redis)
+  - ![결제_낙관적락.png](images%2F%EA%B2%B0%EC%A0%9C_%EB%82%99%EA%B4%80%EC%A0%81%EB%9D%BD.png)
+- [분산락 (Redis)](https://github.com/jo94kr/hhplus-03-server-construction/pull/38)
   - 충돌이 빈번하게 일어나지 않고 DB로도 충분히 처리 가능하므로 오버엔지니어링 이라고 판단
   - 하지만 기존에 분산락을 사용중이라면 사용하는덴 지장 없어 보임
+  - ![결제_레디스.png](images%2F%EA%B2%B0%EC%A0%9C_%EB%A0%88%EB%94%94%EC%8A%A4.png)
 - 최종 선택
   - 비관적 락
     - 금액관련 중요한 데이터 처리, 본인 자원에 접근하기 때문에 병목현상도 발생하지 않기 때문에 적용
 
 #### 잔액 충전
 
-- 비관적 락
-  - 결제와 동일한 이유로 비관적 락이 적합하다고 판단
+- [비관적 락](https://github.com/jo94kr/hhplus-03-server-construction/pull/40/commits/2199943f9b7e558f7ba854ebb8245541996db05f)
+  - 데이터 무결성을 보장해야하는 결제에서는 비관적 락이 적합하다고 판단
+  - 본인의 자원을 본인이 사용하는 구조이기 때문에 자원에 접근못해도 문제가 없다고 생각
+  - ![잔액충전_비관적락.png](images%2F%EC%9E%94%EC%95%A1%EC%B6%A9%EC%A0%84_%EB%B9%84%EA%B4%80%EC%A0%81%EB%9D%BD.png)
+- [낙관적 락](https://github.com/jo94kr/hhplus-03-server-construction/pull/35)
+  - 충돌이 발생하는 경우가 거의 없으므로 성능상으로는 이점
+  - ![잔액충전_낙관적락.png](images%2F%EC%9E%94%EC%95%A1%EC%B6%A9%EC%A0%84_%EB%82%99%EA%B4%80%EC%A0%81%EB%9D%BD.png)
+- [분산락 (Redis)](https://github.com/jo94kr/hhplus-03-server-construction/pull/36)
+  - 충돌이 빈번하게 일어나지 않고 DB로도 충분히 처리 가능하므로 오버엔지니어링 이라고 판단
+  - 하지만 기존에 분산락을 사용중이라면 사용하는덴 지장 없어 보임
+  - ![잔액충전_레디스.png](images%2F%EC%9E%94%EC%95%A1%EC%B6%A9%EC%A0%84_%EB%A0%88%EB%94%94%EC%8A%A4.png)
+- 최종 선택
+  - 비관적 락
+    - 결제와 동일한 이유로 비관적 락이 적합하다고 판단
 
 ---
