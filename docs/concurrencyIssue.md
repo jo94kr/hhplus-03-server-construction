@@ -35,13 +35,13 @@
   - JPA 에서 지원하는 어노테이션을 사용하기만 해도 구현 가능 기존 소스를 거의 수정 안해도 된다
 
 #### 구현 방법
-JPA 에서 지원하는 @Lock어노테이션의 LockModeType로 사용할 수 있다 
-- PESSIMISTIC_WRITE (주로사용)
+JPA 에서 지원하는 `@Lock`어노테이션의 `LockModeType`로 사용할 수 있다 
+- `PESSIMISTIC_WRITE` (주로사용)
   - 베타 락 (쓰기에 락) 사용. 다른 트랜잭션에서 읽기/쓰기 모두 불가
   - 더티리드가 발생하지않음
-- PESSIMISTIC_READ
+- `PESSIMISTIC_READ`
   - 공유 락 사용. 다른 트랜잭션에서 읽기는 가능하나 쓰기는 불가능
-- PESSIMISTIC_FORCE_INCREMENT
+- `PESSIMISTIC_FORCE_INCREMENT`
   - 베타 락 사용하지만 낙관적 락처럼 버전 정보를 사용.
   - 락을 획득하면 버전이 업데이트된다
 
@@ -50,6 +50,14 @@ JPA 에서 지원하는 @Lock어노테이션의 LockModeType로 사용할 수 �
 @Query("SELECT r FROM ReservationEntity r WHERE r.id = :reservationId")
 Optional<ReservationEntity> pessimisticFindReservationById(@Param("reservationId") Long reservationId);
 ```  
+
+mysql 기준 `select` 문에 `for update`를 추가하여 특정 데이터에 대한 비관적 락을 설정
+```sql
+select r.id, r.reserved 
+from reservation_entity r 
+where r.id = ? 
+for update
+```
 
 ### 낙관적 락
 
@@ -115,7 +123,7 @@ where
 
 #### 구현 방법
 
-Pub/Sub방식 Redisson을 AOP 방식으로 구현 AOP 에서 메서드를 실행시키기전 트랜잭션을 강제로 생성시켜 Lock이 생성되기전엔 트랜잭션이 시작 되지않도록 구현
+Pub/Sub방식 `Redisson`을 AOP 방식으로 구현 AOP 에서 메서드를 실행시키기전 트랜잭션을 강제로 생성시켜 Lock이 생성되기전엔 트랜잭션이 시작 되지않도록 구현
 - `AOP 시작 -> Lock -> 트랜잭션 -> 로직 실행 -> 커밋 -> Lock 해제`
 - 트랜잭션 중 Lock이 생성될 경우 조회시점이 달라질 수 있고 락 획득 대기시간동안 DB 커낵션이 유지되므로 부하가 발생
 ```java
