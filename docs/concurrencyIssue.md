@@ -34,6 +34,23 @@
   - ★☆☆☆☆
   - JPA 에서 지원하는 어노테이션을 사용하기만 해도 구현 가능 기존 소스를 거의 수정 안해도 된다
 
+#### 구현 방법
+JPA 에서 지원하는 @Lock어노테이션의 LockModeType로 사용할 수 있다 
+- PESSIMISTIC_WRITE (주로사용)
+  - 베타 락 (쓰기에 락) 사용. 다른 트랜잭션에서 읽기/쓰기 모두 불가
+  - 더티리드가 발생하지않음
+- PESSIMISTIC_READ
+  - 공유 락 사용. 다른 트랜잭션에서 읽기는 가능하나 쓰기는 불가능
+- PESSIMISTIC_FORCE_INCREMENT
+  - 베타 락 사용하지만 낙관적 락처럼 버전 정보를 사용.
+  - 락을 획득하면 버전이 업데이트된다
+
+```java
+@Lock(LockModeType.PESSIMISTIC_WRITE)
+@Query("SELECT r FROM ReservationEntity r WHERE r.id = :reservationId")
+Optional<ReservationEntity> pessimisticFindReservationById(@Param("reservationId") Long reservationId);
+```  
+
 ### 낙관적 락
 
 > 자원에 락을 걸어서 선점하지않고 동시성 문제가 발생하면 처리하는 방법
@@ -47,6 +64,34 @@
 - 구현 복잡도
   - ★★☆☆☆
   - 엔티티에 버전 컬럼을 추가해줘야 하고 버전 충돌에 대한 예외 처리를 별도로 해줘야한다. 재시도등 고려할 사항도 존재
+
+#### 구현 방법
+
+```java
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Table(name = "reservation")
+public class ReservationEntity extends BaseEntity {
+    
+    // 생략
+  
+    @Version
+    private Long version = 0L;
+}
+```
+
+조회 시점의 버전과 커밋 시점의 버전이 다르면 충돌이 발생한것으로 판단하고 예외를 발생 실제론 아래처럼 쿼리가 생성된다
+```sql
+update reservation
+set
+    생략...,
+    version = 2
+where
+    id = ?
+    and version = 1
+```
+이미 이전 요청에서 버전이 2로 증가된 상태 이므로 예외가 발생
 
 ### Redis
 
@@ -67,6 +112,101 @@
 - 구현 복잡도
   - ★★★☆☆
   - 설정, 클라이언트 구현까지 작업이 필요하지만 AOP등으로 재사용 가능하도록 구현하면 실 사용시 기존 소스를 거의 수정 안해도 된다.
+
+#### 구현 방법
+
+AOP 방식으로 구현 AOP 에서 메서드를 실행시키기전 트랜잭션을 강제로 생성시켜 Lock이 생성되기전엔 트랜잭션이 시작 되지않도록 구현
+- `AOP 시작 -> Lock -> 트랜잭션 -> 로직 실행 -> 커밋 -> Lock 해제`
+```java
+// lock 이 시작하고 트랜잭션을 생성시켜주기 위한 컴포넌트
+@Component
+public class AopTransaction {
+  @Transactional(propagation = Propagation.REQUIRES_NEW) // 신규 트랜잭션 생성
+  public Object proceed(final ProceedingJoinPoint joinPoint) throws Throwable {
+    return joinPoint.proceed(); // 로직 실행
+  }
+}
+
+// 커스텀 어노테이션에 정의한 파라미터 값을 가져오기위한 클래스 SpEL 사용
+public class CustomSpringELParser {
+  public static List<String> getDynamicValue(String[] parameterNames, Object[] args, String key) {
+    ExpressionParser parser = new SpelExpressionParser();
+    StandardEvaluationContext context = new StandardEvaluationContext();
+
+    for (int i = 0; i < parameterNames.length; i++) {
+      context.setVariable(parameterNames[i], args[i]);
+    }
+
+    Object value = parser.parseExpression(key).getValue(context, Object.class);
+    if (value == null) {
+      return Collections.emptyList();
+    } else if (value instanceof List<?> list) {
+      List<String> stringList = new ArrayList<>(list.size());
+      for (Object obj : list) {
+        stringList.add(obj.toString());
+      }
+      return stringList;
+    } else {
+      return Collections.singletonList(value.toString());
+    }
+  }
+}
+
+// Lock 이 시작하고 트랜잭션을 생성해주는 구현부
+public class RedissonLockAspect {
+  // 생략
+  @Around("@annotation(io.hhplus.server_construction.support.aop.annotation.RedissonLock)")
+  public Object redissonLock(ProceedingJoinPoint joinPoint) throws Throwable {
+    // 생략  
+    // lock 키 : 메서드명 + 지정한 키값
+    List<String> dynamicValue = CustomSpringELParser.getDynamicValue(signature.getParameterNames(), joinPoint.getArgs(), annotation.value());
+    RLock lock;
+    
+    // 키값이 여러개일 경우 다중 Lock 사용
+    if (dynamicValue.size() > 1) {
+      List<String> lockKeys = dynamicValue.stream()
+              .map(value -> method.getName() + LOCK_PREFIX + value)
+              .toList();
+      lock = redissonClient.getMultiLock(lockKeys.stream()
+              .map(redissonClient::getLock)
+              .toArray(RLock[]::new));
+    } else {
+      lock = redissonClient.getLock(dynamicValue.get(0));
+    }
+
+    try {
+      // 락 획득 여부 확인
+      boolean isLocked = lock.tryLock(annotation.waitTime(), annotation.leaseTime(), TimeUnit.MILLISECONDS);
+      if (!isLocked) {
+        throw new IllegalStateException("failed to acquire lock");
+      }
+      
+      // 트랜잭션 생성 + 로직 실행
+      return aopTransaction.proceed(joinPoint);
+    } catch (InterruptedException e) {
+      log.error(e.getMessage(), e);
+      throw e;
+    } finally {
+      // 락 해제
+      lock.unlock();
+    }
+  }
+}
+
+@RedissonLock(value = "#reservationConcertCommand.concertSeatIdList")
+public ReservationConcertResult setConcertReservation(ReservationConcertCommand reservationConcertCommand) {
+  // 사용자 조회
+  User user = userService.findUserById(reservationConcertCommand.userId());
+
+  // 콘서트 좌석 조회 - 임시 예약 처리
+  List<ConcertSeat> concertSeatList = concertService.setSeatReservation(reservationConcertCommand.concertSeatIdList());
+
+  // 콘서트 예약
+  Reservation reservation = reservationService.setConcertReservation(concertSeatList, user);
+
+  return ReservationConcertResult.from(reservation);
+}
+```
 
 ### Kafka
 
@@ -96,7 +236,7 @@
 
 - [비관적 락](https://github.com/jo94kr/hhplus-03-server-construction/pull/33/commits/867ede835ca10ba79e40d36ef038454820ef10d6)
   - 여러 유저가 동일한 좌석에 요청을 많이 한다는 가정하에 적용
-  - 좌석 예약을 요청이 많이 몰리기 대문에 트랜잭션 충돌에 대한 실패를 적절하게 방지 할 수 있음
+  - 좌석 예약을 요청이 많이 몰리기 때문에 트랜잭션 충돌에 대한 실패를 적절하게 방지 할 수 있음
   - 인기가 없는 좌석은 충돌빈도가 적으므로 불필요한 자원 낭비가 존재
   - ![좌석예약_비관적락.png](images%2F%EC%A2%8C%EC%84%9D%EC%98%88%EC%95%BD_%EB%B9%84%EA%B4%80%EC%A0%81%EB%9D%BD.png)
 - [낙관적 락](https://github.com/jo94kr/hhplus-03-server-construction/pull/37) 
