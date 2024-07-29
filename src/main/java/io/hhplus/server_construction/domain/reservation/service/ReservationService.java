@@ -9,7 +9,6 @@ import io.hhplus.server_construction.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,6 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
@@ -27,6 +27,7 @@ public class ReservationService {
      * @param reservation 예약
      * @return Reservation
      */
+    @Transactional(rollbackFor = {Exception.class})
     public Reservation save(Reservation reservation) {
         return reservationRepository.saveReservation(reservation);
     }
@@ -37,6 +38,7 @@ public class ReservationService {
      * @param user 사용자
      * @return Reservation
      */
+    @Transactional(rollbackFor = {Exception.class})
     public Reservation setConcertReservation(List<ConcertSeat> concertSeatList, User user) {
         // 총 결제가
         BigDecimal totalPrice = concertSeatList.stream()
@@ -60,6 +62,7 @@ public class ReservationService {
 
     /**
      * 예약 정보 조회 - 좌석 목록 포함
+     * 비관적 락 사용
      * @param reservationId 예약 Id
      * @return Reservation
      */
@@ -75,6 +78,7 @@ public class ReservationService {
      * @param targetDate 조회 대상 일시
      * @return List<ReservationItem> 
      */
+    @Transactional(rollbackFor = {Exception.class})
     public List<ReservationItem> changeTemporaryReservationSeat(ReservationStatus status, LocalDateTime targetDate) {
         List<Reservation> temporaryReservationList = reservationRepository.findReservationByStatusAndTargetDate(status, targetDate);
         if (temporaryReservationList == null || temporaryReservationList.isEmpty()) {

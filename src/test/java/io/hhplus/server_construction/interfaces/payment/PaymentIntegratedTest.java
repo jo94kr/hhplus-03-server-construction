@@ -79,7 +79,7 @@ class PaymentIntegratedTest extends IntegratedTest {
         headers.put("Authorization", "DUMMY_TOKEN_2");
         
         // when
-        int cnt = 2;
+        int cnt = 5;
         CompletableFuture<Integer>[] futureArray = new CompletableFuture[cnt];
         for (int i = 0; i < cnt; i++) {
             futureArray[i] = CompletableFuture.supplyAsync(() -> {
@@ -101,6 +101,6 @@ class PaymentIntegratedTest extends IntegratedTest {
                 .toList();
 
         // then
-        assertThat(failCnt).hasSize(1);
+        assertThat(failCnt).hasSize(4);
     }
 }

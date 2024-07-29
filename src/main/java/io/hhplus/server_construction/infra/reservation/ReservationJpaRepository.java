@@ -1,9 +1,7 @@
 package io.hhplus.server_construction.infra.reservation;
 
-
 import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.infra.reservation.entity.ReservationEntity;
-import io.hhplus.server_construction.infra.user.entity.UserEntity;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;

@@ -8,6 +8,7 @@ import io.hhplus.server_construction.domain.waiting.vo.WaitingConstant;
 import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -143,6 +144,7 @@ public class WaitingService {
      * 대기열 만료처리
      * @param token 대기열 토큰
      */
+    @Transactional(rollbackFor = {Exception.class})
     public void expiredToken(String token) {
         Waiting waiting = waitingRepository.findWaitingByToken(token);
         waitingRepository.save(waiting.expireToken());

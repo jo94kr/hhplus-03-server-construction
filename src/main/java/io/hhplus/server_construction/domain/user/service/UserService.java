@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true, rollbackFor = {Exception.class})
 public class UserService {
 
     private final UserRepository userRepository;
@@ -41,6 +42,7 @@ public class UserService {
      * @param amount 충전 금액
      * @return User
      */
+    @Transactional(rollbackFor = {Exception.class})
     public User charge(User user, BigDecimal amount) {
         return userRepository.save(user.charge(amount));
     }
@@ -52,6 +54,7 @@ public class UserService {
      * @param amount 사용 금액
      * @return User
      */
+    @Transactional(rollbackFor = {Exception.class})
     public User use(User user, BigDecimal amount) {
         return userRepository.save(user.use(amount));
     }

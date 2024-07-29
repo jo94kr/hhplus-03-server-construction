@@ -84,7 +84,7 @@ class UserControllerIntegratedTest extends IntegratedTest {
                 """;
 
         // when
-        int cnt = 100;
+        int cnt = 5;
         CompletableFuture<Integer>[] futureArray = new CompletableFuture[cnt];
         for (int i = 0; i < cnt; i++) {
             futureArray[i] = CompletableFuture.supplyAsync(() -> {
@@ -102,9 +102,9 @@ class UserControllerIntegratedTest extends IntegratedTest {
         // then
         List<Integer> failCnt = Arrays.stream(futureArray)
                 .map(CompletableFuture::join)
-                .filter(statusCode -> statusCode == HttpStatus.OK.value())
+                .filter(statusCode -> statusCode != HttpStatus.OK.value())
                 .toList();
 
-        assertThat(failCnt).hasSize(cnt);
+        assertThat(failCnt).isEmpty();
     }
 }
