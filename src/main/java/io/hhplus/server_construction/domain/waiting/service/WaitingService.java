@@ -104,7 +104,7 @@ public class WaitingService {
      */
     public void expiredToken(LocalDateTime now) {
         // 만료일이 지난 대기열 조회
-        List<Waiting> expireWaitingList = waitingRepository.findWaitingByStatusAndExpireDatetimeIsBefore(WaitingStatus.WAITING, now.minusMinutes(5));
+        List<Waiting> expireWaitingList = waitingRepository.findAllByStatusNotAndExpiredDatetimeIsBefore(WaitingStatus.WAITING, now.minusMinutes(5));
 
         // 대기열 만료 처리
         waitingRepository.saveAll(expireWaitingList.stream()

@@ -122,7 +122,7 @@ class WaitingServiceTest {
         );
 
         // when
-        when(waitingRepository.findWaitingByStatusAndExpireDatetimeIsBefore(WaitingStatus.WAITING, now.minusMinutes(5)))
+        when(waitingRepository.findAllByStatusNotAndExpiredDatetimeIsBefore(WaitingStatus.WAITING, now.minusMinutes(5)))
                 .thenReturn(waitingList);
         waitingService.expiredToken(now);
 

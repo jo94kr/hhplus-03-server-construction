@@ -35,8 +35,8 @@ public class WaitingRepositoryImpl implements WaitingRepository {
     }
 
     @Override
-    public List<Waiting> findWaitingByStatusAndExpireDatetimeIsBefore(WaitingStatus waitingStatus, LocalDateTime targetDatetime) {
-        return waitingJpaRepository.findAllByStatusAndExpiredDatetimeIsBefore(waitingStatus, targetDatetime).stream()
+    public List<Waiting> findAllByStatusNotAndExpiredDatetimeIsBefore(WaitingStatus waitingStatus, LocalDateTime targetDatetime) {
+        return waitingJpaRepository.findAllByStatusNotAndExpiredDatetimeIsBefore(waitingStatus, targetDatetime).stream()
                 .map(WaitingMapper::toDomain)
                 .toList();
     }

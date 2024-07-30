@@ -17,7 +17,7 @@ public interface WaitingJpaRepository extends JpaRepository<WaitingEntity, Long>
     @Query("SELECT m.id FROM WaitingEntity m WHERE m.status = :status ORDER BY m.id ASC")
     Optional<Long> findLastProceedingWaiting(@Param("status") WaitingStatus status);
 
-    List<WaitingEntity> findAllByStatusAndExpiredDatetimeIsBefore(WaitingStatus waitingStatus, LocalDateTime targetDatetime);
+    List<WaitingEntity> findAllByStatusNotAndExpiredDatetimeIsBefore(WaitingStatus waitingStatus, LocalDateTime targetDatetime);
 
     List<WaitingEntity> findWaitingByStatusAndAccessDatetimeIsBefore(WaitingStatus waitingStatus, LocalDateTime targetDatetime);
 }

@@ -12,7 +12,7 @@ public class WaitingScheduler {
 
     private final WaitingFacade waitingFacade;
 
-    @Scheduled(fixedRate = 100000)
+    @Scheduled(fixedRate = 10000)
     public void run() {
         waitingFacade.tokenScheduler();
     }

@@ -21,7 +21,7 @@ public interface WaitingRepository {
      */
     Long findLastProceedingWaiting(WaitingStatus status);
 
-    List<Waiting> findWaitingByStatusAndExpireDatetimeIsBefore(WaitingStatus waitingStatus, LocalDateTime targetDatetime);
+    List<Waiting> findAllByStatusNotAndExpiredDatetimeIsBefore(WaitingStatus waitingStatus, LocalDateTime targetDatetime);
 
     void saveAll(List<Waiting> waitingList);
 
