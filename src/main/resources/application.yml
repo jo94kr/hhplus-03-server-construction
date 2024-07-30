@@ -4,23 +4,26 @@ spring:
       on-profile: default
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
         format_sql: true
         show_sql: true
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:13306/concert_test
     username: root
     password: root
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  cache:
+    type: redis
 
 slack:
   webhook:
