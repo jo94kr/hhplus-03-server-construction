@@ -44,7 +44,7 @@ class ConcertFacadeTest {
         PageImpl<Concert> concerts = new PageImpl<>(List.of(Concert.create(1L, "항해 콘서트", LocalDateTime.now(), LocalDateTime.now())));
 
         // when
-        when(concertService.findConcertList(pageRequest)).thenReturn(concerts);
+        when(concertService.findConcertListWithCache(pageRequest)).thenReturn(concerts);
         Page<Concert> concertList = concertFacade.findConcertList(pageRequest);
 
         // then
@@ -67,7 +67,7 @@ class ConcertFacadeTest {
         LocalDate endDate = LocalDate.now();
 
         // when
-        when(concertService.findConcertScheduleList(concertId, startDate, endDate)).thenReturn(concertScheduleList);
+        when(concertService.findConcertScheduleListWithCache(concertId, startDate, endDate)).thenReturn(concertScheduleList);
         List<FindConcertScheduleResult> resultList = concertFacade.findConcertScheduleList(concertId, startDate, endDate);
 
         // then

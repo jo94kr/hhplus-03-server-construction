@@ -22,7 +22,7 @@ public class ConcertSeatEntity extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "concert_schdule_id")
+    @JoinColumn(name = "concert_schedule_id")
     private ConcertScheduleEntity concertSchedule;
 
     private String seatNum;
