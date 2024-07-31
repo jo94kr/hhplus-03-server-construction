@@ -60,7 +60,6 @@ class ConcertFacadeTest {
         List<ConcertSchedule> concertScheduleList = List.of(ConcertSchedule.create(1L,
                 concert,
                 any(),
-                ConcertScheduleStatus.AVAILABLE,
                 any(),
                 any()));
         LocalDate startDate = LocalDate.now().minusDays(1);
@@ -86,7 +85,6 @@ class ConcertFacadeTest {
         ConcertSchedule concertSchedule = ConcertSchedule.create(1L,
                 concert,
                 now,
-                ConcertScheduleStatus.AVAILABLE,
                 now,
                 now);
 

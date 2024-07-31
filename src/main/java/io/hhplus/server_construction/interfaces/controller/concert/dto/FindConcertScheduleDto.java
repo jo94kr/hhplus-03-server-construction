@@ -15,16 +15,12 @@ public record FindConcertScheduleDto(
             Long concertScheduleId,
 
             @Schema(name = "콘서트 일시")
-            LocalDateTime concertDatetime,
-
-            @Schema(name = "매진 여부")
-            boolean isSoldOut
+            LocalDateTime concertDatetime
     ) {
 
         public static Response from(FindConcertScheduleResult concertScheduleResult) {
             return new Response(concertScheduleResult.concertScheduleId(),
-                    concertScheduleResult.concertDatetime(),
-                    concertScheduleResult.isSoldOut());
+                    concertScheduleResult.concertDatetime());
         }
     }
 }

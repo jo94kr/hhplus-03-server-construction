@@ -13,10 +13,10 @@ insert into concert(id, name, create_datetime)
 values (1, '백엔드 콘서트', now()),
        (2, '프론트엔드 콘서트', now());
 
-insert into concert_schedule(id, concert_id, concert_datetime, status, create_datetime)
-values (1, 1, '2024-07-20T13:00:00', 'AVAILABLE', now()),
-       (2, 1, '2024-07-21T13:00:00', 'AVAILABLE', now()),
-       (3, 2, '2024-08-01T13:00:00', 'AVAILABLE', now());
+insert into concert_schedule(id, concert_id, concert_datetime, create_datetime)
+values (1, 1, '2024-07-20T13:00:00', now()),
+       (2, 1, '2024-07-21T13:00:00', now()),
+       (3, 2, '2024-08-01T13:00:00', now());
 
 insert into concert_seat(id, concert_schdule_id, seat_num, grade, price, status, create_datetime)
 values (1, 1, 'A01', 'GOLD', 3000, 'POSSIBLE', now()),
