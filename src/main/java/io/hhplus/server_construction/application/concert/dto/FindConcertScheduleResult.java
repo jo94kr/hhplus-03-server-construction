@@ -6,13 +6,11 @@ import java.time.LocalDateTime;
 
 public record FindConcertScheduleResult(
         Long concertScheduleId,
-        LocalDateTime concertDatetime,
-        boolean isSoldOut
+        LocalDateTime concertDatetime
 ) {
 
     public static FindConcertScheduleResult create(ConcertSchedule concertSchedule) {
         return new FindConcertScheduleResult(concertSchedule.getId(),
-                concertSchedule.getConcertDatetime(),
-                concertSchedule.getStatus().isAvailable());
+                concertSchedule.getConcertDatetime());
     }
 }

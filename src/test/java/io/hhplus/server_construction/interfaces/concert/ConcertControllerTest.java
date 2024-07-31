@@ -72,7 +72,6 @@ class ConcertControllerTest {
         ConcertSchedule concertSchedule = ConcertSchedule.create(1L,
                 concert,
                 now,
-                ConcertScheduleStatus.AVAILABLE,
                 now,
                 now);
         FindConcertScheduleResult concertScheduleResult = FindConcertScheduleResult.create(concertSchedule);
@@ -101,7 +100,6 @@ class ConcertControllerTest {
         ConcertSchedule concertSchedule = ConcertSchedule.create(1L,
                 concert,
                 LocalDateTime.now(),
-                ConcertScheduleStatus.AVAILABLE,
                 LocalDateTime.now(),
                 LocalDateTime.now());
         ConcertSeat concertSeat = ConcertSeat.create(1L,

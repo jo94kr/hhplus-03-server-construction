@@ -41,7 +41,6 @@ class ConcertServiceTest {
         ConcertSchedule concertSchedule = ConcertSchedule.create(1L,
                 concert,
                 LocalDateTime.now(),
-                ConcertScheduleStatus.AVAILABLE,
                 LocalDateTime.now(),
                 LocalDateTime.now());
         ConcertSeat concertSeat = ConcertSeat.create(1L,
@@ -72,7 +71,6 @@ class ConcertServiceTest {
         ConcertSchedule concertSchedule = ConcertSchedule.create(1L,
                 concert,
                 LocalDateTime.now(),
-                ConcertScheduleStatus.AVAILABLE,
                 LocalDateTime.now(),
                 LocalDateTime.now());
         ConcertSeat concertSeat = ConcertSeat.create(1L,

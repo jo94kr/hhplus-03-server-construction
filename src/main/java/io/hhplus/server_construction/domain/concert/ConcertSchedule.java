@@ -21,8 +21,6 @@ public class ConcertSchedule implements Serializable {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private final LocalDateTime concertDatetime;
 
-    private final ConcertScheduleStatus status;
-
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private final LocalDateTime createDatetime;
@@ -32,15 +30,13 @@ public class ConcertSchedule implements Serializable {
     private final LocalDateTime modifyDatetime;
 
     public ConcertSchedule(Long id,
-                            Concert concert,
-                            LocalDateTime concertDatetime,
-                            ConcertScheduleStatus status,
-                            LocalDateTime createDatetime,
-                            LocalDateTime modifyDatetime) {
+                           Concert concert,
+                           LocalDateTime concertDatetime,
+                           LocalDateTime createDatetime,
+                           LocalDateTime modifyDatetime) {
         this.id = id;
         this.concert = concert;
         this.concertDatetime = concertDatetime;
-        this.status = status;
         this.createDatetime = createDatetime;
         this.modifyDatetime = modifyDatetime;
     }
@@ -48,13 +44,11 @@ public class ConcertSchedule implements Serializable {
     public static ConcertSchedule create(Long id,
                                          Concert concert,
                                          LocalDateTime concertDatetime,
-                                         ConcertScheduleStatus status,
                                          LocalDateTime createDatetime,
                                          LocalDateTime modifyDatetime) {
         return new ConcertSchedule(id,
                 concert,
                 concertDatetime,
-                status,
                 createDatetime,
                 modifyDatetime);
     }
