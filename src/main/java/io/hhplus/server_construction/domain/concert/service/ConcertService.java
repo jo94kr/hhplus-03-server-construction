@@ -38,15 +38,14 @@ public class ConcertService {
     }
 
     /**
-     * 콘서트 스케쥴 조회 (캐시 처리)
+     * 콘서트 스케쥴 조회
      *
      * @param concertId 콘서트 Id
      * @param startDate 날짜 범위 - 시작일
      * @param endDate   날짜 범위 - 종료일
      * @return List<ConcertSchedule>
      */
-    @Cacheable(cacheNames = CacheConstants.CONCERT_SCHEDULE_LIST, key = "#concertId", cacheManager = "cacheManager")
-    public List<ConcertSchedule> findConcertScheduleListWithCache(Long concertId, LocalDate startDate, LocalDate endDate) {
+    public List<ConcertSchedule> findConcertScheduleList(Long concertId, LocalDate startDate, LocalDate endDate) {
         Concert concert = concertRepository.findConcertById(concertId);
         return concertRepository.findAllConcertSchedule(concert, startDate, endDate);
     }

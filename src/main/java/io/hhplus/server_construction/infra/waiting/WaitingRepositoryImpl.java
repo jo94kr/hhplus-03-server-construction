@@ -6,6 +6,8 @@ import io.hhplus.server_construction.domain.waiting.vo.WaitingStatus;
 import io.hhplus.server_construction.infra.waiting.mapper.WaitingMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -30,7 +32,7 @@ public class WaitingRepositoryImpl implements WaitingRepository {
 
     @Override
     public Long findLastProceedingWaiting(WaitingStatus status) {
-        return waitingJpaRepository.findLastProceedingWaiting(status)
+        return waitingJpaRepository.findWaitingEntity(status, PageRequest.of(0, 1))
                 .orElse(0L);
     }
 

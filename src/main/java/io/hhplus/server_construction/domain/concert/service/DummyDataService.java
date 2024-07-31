@@ -61,12 +61,11 @@ public class DummyDataService {
     }
 
     private void insertConcertSchedules() throws SQLException {
-        String sql = "INSERT INTO concert_schedule (id, concert_id, concert_datetime, status, create_datetime) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO concert_schedule (id, concert_id, concert_datetime, create_datetime) VALUES (?, ?, ?, ?)";
         try (Connection connection = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             connection.setAutoCommit(false);
 
-            preparedStatement.setString(4, "AVAILABLE");
             long id = 1;
             for (long concertId = 1; concertId <= 1000; concertId++) {
                 // 각 콘서트에 대해 랜덤한 일정 수를 생성 (1 ~ 30개)
@@ -75,7 +74,7 @@ public class DummyDataService {
                 for (int j = 0; j < scheduleCount; j++) {
                     preparedStatement.setLong(1, id++);
                     preparedStatement.setString(3, getRandomDateTime(random));
-                    preparedStatement.setString(5, getCurrentDateTime());
+                    preparedStatement.setString(4, getCurrentDateTime());
                     preparedStatement.addBatch();
                 }
             }

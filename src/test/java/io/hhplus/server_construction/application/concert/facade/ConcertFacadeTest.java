@@ -5,7 +5,6 @@ import io.hhplus.server_construction.domain.concert.Concert;
 import io.hhplus.server_construction.domain.concert.ConcertSchedule;
 import io.hhplus.server_construction.domain.concert.ConcertSeat;
 import io.hhplus.server_construction.domain.concert.service.ConcertService;
-import io.hhplus.server_construction.domain.concert.vo.ConcertScheduleStatus;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatGrade;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
 import org.junit.jupiter.api.DisplayName;
@@ -66,7 +65,7 @@ class ConcertFacadeTest {
         LocalDate endDate = LocalDate.now();
 
         // when
-        when(concertService.findConcertScheduleListWithCache(concertId, startDate, endDate)).thenReturn(concertScheduleList);
+        when(concertService.findConcertScheduleList(concertId, startDate, endDate)).thenReturn(concertScheduleList);
         List<FindConcertScheduleResult> resultList = concertFacade.findConcertScheduleList(concertId, startDate, endDate);
 
         // then

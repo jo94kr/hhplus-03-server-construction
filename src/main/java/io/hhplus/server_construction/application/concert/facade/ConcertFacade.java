@@ -25,7 +25,7 @@ public class ConcertFacade {
     }
 
     public List<FindConcertScheduleResult> findConcertScheduleList(Long concertId, LocalDate startDate, LocalDate endDate) {
-        return concertService.findConcertScheduleListWithCache(concertId, startDate, endDate).stream()
+        return concertService.findConcertScheduleList(concertId, startDate, endDate).stream()
                 .map(FindConcertScheduleResult::create)
                 .toList();
     }

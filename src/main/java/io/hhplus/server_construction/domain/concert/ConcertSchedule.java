@@ -2,7 +2,6 @@ package io.hhplus.server_construction.domain.concert;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.hhplus.server_construction.domain.concert.vo.ConcertScheduleStatus;
 import io.hhplus.server_construction.support.serializer.LocalDateTimeDeserializer;
 import io.hhplus.server_construction.support.serializer.LocalDateTimeSerializer;
 import lombok.Getter;
