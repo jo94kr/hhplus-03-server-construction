@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Component
 @RequiredArgsConstructor
@@ -20,16 +21,9 @@ public class WaitingFacade {
     public CheckTokenResult checkToken(String token) {
         // 대기열 체크
         Waiting waiting = waitingService.checkToken(token);
-
-        // 대기열 순번
-        Long waitingNumber = waitingService.calcWaitingNumber(waiting);
-
-        // 남은 시간(분)
-        Long timeRemainingMinutes = waitingService.calcTimeRemaining(waitingNumber);
-
         return CheckTokenResult.create(waiting.getToken(),
-                timeRemainingMinutes,
-                waitingNumber,
+                waiting.getTimeRemainingMinutes(),
+                waiting.getRank(),
                 waiting.getStatus(),
                 waiting.getExpiredDatetime());
     }
