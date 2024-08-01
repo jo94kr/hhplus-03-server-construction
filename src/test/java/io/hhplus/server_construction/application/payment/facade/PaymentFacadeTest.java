@@ -63,7 +63,6 @@ class PaymentFacadeTest {
         ConcertSchedule concertSchedule = ConcertSchedule.create(1L,
                 concert,
                 now,
-                ConcertScheduleStatus.AVAILABLE,
                 now,
                 now);
 

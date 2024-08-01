@@ -9,6 +9,7 @@ public class WaitingMapper {
         return new Waiting(waitingEntity.getId(),
                 waitingEntity.getToken(),
                 waitingEntity.getStatus(),
+                null,
                 waitingEntity.getAccessDatetime(),
                 waitingEntity.getExpiredDatetime(),
                 waitingEntity.getCreateDatetime());

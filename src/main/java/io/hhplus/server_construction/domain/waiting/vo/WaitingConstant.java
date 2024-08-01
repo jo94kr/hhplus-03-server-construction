@@ -1,7 +1,14 @@
 package io.hhplus.server_construction.domain.waiting.vo;
 
 public class WaitingConstant {
-    // TODO: 추후 설정값 redis or DB에서 관리
+
+    // 스케쥴러 한 주기 (10초) 당 진입시키는 유저 수
+    public static final Long ENTRY_LIMIT = 50L;
+
+    // 분당 처리량
     public static final Long THROUGHPUT_PER_MINUTE = 10L;
-    public static final Long CYCLE_TIME = 10L;
+    public static final Long CYCLE_TIME = 1L;
+
+    public static final String WAITING_KEY = "waiting";
+    public static final String ACTIVE_KEY_PREFIX = "active:";
 }

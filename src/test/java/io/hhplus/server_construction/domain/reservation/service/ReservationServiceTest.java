@@ -49,7 +49,6 @@ class ReservationServiceTest {
         ConcertSchedule concertSchedule = ConcertSchedule.create(1L,
                 concert,
                 LocalDateTime.now(),
-                ConcertScheduleStatus.AVAILABLE,
                 LocalDateTime.now(),
                 LocalDateTime.now());
 
