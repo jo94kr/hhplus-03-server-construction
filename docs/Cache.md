@@ -127,11 +127,11 @@ public Page<Concert> findConcertListWithCache(Pageable pageable) {
 
 - AS-IS  
   캐시를 걸지않은 DB 조회 약 `116ms` 소요 됨  
-  ![콘서트_조회_일반조회.png](https://github.com/jo94kr/hhplus-03-server-construction/blob/ed1ae84c0b6f4eb520410df7aa13e77e50b32f67/docs/images/%EC%BD%98%EC%84%9C%ED%8A%B8_%EC%A1%B0%ED%9A%8C_%EC%9D%BC%EB%B0%98%EC%A1%B0%ED%9A%8C.png)
+  ![콘서트_조회_일반조회.png](https://github.com/jo94kr/hhplus-03-server-construction/blob/main/docs/images/%EC%BD%98%EC%84%9C%ED%8A%B8_%EC%A1%B0%ED%9A%8C_%EC%9D%BC%EB%B0%98%EC%A1%B0%ED%9A%8C.png)
 
 - TO-BE  
   Redis 캐시를 사용한 조회시 약 `47ms`로 DB 조회보다 약 2배 가량 차이  
-  ![콘서트_조회_캐시조회.png](https://github.com/jo94kr/hhplus-03-server-construction/blob/ed1ae84c0b6f4eb520410df7aa13e77e50b32f67/docs/images/%EC%BD%98%EC%84%9C%ED%8A%B8_%EC%A1%B0%ED%9A%8C_%EC%BA%90%EC%8B%9C%EC%A1%B0%ED%9A%8C.png)
+  ![콘서트_조회_캐시조회.png](https://github.com/jo94kr/hhplus-03-server-construction/blob/main/docs/images/%EC%BD%98%EC%84%9C%ED%8A%B8_%EC%A1%B0%ED%9A%8C_%EC%BA%90%EC%8B%9C%EC%A1%B0%ED%9A%8C.png)
 
 ### 콘서트 일정 조회
 
