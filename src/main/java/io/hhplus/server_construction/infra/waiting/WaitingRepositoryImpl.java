@@ -134,6 +134,7 @@ public class WaitingRepositoryImpl implements WaitingRepository {
             tokenList.forEach(token -> {
                 String key = ACTIVE_KEY_PREFIX + token;
                 connection.setCommands().sAdd(key.getBytes(), token.getBytes());
+                connection.commands().expire(key.getBytes(), 300);
             });
             return null;
         });
