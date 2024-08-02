@@ -67,7 +67,9 @@
 - **정의:** 캐시에 저장된 데이터가 있는지 확인하고, 없으면 DB에서 조회.
 - **장점:** 반복적인 읽기가 많은 호출에 적합. 캐시 장애 시에도 DB에서 데이터 조회 가능.
 - **단점:** 초기 조회 시 DB 호출 발생.
-- **주의:** 캐시 스탬피드 현상. TTL에 도달한 캐시가 삭제되면 여러 애플리케이션이 한꺼번에 DB를 조회해 문제 발생. 적절한 TTL과 미리 캐시에 데이터를 넣어두는 방법으로 해결 가능.
+- **주의:** 캐시 스탬피드 현상. TTL에 도달한 캐시가 삭제되면 여러 애플리케이션이 한꺼번에 DB를 조회해 문제 발생. 적절한 TTL과 미리 캐시에 데이터를 넣어두는 방법(Cache Warming)으로 해결
+  가능.
+
 
 #### Read Through 패턴
 
@@ -99,6 +101,32 @@
 
 ---
 
+## 캐시 문제점
+
+### 캐시 스탬피드 현상
+
+- 분산환경에서 여러 애플리케이션이 참조하고있던 캐시 키가 만료되었을때 한번에 DB에 조회
+- 여러 애플리케이션이 만약 무거운 쿼리를 동시에 호출하게 된다면 DB에 부하가 발생
+- 이후 각 애플리케이션에서 읽어온 데이터를 캐시에 등록할때 중복쓰기가 발생
+
+### 해결방안
+
+- 적절한 캐시 만료 시간을 설정
+- Cache Warming 적용
+    - 캐시를 미리 생성시켜 주는 작업
+    - 이벤트등 부하가 몰리기전 미리 정보를 캐시해두는 작업
+- PER 알고리즘
+    - 확률적 조기 재계산 알고리즘
+    - 캐시 값이 만료되기 전에 언제 데이터베이스에 접근해서 값을 읽어오면 되는지 최적으로 계산
+    - 무작위성을 도입하여 여러 클라이언트가 동시에 캐시를 갱신하려고 하는 문제(캐시 스탬피드 현상)를 줄인다.
+    - 만료 시간에 가까워질수록 true를 반환할 확률이 증가하므로, 만료된 캐시 항목을 더 자주 확인하게 된다. 이를 통해 캐시의 신뢰성을 높이고 성능을 최적화할 수 있다.
+    > - currentTime: 현재 남은 만료 시간
+    > - timeToCompute: 캐시된 값을 다시 계산하는 데 걸리는 시간
+    > - beta: 무작위성 조절 변수 (기본값은 1, 0보다 큰 값으로 설정 가능)
+    > - random(): 0과 1 사이의 랜덤 값을 반환하는 함수
+    > - expiry: 키를 재설정할 때 새로 넣어줄 만료 시간
+    > `currentTime - (timeToCompute * beta * Math.log(Math.random())) > expiry` 조건이 참이면 DB조회 해서 새로 캐싱
+
 ## 비즈니스 로직 중 캐시를 적용해 볼만한 포인트
 
 ### 콘서트 조회
@@ -113,7 +141,9 @@ public Page<Concert> findConcertList(Pageable pageable) {
 
 #### 구현 방법
 
-`Look Aside + Write Around` 패턴을 사용하는 Expiration 방식으로 구현
+
+- `Look Aside + Write Around` 패턴을 사용하는 Expiration 방식으로 구현
+- 빈번하게 수정되는 데이터가 아니지만 조회는 빈번하게 발생 하고 Redis가 사용 불가할때도 정상적인 서비스가 가능하도록 하기위함
 
 ```java
 
@@ -126,11 +156,11 @@ public Page<Concert> findConcertListWithCache(Pageable pageable) {
 #### 성능 비교
 
 - AS-IS  
-  캐시를 걸지않은 DB 조회 약 `116ms` 소요 됨  
+  캐시를 걸지않은 DB 조회 약 10000건 조회 시 `116ms` 소요 됨  
   ![콘서트_조회_일반조회.png](https://github.com/jo94kr/hhplus-03-server-construction/blob/main/docs/images/%EC%BD%98%EC%84%9C%ED%8A%B8_%EC%A1%B0%ED%9A%8C_%EC%9D%BC%EB%B0%98%EC%A1%B0%ED%9A%8C.png)
 
-- TO-BE  
-  Redis 캐시를 사용한 조회시 약 `47ms`로 DB 조회보다 약 2배 가량 차이  
+- TO-BE
+  Redis 캐시를 사용한 약 10000건 조회 시 `47ms`로 DB 조회보다 약 2배 가량 차이  
   ![콘서트_조회_캐시조회.png](https://github.com/jo94kr/hhplus-03-server-construction/blob/main/docs/images/%EC%BD%98%EC%84%9C%ED%8A%B8_%EC%A1%B0%ED%9A%8C_%EC%BA%90%EC%8B%9C%EC%A1%B0%ED%9A%8C.png)
 
 ### 콘서트 일정 조회
