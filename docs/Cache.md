@@ -126,8 +126,8 @@
   > - timeToCompute: 캐시된 값을 다시 계산하는 데 걸리는 시간
   > - beta: 무작위성 조절 변수 (기본값은 1, 0보다 큰 값으로 설정 가능)
   > - random(): 0과 1 사이의 랜덤 값을 반환하는 함수
-  > - expiry: 키를 재설정할 때 새로 넣어줄 만료 시간
-      > `currentTime - (timeToCompute * beta * Math.log(Math.random())) > expiry` 조건이 참이면 DB조회 해서 새로 캐싱
+  > - expiry: 키를 재설정할 때 새로 넣어줄 만료 시간  
+  > - `currentTime - (timeToCompute * beta * Math.log(Math.random())) > expiry` 조건이 참이면 DB조회 해서 새로 캐싱
 
 ---
 
