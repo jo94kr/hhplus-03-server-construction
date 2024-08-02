@@ -73,11 +73,15 @@
 - **주의:** 캐시 스탬피드 현상. TTL에 도달한 캐시가 삭제되면 여러 애플리케이션이 한꺼번에 DB를 조회해 문제 발생. 적절한 TTL과 미리 캐시에 데이터를 넣어두는 방법(Cache Warming)으로 해결
   가능.
 
+![Look-Aside](https://github.com/jo94kr/hhplus-03-server-construction/blob/main/docs/images/lock-aside.png)
+
 #### Read Through 패턴
 
 - **정의:** 캐시에서만 데이터를 읽어옴. 데이터 동기화를 캐시 제공자에게 위임.
 - **장점:** 데이터 정합성 유지.
 - **단점:** 캐시 장애 시 서비스 이용 불가.
+
+![Read-Through](https://github.com/jo94kr/hhplus-03-server-construction/blob/main/docs/images/read-through.png)
 
 ### 캐시 쓰기 전략 (Write Cache Strategy)
 
@@ -88,18 +92,24 @@
 - **단점:** 캐시 장애 시 데이터 유실 가능성.
 - **적합:** Write가 빈번하고 Read 시 많은 리소스를 소모하는 서비스.
 
+![Write-Back](https://github.com/jo94kr/hhplus-03-server-construction/blob/main/docs/images/write-back.png)
+
 #### Write Through 패턴
 
 - **정의:** 데이터 저장 시 캐시와 DB에 동시에 저장.
 - **장점:** 데이터 일관성 유지.
-- **단점:** 쓰기 성능 저하 가능성.
+- **단점:** 쓰기 성능 저하 가능성. 요청마다 두번의 쓰기가 발생하므로 빈번한 수정이 발생하는 곳에선 부적합
 - **적합:** 데이터 유실이 발생하면 안 되는 상황.
+
+![Write-Through](https://github.com/jo94kr/hhplus-03-server-construction/blob/main/docs/images/write-through.png)
 
 #### Write Around 패턴
 
 - **정의:** 데이터 저장 시 DB에만 저장하고, 캐시 갱신 없음.
 - **장점:** 쓰기 성능이 높음.
 - **단점:** 데이터 불일치 가능성, 읽기 시 캐시 miss 발생.
+
+![Write-Around](https://github.com/jo94kr/hhplus-03-server-construction/blob/main/docs/images/write-around.png)
 
 ---
 
@@ -144,6 +154,8 @@ public Page<Concert> findConcertList(Pageable pageable) {
 - **적용 이유:** 콘서트 정보는 빈번하게 수정되지 않으므로 캐시를 적용하는 데 적합.
 
 #### 구현 방법
+
+![look-aside+write-around](https://github.com/jo94kr/hhplus-03-server-construction/blob/main/docs/images/look-aside%2Bwrite-around.png)
 
 - `Look Aside + Write Around` 패턴을 사용하는 Expiration 방식으로 구현
 - 빈번하게 수정되는 데이터가 아니지만 조회는 빈번하게 발생 하고 Redis가 사용 불가할때도 정상적인 서비스가 가능하도록 하기위함
