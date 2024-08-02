@@ -203,3 +203,9 @@ public List<ConcertSeat> findAllConcertSeatList(Long concertId, Long concertSche
 - 좌석의 경우 상태값이 빈번하게 변동되므로 캐시를 적용하기 부적합.
 
 ---
+
+- 참고
+  - [https://velog.io/@hwsa1004/Spring-Redis-Cache](https://velog.io/@hwsa1004/Spring-Redis-Cache%EB%A5%BC-%ED%86%B5%ED%95%B4-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0%ED%95%98%EA%B8%B0)
+  - [https://inpa.tistory.com/entry/REDIS](https://inpa.tistory.com/entry/REDIS-%F0%9F%93%9A-%EC%BA%90%EC%8B%9CCache-%EC%84%A4%EA%B3%84-%EC%A0%84%EB%9E%B5-%EC%A7%80%EC%B9%A8-%EC%B4%9D%EC%A0%95%EB%A6%AC#look_aside_%ED%8C%A8%ED%84%B4)
+  - [https://velog.io/@claraqn](https://velog.io/@claraqn/%EA%B0%9C%EB%B0%9C%EC%9E%90%EB%A5%BC-%EC%9C%84%ED%95%9C-%EB%A0%88%EB%94%94%EC%8A%A4-5%EC%9E%A5-%EB%A0%88%EB%94%94%EC%8A%A4%EB%A5%BC-%EC%BA%90%EC%8B%9C%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0#1-%EB%A0%88%EB%94%94%EC%8A%A4%EC%97%90%EC%84%9C-%EB%A7%8C%EB%A3%8C%EB%90%9C-%ED%82%A4%EB%A5%BC-%EC%82%AD%EC%A0%9C%ED%95%98%EB%8A%94-2%EA%B0%80%EC%A7%80-%EB%B0%A9%EB%B2%95)
+  - [https://yozm.wishket.com/magazine/detail/2296](https://yozm.wishket.com/magazine/detail/2296/)
