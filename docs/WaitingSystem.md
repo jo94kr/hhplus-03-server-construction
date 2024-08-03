@@ -1,6 +1,7 @@
 # 대기열 시스템 설계
 
 --- 
+
 ## 목차
 
 - [대기열 시스템 설계](#대기열-시스템-설계)
@@ -11,6 +12,7 @@
             - [선정 이유](#선정-이유)
             - [사용한 자료구조](#사용한-자료구조)
             - [구현 방식](#구현-방식)
+
 ---
 
 ## 개요
@@ -67,73 +69,73 @@
             3. **10초마다 처리 가능한 유저 수**:
                 - 20000 유저 / 60초 * 10초 = **3333 유저**
 
-            ```java
-            // 토큰검증 시 토큰이 없다면 신규 토큰 발급  
-            // 토큰이 만료되는 일시는 유효한 API 를 호출할때마다 갱신해준다
-            public Waiting checkToken(String reqToken) {  
-                String token = reqToken;  
-                if (reqToken == null) {  
-                    // 토큰없음 -> 신규 진입  
-                    token = UUID.randomUUID().toString();  
-            
-                    // 활성화 수  
-                    Long activeCnt = waitingRepository.findQueueCnt(ACTIVE_KEY_PREFIX);  
-                    if (activeCnt < ENTRY_LIMIT) {  
-                        // 참가열 즉시 진입  
-                        waitingRepository.addActiveQueue(token);  
-                        return Waiting.builder()  
-                                .token(token)  
-                                .status(WaitingStatus.PROCEEDING)  
-                                .build();  
-                    } else {  
-                        // 대기열 진입  
-                        waitingRepository.addWaitingQueue(token);  
-                        return this.getWaitingInfo(token);  
-                    }  
-                } else {  
-                    // 토큰 존재 -> 이미 대기중인 상태, 대기열 정보 조회  
-                    return this.getWaitingInfo(token);  
-                }  
-            }
-  
-            // 예상 입장 시간 계산: (내 순번 / 스케쥴러 한주기당 진입하는 인원) * 스케쥴러 반복 주기(초)
-            private Waiting getWaitingInfo(String token) {  
-                Long rank = waitingRepository.findWaitingRank(token);  
-                long waitingTime = (long) Math.ceil((double) (rank - 1L) / ENTRY_LIMIT) * 10;  
-                LocalDateTime timeRemaining = LocalDateTime.now().plusSeconds(waitingTime);  
-            
+    ```java
+    // 토큰검증 시 토큰이 없다면 신규 토큰 발급  
+    // 토큰이 만료되는 일시는 유효한 API 를 호출할때마다 갱신해준다
+    public Waiting checkToken(String reqToken) {  
+        String token = reqToken;  
+        if (reqToken == null) {  
+            // 토큰없음 -> 신규 진입  
+            token = UUID.randomUUID().toString();  
+    
+            // 활성화 수  
+            Long activeCnt = waitingRepository.findQueueCnt(ACTIVE_KEY_PREFIX);  
+            if (activeCnt < ENTRY_LIMIT) {  
+                // 참가열 즉시 진입  
+                waitingRepository.addActiveQueue(token);  
                 return Waiting.builder()  
                         .token(token)  
-                        .rank(rank)  
-                        .accessDatetime(timeRemaining)  
-                        .status(WaitingStatus.WAITING)  
+                        .status(WaitingStatus.PROCEEDING)  
                         .build();  
-            }
-          
-            // sorted set의 score로 지정한 진입 시간을 이용해서 진입한 순서대로 토큰을 pop을 이용하여 별도 삭제로직없이 처리
-            @Override  
-            public List<String> popWaitingTokenList(Long range) {  
-                Set<ZSetOperations.TypedTuple<String>> typedTuples = zSetOperations.popMin(WAITING_KEY, range);  
-                return Optional.ofNullable(typedTuples)  
-                        .map(set -> set.stream()  
-                                .map(ZSetOperations.TypedTuple::getValue)  
-                                .toList())  
-                        .orElse(null);  
-            }
+            } else {  
+                // 대기열 진입  
+                waitingRepository.addWaitingQueue(token);  
+                return this.getWaitingInfo(token);  
+            }  
+        } else {  
+            // 토큰 존재 -> 이미 대기중인 상태, 대기열 정보 조회  
+            return this.getWaitingInfo(token);  
+        }  
+    }
+
+    // 예상 입장 시간 계산: (내 순번 / 스케쥴러 한주기당 진입하는 인원) * 스케쥴러 반복 주기(초)
+    private Waiting getWaitingInfo(String token) {  
+        Long rank = waitingRepository.findWaitingRank(token);  
+        long waitingTime = (long) Math.ceil((double) (rank - 1L) / ENTRY_LIMIT) * 10;  
+        LocalDateTime timeRemaining = LocalDateTime.now().plusSeconds(waitingTime);  
+    
+        return Waiting.builder()  
+                .token(token)  
+                .rank(rank)  
+                .accessDatetime(timeRemaining)  
+                .status(WaitingStatus.WAITING)  
+                .build();  
+    }
   
-            // popWaitingTokenList에서 추출한 참가열 진입가능한 토큰들을 pipline을 이용하여 한번에 추가
-            @Override  
-            public void activateTokens(List<String> tokenList) {  
-                redisTemplate.executePipelined((RedisCallback<Object>) connection -> {  
-                    tokenList.forEach(token -> {  
-                        String key = ACTIVE_KEY_PREFIX + token;  
-                        connection.setCommands().sAdd(key.getBytes(), token.getBytes());  
-                        connection.commands().expire(key.getBytes(), 300);  
-                    });  
-                    return null;  
-                });  
-            }
-            ```
+    // sorted set의 score로 지정한 진입 시간을 이용해서 진입한 순서대로 토큰을 pop을 이용하여 별도 삭제로직없이 처리
+    @Override  
+    public List<String> popWaitingTokenList(Long range) {  
+        Set<ZSetOperations.TypedTuple<String>> typedTuples = zSetOperations.popMin(WAITING_KEY, range);  
+        return Optional.ofNullable(typedTuples)  
+                .map(set -> set.stream()  
+                        .map(ZSetOperations.TypedTuple::getValue)  
+                        .toList())  
+                .orElse(null);  
+    }
+
+    // popWaitingTokenList에서 추출한 참가열 진입가능한 토큰들을 pipline을 이용하여 한번에 추가
+    @Override  
+    public void activateTokens(List<String> tokenList) {  
+        redisTemplate.executePipelined((RedisCallback<Object>) connection -> {  
+            tokenList.forEach(token -> {  
+                String key = ACTIVE_KEY_PREFIX + token;  
+                connection.setCommands().sAdd(key.getBytes(), token.getBytes());  
+                connection.commands().expire(key.getBytes(), 300);  
+            });  
+            return null;  
+        });  
+    }
+    ```
 
 - active token 만료처리
     - 대기열에서 참가열로 진입할때 지정해준 TTL을 가지고 기본적으로 만료시키고 유의미한 API(ex: 좌석 조회)를 호출하면 토큰 검증 로직에서 TTL을 갱신해준다
@@ -148,4 +150,5 @@
         }
     }
     ```
+
 ---

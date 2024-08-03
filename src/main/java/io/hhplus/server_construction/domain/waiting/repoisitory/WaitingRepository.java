@@ -26,4 +26,22 @@ public interface WaitingRepository {
     void saveAll(List<Waiting> waitingList);
 
     List<Waiting> findWaitingByStatusAndAccessDatetimeIsBefore(WaitingStatus waitingStatus, LocalDateTime targetDatetime);
+
+    Boolean addWaitingQueue(String token);
+
+    Long findWaitingRank(String token);
+
+    Long findQueueCnt(String key);
+
+    List<String> popWaitingTokenList(Long range);
+
+    void addActiveQueue(String token);
+
+    Boolean isActiveToken(String token);
+
+    void refreshTimeout(String token);
+
+    void removeActiveToken(String token);
+
+    void activateTokens(List<String> tokenList);
 }
