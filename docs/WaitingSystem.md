@@ -44,7 +44,7 @@
 - waiting queue: **sorted set**
     - Score를 기준으로 정렬된 중복을 허용하지 않는 고유한 값들을 관리하는 컬렉션
     - 대기열에 입장한 순서대로 참가열에 입장해야 하므로 사용
-    - `key: waiting` `member: token` `score: timestamp`
+    - `key: WAITING` `member: {token}` `score: {timestamp}`
 - active queue: **set**
     - 중복을 허용하지 않는 고유한 값들의 컬렉션
     - `key: active:{token}` `member: {token}`
