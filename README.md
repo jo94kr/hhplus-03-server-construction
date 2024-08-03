@@ -8,6 +8,8 @@
 - [Sequence Diagram](docs%2FSequenceDiagram.md)
 - [API 명세](docs%2FApi.md)
 - [🌟동시성 문제와 극복](docs%2FconcurrencyIssue.md)
+- [캐시를 통한 성능 개선](docs/Cache.md)
+- [대기열 시스템 설계](docs/WaitingSystem.md)
 
 ---
 
