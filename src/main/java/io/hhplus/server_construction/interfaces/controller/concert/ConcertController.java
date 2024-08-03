@@ -4,13 +4,13 @@ import io.hhplus.server_construction.application.concert.facade.ConcertFacade;
 import io.hhplus.server_construction.interfaces.controller.concert.dto.FindConcertListDto;
 import io.hhplus.server_construction.interfaces.controller.concert.dto.FindConcertScheduleDto;
 import io.hhplus.server_construction.interfaces.controller.concert.dto.FindConcertSeatDto;
+import io.hhplus.server_construction.support.handler.RestPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +29,9 @@ public class ConcertController {
     @Operation(summary = "콘서트 목록 조회")
     @ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = FindConcertListDto.Response.class)))
     @GetMapping()
-    public ResponseEntity<Page<FindConcertListDto.Response>> findConcertList(@Schema(name = "페이징 정보") Pageable pageable) {
-        return ResponseEntity.ok(concertFacade.findConcertList(pageable)
-                .map(FindConcertListDto.Response::from));
+    public ResponseEntity<RestPage<FindConcertListDto.Response>> findConcertList(@Schema(name = "페이징 정보") Pageable pageable) {
+        return ResponseEntity.ok(new RestPage<>(concertFacade.findConcertList(pageable)
+                .map(FindConcertListDto.Response::from)));
     }
 
     @Operation(summary = "콘서트 일정 목록 조회")
@@ -46,7 +46,7 @@ public class ConcertController {
                 .toList());
     }
 
-    @Operation(summary = "콘서트 일정 목록 조회")
+    @Operation(summary = "콘서트 좌석 목록 조회")
     @ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = FindConcertSeatDto.Response.class)))
     @GetMapping(value = "/{concertId}/schedules/{concertScheduleId}/seats")
     public ResponseEntity<List<FindConcertSeatDto.Response>> findConcertSeat(@Schema(name = "콘서트 Id") @PathVariable(name = "concertId") Long concertId,

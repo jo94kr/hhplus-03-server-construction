@@ -35,7 +35,6 @@ class PaymentTest {
         ConcertSchedule concertSchedule = ConcertSchedule.create(1L,
                 concert,
                 now,
-                ConcertScheduleStatus.AVAILABLE,
                 now,
                 now);
         ConcertSeat concertSeat1 = ConcertSeat.create(1L,

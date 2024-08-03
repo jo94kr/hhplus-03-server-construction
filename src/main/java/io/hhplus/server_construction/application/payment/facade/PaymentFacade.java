@@ -12,7 +12,6 @@ import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import io.hhplus.server_construction.domain.user.service.UserService;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
-import io.hhplus.server_construction.support.aop.annotation.RedissonLock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

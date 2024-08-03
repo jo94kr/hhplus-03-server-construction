@@ -5,7 +5,6 @@ import io.hhplus.server_construction.domain.concert.Concert;
 import io.hhplus.server_construction.domain.concert.ConcertSchedule;
 import io.hhplus.server_construction.domain.concert.ConcertSeat;
 import io.hhplus.server_construction.domain.concert.service.ConcertService;
-import io.hhplus.server_construction.domain.concert.vo.ConcertScheduleStatus;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatGrade;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
 import org.junit.jupiter.api.DisplayName;
@@ -44,7 +43,7 @@ class ConcertFacadeTest {
         PageImpl<Concert> concerts = new PageImpl<>(List.of(Concert.create(1L, "항해 콘서트", LocalDateTime.now(), LocalDateTime.now())));
 
         // when
-        when(concertService.findConcertList(pageRequest)).thenReturn(concerts);
+        when(concertService.findConcertListWithCache(pageRequest)).thenReturn(concerts);
         Page<Concert> concertList = concertFacade.findConcertList(pageRequest);
 
         // then
@@ -60,7 +59,6 @@ class ConcertFacadeTest {
         List<ConcertSchedule> concertScheduleList = List.of(ConcertSchedule.create(1L,
                 concert,
                 any(),
-                ConcertScheduleStatus.AVAILABLE,
                 any(),
                 any()));
         LocalDate startDate = LocalDate.now().minusDays(1);
@@ -86,7 +84,6 @@ class ConcertFacadeTest {
         ConcertSchedule concertSchedule = ConcertSchedule.create(1L,
                 concert,
                 now,
-                ConcertScheduleStatus.AVAILABLE,
                 now,
                 now);
 

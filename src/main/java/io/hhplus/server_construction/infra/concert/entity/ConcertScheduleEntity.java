@@ -26,16 +26,12 @@ public class ConcertScheduleEntity extends BaseEntity {
 
     private LocalDateTime concertDatetime;
 
-    private ConcertScheduleStatus status;
-
     public ConcertScheduleEntity(Long id,
                                  ConcertEntity concert,
-                                 LocalDateTime concertDatetime,
-                                 ConcertScheduleStatus status) {
+                                 LocalDateTime concertDatetime) {
         this.id = id;
         this.concert = concert;
         this.concertDatetime = concertDatetime;
-        this.status = status;
     }
 
     @Override

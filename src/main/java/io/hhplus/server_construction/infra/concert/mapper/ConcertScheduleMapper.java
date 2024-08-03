@@ -9,7 +9,6 @@ public class ConcertScheduleMapper {
         return new ConcertSchedule(concertScheduleEntity.getId(),
                 ConcertMapper.toDomain(concertScheduleEntity.getConcert()),
                 concertScheduleEntity.getConcertDatetime(),
-                concertScheduleEntity.getStatus(),
                 concertScheduleEntity.getCreateDatetime(),
                 concertScheduleEntity.getModifyDatetime());
     }
@@ -17,7 +16,6 @@ public class ConcertScheduleMapper {
     public static ConcertScheduleEntity toEntity(ConcertSchedule concertSchedule) {
         return new ConcertScheduleEntity(concertSchedule.getId(),
                 ConcertMapper.toEntity(concertSchedule.getConcert()),
-                concertSchedule.getConcertDatetime(),
-                concertSchedule.getStatus());
+                concertSchedule.getConcertDatetime());
     }
 }

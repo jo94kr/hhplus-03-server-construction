@@ -24,6 +24,8 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-json'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -31,6 +33,7 @@ dependencies {
     implementation 'com.github.maricn:logback-slack-appender:1.6.1'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.redisson:redisson-spring-boot-starter:3.33.0'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'com.google.guava:guava:33.2.1-jre'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'

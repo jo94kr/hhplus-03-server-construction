@@ -70,6 +70,7 @@ class WaitingServiceTest {
                 "DUMMY_TOKEN",
                 WaitingStatus.WAITING,
                 null,
+                null,
                 now,
                 now);
 
@@ -111,11 +112,13 @@ class WaitingServiceTest {
                         "DUMMY_TOKEN_1",
                         WaitingStatus.WAITING,
                         null,
+                        null,
                         now.minusMinutes(10),
                         now),
                 new Waiting(2L,
                         "DUMMY_TOKEN_2",
                         WaitingStatus.WAITING,
+                        null,
                         null,
                         now.minusMinutes(10),
                         now)
@@ -139,12 +142,14 @@ class WaitingServiceTest {
                 new Waiting(1L,
                         "DUMMY_TOKEN_1",
                         WaitingStatus.WAITING,
+                        null,
                         now,
                         now,
                         now),
                 new Waiting(2L,
                         "DUMMY_TOKEN_2",
                         WaitingStatus.WAITING,
+                        null,
                         now,
                         now,
                         now)
@@ -153,7 +158,7 @@ class WaitingServiceTest {
         // when
         when(waitingRepository.findWaitingByStatusAndAccessDatetimeIsBefore(WaitingStatus.WAITING, now))
                 .thenReturn(waitingList);
-        waitingService.activeToken(now);
+        waitingService.activeToken();
 
         // then
         assertThat(waitingList).allSatisfy(waiting -> assertThat(waiting.getStatus()).isEqualTo(WaitingStatus.PROCEEDING));
