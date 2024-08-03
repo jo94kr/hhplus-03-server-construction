@@ -141,6 +141,32 @@
 
 ---
 
+## 캐시 문제점
+
+### 캐시 스탬피드 현상
+
+- 분산환경에서 여러 애플리케이션이 참조하고있던 캐시 키가 만료되었을때 한번에 DB에 조회
+- 여러 애플리케이션이 만약 무거운 쿼리를 동시에 호출하게 된다면 DB에 부하가 발생
+- 이후 각 애플리케이션에서 읽어온 데이터를 캐시에 등록할때 중복쓰기가 발생
+
+### 해결방안
+
+- 적절한 캐시 만료 시간을 설정
+- Cache Warming 적용
+    - 캐시를 미리 생성시켜 주는 작업
+    - 이벤트등 부하가 몰리기전 미리 정보를 캐시해두는 작업
+- PER 알고리즘
+    - 확률적 조기 재계산 알고리즘
+    - 캐시 값이 만료되기 전에 언제 데이터베이스에 접근해서 값을 읽어오면 되는지 최적으로 계산
+    - 무작위성을 도입하여 여러 클라이언트가 동시에 캐시를 갱신하려고 하는 문제(캐시 스탬피드 현상)를 줄인다.
+    - 만료 시간에 가까워질수록 true를 반환할 확률이 증가하므로, 만료된 캐시 항목을 더 자주 확인하게 된다. 이를 통해 캐시의 신뢰성을 높이고 성능을 최적화할 수 있다.
+    > - currentTime: 현재 남은 만료 시간
+    > - timeToCompute: 캐시된 값을 다시 계산하는 데 걸리는 시간
+    > - beta: 무작위성 조절 변수 (기본값은 1, 0보다 큰 값으로 설정 가능)
+    > - random(): 0과 1 사이의 랜덤 값을 반환하는 함수
+    > - expiry: 키를 재설정할 때 새로 넣어줄 만료 시간
+    > `currentTime - (timeToCompute * beta * Math.log(Math.random())) > expiry` 조건이 참이면 DB조회 해서 새로 캐싱
+
 ## 비즈니스 로직 중 캐시를 적용해 볼만한 포인트
 
 ### 콘서트 조회
@@ -174,8 +200,8 @@ public Page<Concert> findConcertListWithCache(Pageable pageable) {
   캐시를 걸지않은 DB 조회 약 10000건 조회 시 `116ms` 소요 됨  
   ![콘서트_조회_일반조회.png](https://github.com/jo94kr/hhplus-03-server-construction/blob/main/docs/images/%EC%BD%98%EC%84%9C%ED%8A%B8_%EC%A1%B0%ED%9A%8C_%EC%9D%BC%EB%B0%98%EC%A1%B0%ED%9A%8C.png)
 
-- TO-BE  
-  Redis 캐시를 사용한 조회시 약 10000건 조회 시 `47ms`로 DB 조회보다 약 2배 가량 차이  
+- TO-BE
+  Redis 캐시를 사용한 약 10000건 조회 시 `47ms`로 DB 조회보다 약 2배 가량 차이  
   ![콘서트_조회_캐시조회.png](https://github.com/jo94kr/hhplus-03-server-construction/blob/main/docs/images/%EC%BD%98%EC%84%9C%ED%8A%B8_%EC%A1%B0%ED%9A%8C_%EC%BA%90%EC%8B%9C%EC%A1%B0%ED%9A%8C.png)
 
 ### 콘서트 일정 조회
