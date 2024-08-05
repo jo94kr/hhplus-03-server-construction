@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.domain.concert.service;
+package io.hhplus.server_construction.support.dummy;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,8 +19,12 @@ import java.util.Random;
 public class DummyDataService {
 
     private final JdbcTemplate jdbcTemplate;
-
     private final Random random = new Random();
+
+    private static final int BATCH_SIZE = 1000; // 배치 크기 설정
+    private static final int CONCERT_CNT = 20;
+    private static final int SCHEDULE_CNT = 10000;
+    private static final int SEAT_CNT = 100000;
 
     public void initializeData() throws SQLException {
         deleteAllData();
@@ -48,15 +52,25 @@ public class DummyDataService {
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             connection.setAutoCommit(false);
 
-            for (long i = 1; i <= 1000; i++) {
+            int batchCounter = 0;
+            for (long i = 1; i <= CONCERT_CNT; i++) {
                 preparedStatement.setLong(1, i);
                 preparedStatement.setString(2, "Concert " + i);
                 preparedStatement.setString(3, getCurrentDateTime());
                 preparedStatement.addBatch();
+
+                batchCounter++;
+                if (batchCounter % BATCH_SIZE == 0) {
+                    preparedStatement.executeBatch();
+                    connection.commit();
+                    batchCounter = 0;
+                }
             }
 
-            preparedStatement.executeBatch();
-            connection.commit();
+            if (batchCounter > 0) {
+                preparedStatement.executeBatch();
+                connection.commit();
+            }
         }
     }
 
@@ -67,20 +81,28 @@ public class DummyDataService {
             connection.setAutoCommit(false);
 
             long id = 1;
-            for (long concertId = 1; concertId <= 1000; concertId++) {
-                // 각 콘서트에 대해 랜덤한 일정 수를 생성 (1 ~ 30개)
+            int batchCounter = 0;
+            for (long concertId = 1; concertId <= CONCERT_CNT; concertId++) {
                 preparedStatement.setLong(2, concertId);
-                int scheduleCount = random.nextInt(30) + 1;
-                for (int j = 0; j < scheduleCount; j++) {
+                for (int j = 0; j < SCHEDULE_CNT / CONCERT_CNT; j++) {
                     preparedStatement.setLong(1, id++);
                     preparedStatement.setString(3, getRandomDateTime(random));
                     preparedStatement.setString(4, getCurrentDateTime());
                     preparedStatement.addBatch();
+
+                    batchCounter++;
+                    if (batchCounter % BATCH_SIZE == 0) {
+                        preparedStatement.executeBatch();
+                        connection.commit();
+                        batchCounter = 0;
+                    }
                 }
             }
 
-            preparedStatement.executeBatch();
-            connection.commit();
+            if (batchCounter > 0) {
+                preparedStatement.executeBatch();
+                connection.commit();
+            }
         }
     }
 
@@ -90,25 +112,35 @@ public class DummyDataService {
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             connection.setAutoCommit(false);
 
-            preparedStatement.setString(6, "POSSIBLE");
-            for (long i = 1; i <= 3000; i++) {
+            int batchCounter = 0;
+            for (long i = 1; i <= SEAT_CNT; i++) {
                 preparedStatement.setLong(1, i);
-                preparedStatement.setLong(2, (i % 1000) + 1);
+                preparedStatement.setLong(2, (i % SCHEDULE_CNT) + 1);
                 preparedStatement.setString(3, String.format("%02d", (i % 50) + 1));
                 String grade = getGrade(random);
                 preparedStatement.setString(4, grade);
                 preparedStatement.setInt(5, getPrice(grade));
+                preparedStatement.setString(6, getRandomStatus(random));
                 preparedStatement.setString(7, getCurrentDateTime());
                 preparedStatement.addBatch();
+
+                batchCounter++;
+                if (batchCounter % BATCH_SIZE == 0) {
+                    preparedStatement.executeBatch();
+                    connection.commit();
+                    batchCounter = 0;
+                }
             }
 
-            preparedStatement.executeBatch();
-            connection.commit();
+            if (batchCounter > 0) {
+                preparedStatement.executeBatch();
+                connection.commit();
+            }
         }
     }
 
     private String getCurrentDateTime() {
-        return LocalDateTime.now().toString();
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     private String getRandomDateTime(Random random) {
@@ -127,8 +159,18 @@ public class DummyDataService {
     }
 
     private int getPrice(String grade) {
-        if (grade.equals("GOLD")) return 3000;
-        else if (grade.equals("SILVER")) return 2000;
-        else return 1000;
+        return switch (grade) {
+            case "GOLD" -> 3000;
+            case "SILVER" -> 2000;
+            case "BRONZE" -> 1000;
+            default -> throw new IllegalArgumentException("Unknown grade: " + grade);
+        };
+    }
+
+    private String getRandomStatus(Random random) {
+        int val = random.nextInt(3);
+        if (val == 0) return "POSSIBLE";
+        else if (val == 1) return "PENDING";
+        else return "SOLD_OUT";
     }
 }

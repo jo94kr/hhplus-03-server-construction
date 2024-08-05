@@ -13,6 +13,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
+import static io.hhplus.server_construction.domain.waiting.exceprtion.WaitingExceptionEnums.EMPTY_TOKEN;
 import static io.hhplus.server_construction.domain.waiting.vo.WaitingConstant.*;
 
 @Service
@@ -59,9 +60,19 @@ public class WaitingService {
 
     private Waiting getWaitingInfo(String token) {
         Long rank = waitingRepository.findWaitingRank(token);
+        if (rank == null) {
+            if (Boolean.FALSE.equals(waitingRepository.isActiveToken(token))) {
+                throw new WaitingException(EMPTY_TOKEN);
+            } else {
+                return Waiting.builder()
+                        .token(token)
+                        .status(WaitingStatus.PROCEEDING)
+                        .build();
+            }
+        }
+
         long waitingTime = (long) Math.ceil((double) (rank - 1L) / ENTRY_LIMIT) * 10;
         LocalDateTime timeRemaining = LocalDateTime.now().plusSeconds(waitingTime);
-
         return Waiting.builder()
                 .token(token)
                 .rank(rank)
