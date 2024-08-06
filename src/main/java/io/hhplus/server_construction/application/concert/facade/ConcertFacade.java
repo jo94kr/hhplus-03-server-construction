@@ -4,6 +4,7 @@ import io.hhplus.server_construction.application.concert.dto.FindConcertSchedule
 import io.hhplus.server_construction.domain.concert.Concert;
 import io.hhplus.server_construction.domain.concert.ConcertSeat;
 import io.hhplus.server_construction.domain.concert.service.ConcertService;
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +31,7 @@ public class ConcertFacade {
                 .toList();
     }
 
-    public List<ConcertSeat> findConcertSeatList(Long concertId, Long concertScheduleId) {
-        return concertService.findAllConcertSeatList(concertId, concertScheduleId);
+    public List<ConcertSeat> findAvailableConcertSeat(Long concertId, Long concertScheduleId) {
+        return concertService.findAvailableConcertSeatList(concertId, concertScheduleId, ConcertSeatStatus.POSSIBLE);
     }
 }

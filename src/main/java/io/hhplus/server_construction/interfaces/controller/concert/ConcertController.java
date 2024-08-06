@@ -46,12 +46,12 @@ public class ConcertController {
                 .toList());
     }
 
-    @Operation(summary = "콘서트 좌석 목록 조회")
+    @Operation(summary = "예약 가능 콘서트 좌석 목록 조회")
     @ApiResponse(content = @Content(mediaType = "application/json", schema = @Schema(implementation = FindConcertSeatDto.Response.class)))
     @GetMapping(value = "/{concertId}/schedules/{concertScheduleId}/seats")
-    public ResponseEntity<List<FindConcertSeatDto.Response>> findConcertSeat(@Schema(name = "콘서트 Id") @PathVariable(name = "concertId") Long concertId,
-                                                                             @Schema(name = "콘서트 스케쥴 Id") @PathVariable("concertScheduleId") Long concertScheduleId) {
-        return ResponseEntity.ok(concertFacade.findConcertSeatList(concertId, concertScheduleId).stream()
+    public ResponseEntity<List<FindConcertSeatDto.Response>> findAvailableConcertSeat(@Schema(name = "콘서트 Id") @PathVariable(name = "concertId") Long concertId,
+                                                                                      @Schema(name = "콘서트 스케쥴 Id") @PathVariable("concertScheduleId") Long concertScheduleId) {
+        return ResponseEntity.ok(concertFacade.findAvailableConcertSeat(concertId, concertScheduleId).stream()
                 .map(FindConcertSeatDto.Response::from)
                 .toList());
     }

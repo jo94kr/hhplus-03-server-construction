@@ -4,6 +4,7 @@ import io.hhplus.server_construction.domain.concert.Concert;
 import io.hhplus.server_construction.domain.concert.ConcertSchedule;
 import io.hhplus.server_construction.domain.concert.ConcertSeat;
 import io.hhplus.server_construction.domain.concert.repoisitory.ConcertRepository;
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
 import io.hhplus.server_construction.infra.concert.mapper.ConcertMapper;
 import io.hhplus.server_construction.infra.concert.mapper.ConcertScheduleMapper;
 import io.hhplus.server_construction.infra.concert.mapper.ConcertSeatMapper;
@@ -53,9 +54,10 @@ public class ConcertRepositoryImpl implements ConcertRepository {
     }
 
     @Override
-    public List<ConcertSeat> findAllConcertSeat(Concert concert, ConcertSchedule concertSchedule) {
-        return concertSeatJpaRepository.findAllByConcertSchedule_ConcertAndConcertSchedule(ConcertMapper.toEntity(concert),
-                        ConcertScheduleMapper.toEntity(concertSchedule)).stream()
+    public List<ConcertSeat> findAllConcertSeatByStatus(Concert concert, ConcertSchedule concertSchedule, ConcertSeatStatus concertSeatStatus) {
+        return concertSeatJpaRepository.findAllByConcertSchedule_ConcertAndConcertScheduleAndStatus(ConcertMapper.toEntity(concert),
+                        ConcertScheduleMapper.toEntity(concertSchedule),
+                        concertSeatStatus).stream()
                 .map(ConcertSeatMapper::toDomain)
                 .toList();
     }

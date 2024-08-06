@@ -92,7 +92,7 @@ class ConcertControllerIntegratedTest extends IntegratedTest {
 
     @Test
     @DisplayName("예약 가능한 콘서트 좌석 목록을 조회한다.")
-    void findConcertSeat() {
+    void findAvailableConcertSeat() {
         // given
         Map<String, Object> headers = new HashMap<>();
         headers.put("Authorization", "DUMMY_TOKEN_2");

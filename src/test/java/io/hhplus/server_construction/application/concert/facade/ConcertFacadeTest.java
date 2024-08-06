@@ -74,7 +74,7 @@ class ConcertFacadeTest {
 
     @Test
     @DisplayName("유효하지 않은 토큰으로 콘서트 좌석 조회")
-    void findConcertSeatListTokenException() {
+    void findAvailableConcertSeatTokenException() {
         // given
         Long concertId = 1L;
         Long concertScheduleId = 1L;
@@ -97,8 +97,8 @@ class ConcertFacadeTest {
                 now));
 
         // when
-        when(concertService.findAllConcertSeatList(concertId, concertScheduleId)).thenReturn(concertSeatList);
-        List<ConcertSeat> resultList = concertFacade.findConcertSeatList(concertId, concertScheduleId);
+        when(concertService.findAvailableConcertSeatList(concertId, concertScheduleId, ConcertSeatStatus.POSSIBLE)).thenReturn(concertSeatList);
+        List<ConcertSeat> resultList = concertFacade.findAvailableConcertSeat(concertId, concertScheduleId);
 
         // then
         assertThat(resultList).isNotNull();

@@ -5,7 +5,6 @@ import io.hhplus.server_construction.application.concert.facade.ConcertFacade;
 import io.hhplus.server_construction.domain.concert.Concert;
 import io.hhplus.server_construction.domain.concert.ConcertSchedule;
 import io.hhplus.server_construction.domain.concert.ConcertSeat;
-import io.hhplus.server_construction.domain.concert.vo.ConcertScheduleStatus;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatGrade;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
 import io.hhplus.server_construction.interfaces.controller.concert.ConcertController;
@@ -94,7 +93,7 @@ class ConcertControllerTest {
 
     @Test
     @DisplayName("예약 가능한 콘서트 좌석을 조회한다.")
-    void findConcertSeat() throws Exception {
+    void findAvailableConcertSeat() throws Exception {
         // given
         Concert concert = Concert.create(1L, "항해 콘서트", LocalDateTime.now(), LocalDateTime.now());
         ConcertSchedule concertSchedule = ConcertSchedule.create(1L,
@@ -112,7 +111,7 @@ class ConcertControllerTest {
                 LocalDateTime.now());
 
         // when
-        when(concertFacade.findConcertSeatList(1L, 2L)).thenReturn(List.of(concertSeat));
+        when(concertFacade.findAvailableConcertSeat(1L, 2L)).thenReturn(List.of(concertSeat));
         ResultActions response = mockMvc.perform(get(PATH + "/{concertId}/schedules/{concertScheduleId}/seats", 1L, 2L)
                 .header("Authorization", TOKEN));
 

@@ -57,10 +57,10 @@ public class ConcertService {
      * @param concertScheduleId 콘서트 스케쥴 Id
      * @return List<ConcertSeat>
      */
-    public List<ConcertSeat> findAllConcertSeatList(Long concertId, Long concertScheduleId) {
+    public List<ConcertSeat> findAvailableConcertSeatList(Long concertId, Long concertScheduleId, ConcertSeatStatus concertSeatStatus) {
         Concert concert = concertRepository.findConcertById(concertId);
         ConcertSchedule concertSchedule = concertRepository.findConcertScheduleById(concertScheduleId);
-        return concertRepository.findAllConcertSeat(concert, concertSchedule);
+        return concertRepository.findAllConcertSeatByStatus(concert, concertSchedule, concertSeatStatus);
     }
 
     /**

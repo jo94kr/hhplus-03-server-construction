@@ -3,6 +3,7 @@ package io.hhplus.server_construction.domain.concert.repoisitory;
 import io.hhplus.server_construction.domain.concert.Concert;
 import io.hhplus.server_construction.domain.concert.ConcertSchedule;
 import io.hhplus.server_construction.domain.concert.ConcertSeat;
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,7 +20,7 @@ public interface ConcertRepository {
 
     ConcertSchedule findConcertScheduleById(Long concertScheduleId);
 
-    List<ConcertSeat> findAllConcertSeat(Concert concert, ConcertSchedule concertSchedule);
+    List<ConcertSeat> findAllConcertSeatByStatus(Concert concert, ConcertSchedule concertSchedule, ConcertSeatStatus concertSeatStatus);
 
     ConcertSeat findById(Long concertSeatId);
 

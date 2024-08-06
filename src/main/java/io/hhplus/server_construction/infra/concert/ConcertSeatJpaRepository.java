@@ -1,5 +1,6 @@
 package io.hhplus.server_construction.infra.concert;
 
+import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
 import io.hhplus.server_construction.infra.concert.entity.ConcertEntity;
 import io.hhplus.server_construction.infra.concert.entity.ConcertScheduleEntity;
 import io.hhplus.server_construction.infra.concert.entity.ConcertSeatEntity;
@@ -18,5 +19,7 @@ public interface ConcertSeatJpaRepository extends JpaRepository<ConcertSeatEntit
     @Query("SELECT s FROM ConcertSeatEntity s WHERE s.id = :concertSeatId")
     Optional<ConcertSeatEntity> pessimisticLockFindById(@Param("concertSeatId") Long concertSeatId);
 
-    List<ConcertSeatEntity> findAllByConcertSchedule_ConcertAndConcertSchedule(ConcertEntity concert, ConcertScheduleEntity concertSchedule);
+    List<ConcertSeatEntity> findAllByConcertSchedule_ConcertAndConcertScheduleAndStatus(ConcertEntity concert,
+                                                                                        ConcertScheduleEntity concertSchedule,
+                                                                                        ConcertSeatStatus concertSeatStatus);
 }
