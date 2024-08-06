@@ -6,7 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.SQLException;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class DummyDataServiceTest {
@@ -15,8 +14,7 @@ class DummyDataServiceTest {
     DummyDataService dummyDataService;
 
     @Test
-    void initializeData() throws SQLException {
+    void initializeData() throws InterruptedException, SQLException {
         dummyDataService.initializeData();
     }
-
 }

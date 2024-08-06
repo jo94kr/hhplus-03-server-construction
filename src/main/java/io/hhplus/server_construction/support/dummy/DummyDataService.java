@@ -13,6 +13,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -21,16 +24,17 @@ public class DummyDataService {
     private final JdbcTemplate jdbcTemplate;
     private final Random random = new Random();
 
-    private static final int BATCH_SIZE = 1000; // 배치 크기 설정
-    private static final int CONCERT_CNT = 20;
-    private static final int SCHEDULE_CNT = 10000;
-    private static final int SEAT_CNT = 100000;
+    private static final int BATCH_SIZE = 2000; // 배치 크기 설정
+    private static final int CONCERT_CNT = 100000;
+    private static final int SCHEDULE_CNT = 100000;
+    private static final int SEAT_CNT = 10000000;
+    private static final int THREAD_COUNT = 30;
 
-    public void initializeData() throws SQLException {
-        deleteAllData();
+    public void initializeData() throws InterruptedException, SQLException {
+//        deleteAllData();
         insertConcerts();
-        insertConcertSchedules();
-        insertConcertSeats();
+//        insertConcertSchedules();
+//        insertConcertSeats();
     }
 
     private void deleteAllData() throws SQLException {
@@ -53,7 +57,7 @@ public class DummyDataService {
             connection.setAutoCommit(false);
 
             int batchCounter = 0;
-            for (long i = 1; i <= CONCERT_CNT; i++) {
+            for (long i = 21; i <= CONCERT_CNT; i++) {
                 preparedStatement.setLong(1, i);
                 preparedStatement.setString(2, "Concert " + i);
                 preparedStatement.setString(3, getCurrentDateTime());
@@ -82,9 +86,9 @@ public class DummyDataService {
 
             long id = 1;
             int batchCounter = 0;
-            for (long concertId = 1; concertId <= CONCERT_CNT; concertId++) {
-                preparedStatement.setLong(2, concertId);
-                for (int j = 0; j < SCHEDULE_CNT / CONCERT_CNT; j++) {
+//            for (long concertId = 1; concertId <= CONCERT_CNT; concertId++) {
+                preparedStatement.setLong(2, 1L);
+                for (int j = 0; j < SCHEDULE_CNT ; j++) {
                     preparedStatement.setLong(1, id++);
                     preparedStatement.setString(3, getRandomDateTime(random));
                     preparedStatement.setString(4, getCurrentDateTime());
@@ -97,7 +101,7 @@ public class DummyDataService {
                         batchCounter = 0;
                     }
                 }
-            }
+//            }
 
             if (batchCounter > 0) {
                 preparedStatement.executeBatch();
@@ -106,17 +110,36 @@ public class DummyDataService {
         }
     }
 
-    private void insertConcertSeats() throws SQLException {
+    private void insertConcertSeats() throws InterruptedException {
+        ExecutorService executorService = Executors.newFixedThreadPool(THREAD_COUNT);
+
+        for (long scheduleId = 1; scheduleId <= 100; scheduleId++) {
+            long finalScheduleId = scheduleId;
+            executorService.submit(() -> {
+                try {
+                    insertSeatsForSchedule(finalScheduleId);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+        executorService.shutdown();
+        executorService.awaitTermination(1, TimeUnit.HOURS);
+    }
+
+    private void insertSeatsForSchedule(long scheduleId) throws SQLException {
         String sql = "INSERT INTO concert_seat (id, concert_schedule_id, seat_num, grade, price, status, create_datetime) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             connection.setAutoCommit(false);
 
             int batchCounter = 0;
+
             for (long i = 1; i <= SEAT_CNT; i++) {
-                preparedStatement.setLong(1, i);
-                preparedStatement.setLong(2, (i % SCHEDULE_CNT) + 1);
-                preparedStatement.setString(3, String.format("%02d", (i % 50) + 1));
+                preparedStatement.setLong(1, scheduleId * SEAT_CNT + i); // 고유한 ID 생성
+                preparedStatement.setLong(2, scheduleId);
+                preparedStatement.setString(3, String.format("%05d", i));
                 String grade = getGrade(random);
                 preparedStatement.setString(4, grade);
                 preparedStatement.setInt(5, getPrice(grade));
@@ -138,6 +161,42 @@ public class DummyDataService {
             }
         }
     }
+
+//    private void insertConcertSeats() throws SQLException {
+//        String sql = "INSERT INTO concert_seat (id, concert_schedule_id, seat_num, grade, price, status, create_datetime) VALUES (?, ?, ?, ?, ?, ?, ?)";
+//        try (Connection connection = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+//            connection.setAutoCommit(false);
+//
+//            long seatId = 1;
+//            for (long scheduleId = 1; scheduleId <= 100; scheduleId++) {
+//                int batchCounter = 0;
+//
+//                preparedStatement.setLong(2, scheduleId);
+//                for (long i = 1; i <= 100000; i++) {
+//                    preparedStatement.setLong(1, seatId++);
+//                    preparedStatement.setString(3, String.format("%05d", i));
+//                    String grade = getGrade(random);
+//                    preparedStatement.setString(4, grade);
+//                    preparedStatement.setInt(5, getPrice(grade));
+//                    preparedStatement.setString(6, getRandomStatus(random));
+//                    preparedStatement.setString(7, getCurrentDateTime());
+//                    preparedStatement.addBatch();
+//
+//                    batchCounter++;
+//                    if (batchCounter % BATCH_SIZE == 0) {
+//                        preparedStatement.executeBatch();
+//                        connection.commit();
+//                        batchCounter = 0;
+//                    }
+//                }
+//                if (batchCounter > 0) {
+//                    preparedStatement.executeBatch();
+//                    connection.commit();
+//                }
+//            }
+//        }
+//    }
 
     private String getCurrentDateTime() {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
