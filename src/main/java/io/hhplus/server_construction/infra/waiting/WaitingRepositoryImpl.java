@@ -126,7 +126,7 @@ public class WaitingRepositoryImpl implements WaitingRepository {
     @Override
     public void removeActiveToken(String token) {
         String key = ACTIVE_KEY_PREFIX + token;
-        setOperations.remove(key);
+        setOperations.remove(key, token);
     }
 
     @Override
