@@ -53,14 +53,12 @@ public class ConcertService {
     /**
      * 콘서트 좌석 조회
      *
-     * @param concertId         콘서트 Id
      * @param concertScheduleId 콘서트 스케쥴 Id
      * @return List<ConcertSeat>
      */
-    public List<ConcertSeat> findAvailableConcertSeatList(Long concertId, Long concertScheduleId, ConcertSeatStatus concertSeatStatus) {
-        Concert concert = concertRepository.findConcertById(concertId);
+    public List<ConcertSeat> findAvailableConcertSeatList(Long concertScheduleId, ConcertSeatStatus concertSeatStatus) {
         ConcertSchedule concertSchedule = concertRepository.findConcertScheduleById(concertScheduleId);
-        return concertRepository.findAllConcertSeatByStatus(concert, concertSchedule, concertSeatStatus);
+        return concertRepository.findAllConcertSeatByStatus(concertSchedule, concertSeatStatus);
     }
 
     /**

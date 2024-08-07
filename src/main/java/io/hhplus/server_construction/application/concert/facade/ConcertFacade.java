@@ -31,7 +31,7 @@ public class ConcertFacade {
                 .toList();
     }
 
-    public List<ConcertSeat> findAvailableConcertSeat(Long concertId, Long concertScheduleId) {
-        return concertService.findAvailableConcertSeatList(concertId, concertScheduleId, ConcertSeatStatus.POSSIBLE);
+    public List<ConcertSeat> findAvailableConcertSeat(Long concertScheduleId) {
+        return concertService.findAvailableConcertSeatList(concertScheduleId, ConcertSeatStatus.POSSIBLE);
     }
 }

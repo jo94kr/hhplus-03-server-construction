@@ -111,8 +111,8 @@ class ConcertControllerTest {
                 LocalDateTime.now());
 
         // when
-        when(concertFacade.findAvailableConcertSeat(1L, 2L)).thenReturn(List.of(concertSeat));
-        ResultActions response = mockMvc.perform(get(PATH + "/{concertId}/schedules/{concertScheduleId}/seats", 1L, 2L)
+        when(concertFacade.findAvailableConcertSeat(2L)).thenReturn(List.of(concertSeat));
+        ResultActions response = mockMvc.perform(get(PATH + "/schedules/{concertScheduleId}/seats", 2L)
                 .header("Authorization", TOKEN));
 
         // then

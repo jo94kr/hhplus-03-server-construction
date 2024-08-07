@@ -54,9 +54,8 @@ public class ConcertRepositoryImpl implements ConcertRepository {
     }
 
     @Override
-    public List<ConcertSeat> findAllConcertSeatByStatus(Concert concert, ConcertSchedule concertSchedule, ConcertSeatStatus concertSeatStatus) {
-        return concertSeatJpaRepository.findAllByConcertSchedule_ConcertAndConcertScheduleAndStatus(ConcertMapper.toEntity(concert),
-                        ConcertScheduleMapper.toEntity(concertSchedule),
+    public List<ConcertSeat> findAllConcertSeatByStatus(ConcertSchedule concertSchedule, ConcertSeatStatus concertSeatStatus) {
+        return concertSeatJpaRepository.findAllByConcertScheduleAndStatus(ConcertScheduleMapper.toEntity(concertSchedule),
                         concertSeatStatus).stream()
                 .map(ConcertSeatMapper::toDomain)
                 .toList();

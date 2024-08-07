@@ -20,7 +20,7 @@ public interface ConcertRepository {
 
     ConcertSchedule findConcertScheduleById(Long concertScheduleId);
 
-    List<ConcertSeat> findAllConcertSeatByStatus(Concert concert, ConcertSchedule concertSchedule, ConcertSeatStatus concertSeatStatus);
+    List<ConcertSeat> findAllConcertSeatByStatus(ConcertSchedule concertSchedule, ConcertSeatStatus concertSeatStatus);
 
     ConcertSeat findById(Long concertSeatId);
 

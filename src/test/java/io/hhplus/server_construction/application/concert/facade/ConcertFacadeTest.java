@@ -23,7 +23,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -76,7 +75,6 @@ class ConcertFacadeTest {
     @DisplayName("유효하지 않은 토큰으로 콘서트 좌석 조회")
     void findAvailableConcertSeatTokenException() {
         // given
-        Long concertId = 1L;
         Long concertScheduleId = 1L;
 
         LocalDateTime now = LocalDateTime.now();
@@ -97,8 +95,8 @@ class ConcertFacadeTest {
                 now));
 
         // when
-        when(concertService.findAvailableConcertSeatList(concertId, concertScheduleId, ConcertSeatStatus.POSSIBLE)).thenReturn(concertSeatList);
-        List<ConcertSeat> resultList = concertFacade.findAvailableConcertSeat(concertId, concertScheduleId);
+        when(concertService.findAvailableConcertSeatList(concertScheduleId, ConcertSeatStatus.POSSIBLE)).thenReturn(concertSeatList);
+        List<ConcertSeat> resultList = concertFacade.findAvailableConcertSeat(concertScheduleId);
 
         // then
         assertThat(resultList).isNotNull();

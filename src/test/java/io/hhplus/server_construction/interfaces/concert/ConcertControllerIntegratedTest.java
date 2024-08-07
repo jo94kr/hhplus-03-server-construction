@@ -101,7 +101,7 @@ class ConcertControllerIntegratedTest extends IntegratedTest {
         ExtractableResponse<Response> response = RestAssured
                 .given().log().all()
                 .headers(headers)
-                .when().get(PATH + "/" + 1L + "/schedules/" + 1L + "/seats")
+                .when().get(PATH + "/schedules/" + 1L + "/seats")
                 .then().log().all().extract();
 
         // then
