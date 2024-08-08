@@ -5,6 +5,7 @@ import io.hhplus.server_construction.application.reservation.dto.ReservationConc
 import io.hhplus.server_construction.domain.concert.ConcertSeat;
 import io.hhplus.server_construction.domain.concert.service.ConcertService;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
+import io.hhplus.server_construction.domain.data_platform.event.ReservationInfoEvent;
 import io.hhplus.server_construction.domain.reservation.Reservation;
 import io.hhplus.server_construction.domain.reservation.ReservationItem;
 import io.hhplus.server_construction.domain.reservation.service.ReservationService;
@@ -13,9 +14,8 @@ import io.hhplus.server_construction.domain.user.User;
 import io.hhplus.server_construction.domain.user.service.UserService;
 import io.hhplus.server_construction.support.aop.annotation.RedissonLock;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +27,7 @@ public class ReservationFacade {
     private final UserService userService;
     private final ConcertService concertService;
     private final ReservationService reservationService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @RedissonLock(value = "#reservationConcertCommand.concertSeatIdList")
     public ReservationConcertResult setConcertReservation(ReservationConcertCommand reservationConcertCommand) {
@@ -38,6 +39,9 @@ public class ReservationFacade {
 
         // 콘서트 예약
         Reservation reservation = reservationService.setConcertReservation(concertSeatList, user);
+
+        // 데이터 플랫폼 전송
+        applicationEventPublisher.publishEvent(new ReservationInfoEvent(reservation));
 
         return ReservationConcertResult.from(reservation);
     }
