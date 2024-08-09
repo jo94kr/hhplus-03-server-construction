@@ -1,9 +1,5 @@
-### 더미데이터 생성
-POST http://localhost:8080/initialize
-
 ### 토큰 발급
 GET http://localhost:8080/waiting/check
-Authorization: fffbfc0e-edaa-42a1-b4ef-27b09fa91f40
 
 ### 콘서트 조회
 GET http://localhost:8080/concerts?page=0&size=5

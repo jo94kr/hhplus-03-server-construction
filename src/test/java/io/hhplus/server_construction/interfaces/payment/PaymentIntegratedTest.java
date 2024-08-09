@@ -55,7 +55,7 @@ class PaymentIntegratedTest extends IntegratedTest {
         // given
         PaymentDto.Request request = new PaymentDto.Request(1L, 1L);
         Map<String, Object> headers = new HashMap<>();
-        headers.put("Authorization", "DUMMY_TOKEN_2");
+        headers.put("Authorization", "0e930348-14bf-4ea3-85a3-70b5cc164b46");
 
         // when
         ExtractableResponse<Response> response = RestAssured

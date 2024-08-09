@@ -11,8 +11,9 @@ import io.hhplus.server_construction.domain.reservation.service.ReservationServi
 import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
 import io.hhplus.server_construction.domain.user.service.UserService;
-import io.hhplus.server_construction.domain.waiting.service.WaitingService;
+import io.hhplus.server_construction.domain.waiting.event.TokenExpireEvent;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,9 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class PaymentFacade {
 
     private final PaymentService paymentService;
-    private final WaitingService waitingService;
     private final ReservationService reservationService;
     private final UserService userService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional
     public PaymentResult payment(PaymentCommand paymentCommand, String token) {
@@ -42,7 +43,7 @@ public class PaymentFacade {
         reservationService.save(reservation.changeStatus(ReservationStatus.PAYMENT_COMPLETE));
 
         // 토큰 만료 처리
-        waitingService.expiredToken(token);
+        applicationEventPublisher.publishEvent(new TokenExpireEvent(token));
 
         return PaymentResult.create(payment);
     }
