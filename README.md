@@ -10,6 +10,8 @@
 - [동시성 문제와 극복](docs%2FconcurrencyIssue.md)
 - [캐시를 통한 성능 개선](docs/Cache.md)
 - [대기열 시스템 설계](docs/WaitingSystem.md)
+- [성능 개선을 위한 쿼리 파악 및 Index 처리](docs/DbIndex.md)
+- [MSA 전환을 통한 서비스 분리 및 트랜잭션 처리 설계](docs/MSA.md)
 
 ---
 
