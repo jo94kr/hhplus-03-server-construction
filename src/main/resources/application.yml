@@ -4,7 +4,7 @@ spring:
       on-profile: default
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
@@ -24,6 +24,10 @@ spring:
 
   cache:
     type: redis
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
 
 slack:
   webhook:
