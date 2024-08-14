@@ -1,6 +1,7 @@
-package io.hhplus.server_construction.domain.data_platform.event;
+package io.hhplus.server_construction.interfaces.event.data_platform;
 
-import io.hhplus.server_construction.domain.data_platform.service.DataPlatformService;
+import io.hhplus.server_construction.application.data_platform.facade.DataPlatformFacade;
+import io.hhplus.server_construction.domain.reservation.event.ReservationInfoEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -13,14 +14,14 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 public class DataPlatformEventListener {
 
-    private final DataPlatformService dataPlatformService;
+    private final DataPlatformFacade dataPlatformFacade;
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void reservationDataSendHandler(ReservationInfoEvent event) {
         try {
             // 데이터 플랫폼 전송
-            dataPlatformService.sendReservationInfo(event.reservation());
+            dataPlatformFacade.sendReservationInfo(event.reservation());
         } catch (InterruptedException e) {
             log.error("send payment info error", e);
         }
