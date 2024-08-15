@@ -1,5 +1,6 @@
-package io.hhplus.server_construction.domain.waiting.event;
+package io.hhplus.server_construction.interfaces.event.waiting;
 
+import io.hhplus.server_construction.domain.payment.event.PaymentSuccessEvent;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -15,7 +16,7 @@ public class TokenEventListener {
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void tokenExpireHandler(TokenExpireEvent event) {
+    public void tokenExpireHandler(PaymentSuccessEvent event) {
         // 토큰 만료 처리
         waitingService.expiredToken(event.token());
     }

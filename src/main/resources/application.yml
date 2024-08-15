@@ -2,6 +2,14 @@ spring:
   config:
     activate:
       on-profile: default
+
+  async:
+    execution:
+      pool:
+        core-size: 5
+        max-size: 10
+        queue-capacity: 100
+
   jpa:
     hibernate:
       ddl-auto: create

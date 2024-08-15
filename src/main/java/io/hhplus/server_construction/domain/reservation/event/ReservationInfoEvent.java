@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.domain.data_platform.event;
+package io.hhplus.server_construction.domain.reservation.event;
 
 import io.hhplus.server_construction.domain.reservation.Reservation;
 
