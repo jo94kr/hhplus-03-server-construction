@@ -26,17 +26,17 @@ public class OutboxFacade {
         }
 
         for (Outbox outbox : outboxList) {
-            if (outbox.cnt() >= 3) {
+            if (outbox.getCnt() >= 3) {
                 outboxService.save(outbox.failed());
                 continue;
             }
 
-            String topic = switch (outbox.messageType()) {
+            String topic = switch (outbox.getMessageType()) {
                 case RESERVATION -> KafkaConstants.RESERVATION_TOPIC;
                 case PAYMENT -> KafkaConstants.PAYMENT_TOPIC;
             };
 
-            kafkaProducer.send(topic, outbox.id(), outbox.message());
+            kafkaProducer.send(topic, outbox.getId(), outbox.getMessage());
             outboxService.save(outbox.incrementCnt());
         }
     }

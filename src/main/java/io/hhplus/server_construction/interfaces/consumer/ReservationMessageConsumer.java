@@ -22,12 +22,14 @@ public class ReservationMessageConsumer {
 
     @KafkaListener(topics = KafkaConstants.RESERVATION_TOPIC, groupId = "reservation-outbox")
     public void checkOutbox(ConsumerRecord<String, String> record) {
+        log.info("[reservation-outbox] key: {}", record.key());
         Outbox outbox = outboxService.findById(record.key());
         outboxService.save(outbox.published());
     }
 
     @KafkaListener(topics = KafkaConstants.RESERVATION_TOPIC, groupId = "reservation-process")
     public void reserved(ConsumerRecord<String, String> record) throws InterruptedException {
+        log.info("[reservation-process] value: {}", record.value());
         Reservation reservation = JsonUtil.stringToObject(record.value(), Reservation.class);
         dataPlatformFacade.sendReservationInfo(reservation);
     }

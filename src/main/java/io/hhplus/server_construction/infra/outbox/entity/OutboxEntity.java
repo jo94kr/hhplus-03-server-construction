@@ -53,10 +53,10 @@ public class OutboxEntity extends BaseEntity {
     }
 
     public static OutboxEntity toEntity(Outbox outbox) {
-        return new OutboxEntity(outbox.id(),
-                outbox.messageType(),
-                outbox.message(),
-                outbox.status(),
-                outbox.cnt());
+        return new OutboxEntity(outbox.getId(),
+                outbox.getMessageType(),
+                outbox.getMessage(),
+                outbox.getStatus(),
+                outbox.getCnt());
     }
 }
