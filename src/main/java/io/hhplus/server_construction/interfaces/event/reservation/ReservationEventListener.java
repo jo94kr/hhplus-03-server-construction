@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.interfaces.event.data_platform;
+package io.hhplus.server_construction.interfaces.event.reservation;
 
 import io.hhplus.server_construction.application.data_platform.facade.DataPlatformFacade;
 import io.hhplus.server_construction.domain.reservation.event.ReservationInfoEvent;
@@ -12,7 +12,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class DataPlatformEventListener {
+public class ReservationEventListener {
 
     private final DataPlatformFacade dataPlatformFacade;
 
