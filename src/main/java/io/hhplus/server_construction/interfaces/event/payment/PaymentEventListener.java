@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.interfaces.event.waiting;
+package io.hhplus.server_construction.interfaces.event.payment;
 
 import io.hhplus.server_construction.domain.payment.event.PaymentSuccessEvent;
 import io.hhplus.server_construction.domain.waiting.service.WaitingService;
@@ -10,7 +10,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
-public class TokenEventListener {
+public class PaymentEventListener {
 
     private final WaitingService waitingService;
 
