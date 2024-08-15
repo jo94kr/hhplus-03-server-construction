@@ -12,7 +12,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
@@ -34,8 +34,12 @@ spring:
     type: redis
 
   kafka:
+    bootstrap-servers: localhost:9092
     producer:
       bootstrap-servers: localhost:9092
+    consumer:
+      bootstrap-servers: localhost:9092
+      auto-offset-reset: earliest
 
 slack:
   webhook:

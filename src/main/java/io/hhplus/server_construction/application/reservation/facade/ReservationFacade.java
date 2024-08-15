@@ -5,10 +5,10 @@ import io.hhplus.server_construction.application.reservation.dto.ReservationConc
 import io.hhplus.server_construction.domain.concert.ConcertSeat;
 import io.hhplus.server_construction.domain.concert.service.ConcertService;
 import io.hhplus.server_construction.domain.concert.vo.ConcertSeatStatus;
-import io.hhplus.server_construction.domain.reservation.event.ReservationInfoEvent;
 import io.hhplus.server_construction.domain.reservation.Reservation;
 import io.hhplus.server_construction.domain.reservation.ReservationItem;
 import io.hhplus.server_construction.domain.reservation.event.ReservationEventPublisher;
+import io.hhplus.server_construction.domain.reservation.event.ReservationInfoEvent;
 import io.hhplus.server_construction.domain.reservation.service.ReservationService;
 import io.hhplus.server_construction.domain.reservation.vo.ReservationStatus;
 import io.hhplus.server_construction.domain.user.User;
@@ -41,7 +41,7 @@ public class ReservationFacade {
         Reservation reservation = reservationService.setConcertReservation(concertSeatList, user);
 
         // 데이터 플랫폼 전송
-        reservationEventPublisher.sendDataPlatform(new ReservationInfoEvent(reservation));
+        reservationEventPublisher.reservationSuccess(ReservationInfoEvent.create(reservation));
 
         return ReservationConcertResult.from(reservation);
     }
