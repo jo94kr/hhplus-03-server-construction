@@ -31,7 +31,7 @@ public class OutboxRepositoryImpl implements OutboxRepository {
 
     @Override
     public List<Outbox> findAllByStatusTargetDatetime(OutboxStatus outboxStatus, LocalDateTime targetDatetime) {
-        return outboxJpaRepository.findAllByStatusAndCreateDatetimeBefore(outboxStatus, targetDatetime).stream()
+        return outboxJpaRepository.findAllByStatusAndModifyDatetimeBefore(outboxStatus, targetDatetime).stream()
                 .map(OutboxEntity::toDomain)
                 .toList();
     }

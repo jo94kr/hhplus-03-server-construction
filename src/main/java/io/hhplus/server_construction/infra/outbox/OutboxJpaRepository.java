@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface OutboxJpaRepository extends JpaRepository<OutboxEntity, String> {
 
-    List<OutboxEntity> findAllByStatusAndCreateDatetimeBefore(OutboxStatus status, LocalDateTime targetDatetime);
+    List<OutboxEntity> findAllByStatusAndModifyDatetimeBefore(OutboxStatus status, LocalDateTime targetDatetime);
 }

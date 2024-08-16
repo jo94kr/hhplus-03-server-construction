@@ -5,6 +5,7 @@ import io.hhplus.server_construction.domain.outbox.service.OutboxService;
 import io.hhplus.server_construction.domain.outbox.vo.OutboxStatus;
 import io.hhplus.server_construction.support.kafka.KafkaConstants;
 import io.hhplus.server_construction.support.kafka.KafkaProducer;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ public class OutboxFacade {
     private final OutboxService outboxService;
     private final KafkaProducer kafkaProducer;
 
+    @Transactional
     public void retryOutboxMessage(LocalDateTime targetDatetime) {
         List<Outbox> outboxList = outboxService.findAllByStatusTargetDatetime(OutboxStatus.INIT, targetDatetime);
 
