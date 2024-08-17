@@ -33,6 +33,14 @@ spring:
   cache:
     type: redis
 
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      bootstrap-servers: localhost:9092
+    consumer:
+      bootstrap-servers: localhost:9092
+      auto-offset-reset: earliest
+
 slack:
   webhook:
     url: https://hooks.slack.com/services/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

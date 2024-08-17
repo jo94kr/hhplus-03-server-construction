@@ -41,7 +41,7 @@ public class ReservationFacade {
         Reservation reservation = reservationService.setConcertReservation(concertSeatList, user);
 
         // 데이터 플랫폼 전송
-        reservationEventPublisher.sendDataPlatform(new ReservationInfoEvent(reservation));
+        reservationEventPublisher.reservationSuccess(ReservationInfoEvent.create(reservation));
 
         return ReservationConcertResult.from(reservation);
     }

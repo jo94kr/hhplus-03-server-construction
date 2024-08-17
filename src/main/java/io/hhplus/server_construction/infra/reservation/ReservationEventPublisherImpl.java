@@ -13,7 +13,7 @@ public class ReservationEventPublisherImpl implements ReservationEventPublisher 
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
-    public void sendDataPlatform(ReservationInfoEvent reservationInfoEvent) {
+    public void reservationSuccess(ReservationInfoEvent reservationInfoEvent) {
         applicationEventPublisher.publishEvent(reservationInfoEvent);
     }
 }

@@ -4,7 +4,7 @@ spring:
       on-profile: test
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
@@ -28,6 +28,14 @@ spring:
     url: jdbc:mysql://localhost:13306/concert_test
     username: root
     password: root
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      bootstrap-servers: localhost:9092
+    consumer:
+      bootstrap-servers: localhost:9092
+      auto-offset-reset: earliest
 
 slack:
   webhook:

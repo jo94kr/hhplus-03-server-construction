@@ -30,4 +30,8 @@ public class WaitingFacade {
         // 대기열 진입 가능한 토큰 상태 변경
         waitingService.activeToken();
     }
+
+    public void expiredToken(String token) {
+        waitingService.expiredToken(token);
+    }
 }

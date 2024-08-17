@@ -43,7 +43,7 @@ public class PaymentFacade {
         reservationService.save(reservation.changeStatus(ReservationStatus.PAYMENT_COMPLETE));
 
         // 토큰 만료 처리
-        paymentEventPublisher.paymentSuccess(new PaymentSuccessEvent(token));
+        paymentEventPublisher.paymentSuccess(PaymentSuccessEvent.create(token));
 
         return PaymentResult.create(payment);
     }

@@ -1,5 +1,6 @@
 package io.hhplus.server_construction.domain.reservation;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.hhplus.server_construction.domain.concert.ConcertSeat;
 import lombok.Getter;
 
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 public class ReservationItem {
 
     private final Long id;
+    @JsonBackReference
     private final Reservation reservation;
     private final ConcertSeat concertSeat;
     private final BigDecimal price;
