@@ -4,7 +4,7 @@ import io.hhplus.server_construction.application.data_platform.facade.DataPlatfo
 import io.hhplus.server_construction.domain.outbox.Outbox;
 import io.hhplus.server_construction.domain.outbox.service.OutboxService;
 import io.hhplus.server_construction.domain.reservation.Reservation;
-import io.hhplus.server_construction.support.kafka.KafkaConstants;
+import io.hhplus.server_construction.infra.kafka.KafkaConstants;
 import io.hhplus.server_construction.support.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

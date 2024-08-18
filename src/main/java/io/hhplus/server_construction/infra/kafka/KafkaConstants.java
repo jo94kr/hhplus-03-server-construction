@@ -1,4 +1,4 @@
-package io.hhplus.server_construction.support.kafka;
+package io.hhplus.server_construction.infra.kafka;
 
 public class KafkaConstants {
 

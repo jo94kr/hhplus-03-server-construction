@@ -4,7 +4,7 @@ import io.hhplus.server_construction.domain.outbox.Outbox;
 import io.hhplus.server_construction.domain.outbox.service.OutboxService;
 import io.hhplus.server_construction.domain.outbox.vo.MessageType;
 import io.hhplus.server_construction.domain.payment.event.PaymentSuccessEvent;
-import io.hhplus.server_construction.support.kafka.KafkaProducer;
+import io.hhplus.server_construction.infra.kafka.KafkaProducer;
 import io.hhplus.server_construction.support.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-import static io.hhplus.server_construction.support.kafka.KafkaConstants.RESERVATION_TOPIC;
+import static io.hhplus.server_construction.infra.kafka.KafkaConstants.RESERVATION_TOPIC;
 
 @Component
 @RequiredArgsConstructor
