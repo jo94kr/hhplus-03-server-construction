@@ -45,6 +45,9 @@
         </filter>
     </appender>
 
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.hibernate" level="WARN"/>
+
     <!-- local Profile에서의 로그 설정 -->
     <springProfile name="default">
         <root level="INFO">
@@ -56,7 +59,7 @@
 
     <!-- test Profile에서의 로그 설정 -->
     <springProfile name="test">
-        <root level="INFO">
+        <root level="DEBUG">
             <appender-ref ref="THREAD_CONSOLE" />
             <appender-ref ref="ASYNC_SLACK" />
         </root>
