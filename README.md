@@ -12,7 +12,7 @@
 - [대기열 시스템 설계](docs/WaitingSystem.md)
 - [성능 개선을 위한 쿼리 파악 및 Index 처리](docs/DbIndex.md)
 - [MSA 전환을 통한 서비스 분리 및 트랜잭션 처리 설계](docs/MSA.md)
-- [부하 테스트](docs/stressTest.md)
+- [부하 테스트 대상 선정 및 목적, 시나리오](docs/StressTest.md)
 
 ---
 
